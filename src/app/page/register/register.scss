@@ -53,7 +53,7 @@
     gap: 0;
     /* ปรับระยะห่างตรงกลาง (เช่น 2rem หรือ 1.5rem) */
     padding: 2rem 4rem;
-    margin-top: 200px;
+    margin-top: 50px;
 }
 
 
@@ -77,31 +77,48 @@
     /* ค่าน้อย อยู่ล่าง */
 }
 
-.info-card h2 {
-    font-family: 'New Rocker', cursive;
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    color: black;
-}
 
 .info-card h3 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
     font-weight: 600;
     color: black;
+    line-height: 1.5;
 }
 
-.info-card p {
-    font-size: 1.3rem;
-    line-height: 1.6;
-    margin-bottom: 2.5rem;
-    color: black;
-}
 
 /* การ์ดล็อกอิน (ฝั่งขวา) */
 .login-pane {
     width: 100%;
     max-width: 450px;
+}
+
+.steps-list {
+    list-style: none;
+    padding-left: 0;
+    counter-reset: steps-counter; /* เริ่มนับ counter */
+}
+
+.steps-list li {
+    counter-increment: steps-counter; /* เพิ่มเลข counter ทีละ 1 */
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1.8rem;
+    font-size: 1.2rem;
+}
+
+.steps-list li::before {
+    content: counter(steps-counter); /* แสดงเลข counter */
+    background-color: #D9D9D9;
+    color: #383838;
+    font-weight: bold;
+    min-width: 35px;
+    height: 35px;
+    border-radius: 20%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
 }
 
 .login-card {
@@ -116,6 +133,22 @@
     margin-left: -19px;
 }
 
+.profile-pic-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px !important;
+    height: 50px !important;
+    border: 2px solid #cceeff;
+    border-radius: 50%;
+
+    mat-icon {
+        color: #333;
+        font-size: 28px;
+        height: 28px;
+        width: 28px;
+    }
+}
 
 
 .login-title {
@@ -130,7 +163,7 @@
 /* --- สไตล์ของฟอร์ม Input --- */
 .login-field {
     width: 100%;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.7rem;
 }
 
 /* --- ส่วน Actions ใต้ฟอร์ม --- */
@@ -138,7 +171,7 @@
     display: flex;
     justify-content: center;
     /* จัดให้อยู่ตรงกลางแนวนอน */
-    margin-top: 2rem;
+    margin-top: 1rem;
 
 }
 
@@ -175,10 +208,19 @@
 /* --- สำหรับรูปภาพตัวละคร --- */
 .character-image-container {
     position: absolute;
-    right: 30%;
-    top: 16%;
+    left: 10%;
+    top: 35%;
     z-index: 11; // ให้อยู่บนสุด
     width: 100px;
     // เพิ่มโค้ด img ใน html แล้ว uncomment ส่วนนี้
     // img { width: 100%; }
+}
+
+.footer-text {
+    color: white;
+    text-align: center;
+    width: 100%;
+ 
+     font-size: 1.3rem;
+
 }
