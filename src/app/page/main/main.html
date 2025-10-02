@@ -1,1 +1,55 @@
-<p>main works!</p>
+<app-navber></app-navber>
+<div class="home-container">
+  <section class="banners-section">
+    <mat-card class="banner-card placeholder-card"><span>Banner 1</span></mat-card>
+    <mat-card class="banner-card placeholder-card main-banner"><span>Spike At New Heights!</span></mat-card>
+    <mat-card class="banner-card placeholder-card"><span>Banner 3</span></mat-card>
+  </section>
+
+  <section class="offers-section">
+    <h2>ข้อเสนอพิเศษ</h2>
+    <p>อย่าพลาดโอกาสที่จะได้รับข้อเสนอพิเศษจากเรา! ค้นหาสิ่งที่คุณชื่นชอบวันนี้!</p>
+    
+    <div class="offers-scroll-container">
+      <mat-card class="offer-card" *ngFor="let offer of specialOffers">
+        <div class="offer-image-placeholder" [style.background-color]="offer.imagePlaceholder"></div>
+        <mat-card-content>
+          <p class="offer-title">{{ offer.name }}</p>
+          <button mat-flat-button class="top-up-btn">เติมเงิน</button>
+        </mat-card-content>
+        <span class="discount-tag">{{ offer.discount }}</span>
+      </mat-card>
+    </div>
+  </section>
+
+  <mat-divider></mat-divider>
+
+  <section class="news-section">
+    <h2>ข่าว & การโปรโมชั่น</h2>
+    <div class="news-grid">
+      <mat-card class="news-card placeholder-card large"><span>News 1 (Large)</span></mat-card>
+      <mat-card class="news-card placeholder-card small"><span>News 2 (Small)</span></mat-card>
+      <mat-card class="news-card placeholder-card small"><span>News 3 (Small)</span></mat-card>
+      <mat-card class="news-card placeholder-card medium"><span>News 4 (Medium)</span></mat-card>
+      <mat-card class="news-card placeholder-card medium"><span>News 5 (Medium)</span></mat-card>
+      <mat-card class="news-card placeholder-card medium"><span>News 6 (Medium)</span></mat-card>
+    </div>
+  </section>
+</div>
+<div class="popup-overlay" *ngIf="showPromotionPopup">
+
+  <mat-card class="popup-card">
+    <button mat-icon-button class="close-btn" (click)="closePopup()" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <div class="popup-content">
+      <mat-icon class="promo-icon">campaign</mat-icon>
+      <h2 class="promo-title">โปรโมชั่น</h2>
+      <h3 class="promo-discount">ลดกระหน่ำ 70%</h3>
+      <p class="promo-details">เพียงแค่สมัครสมาชิกเป็นลูกค้าใหม่</p>
+      <button mat-flat-button class="promo-action-btn" (click)="closePopup()">รับโค้ดส่วนลด</button>
+    </div>
+  </mat-card>
+
+</div>

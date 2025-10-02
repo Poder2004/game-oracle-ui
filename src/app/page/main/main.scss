@@ -1,0 +1,205 @@
+:host {
+  font-family: 'Noto Sans Thai', sans-serif;
+  color: #e0e0e0;
+}
+
+.home-container {
+  background-color: #383838;
+  padding: 2rem 4rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  color: #b0b0b0;
+  margin-bottom: 2rem;
+}
+
+mat-divider {
+  margin: 3rem 0;
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+// ใช้สำหรับ placeholder card ทั่วไป
+.placeholder-card {
+  background-color: #555;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #aaa;
+  border-radius: 15px !important;
+}
+
+/* --- Section 1: Banners --- */
+.banners-section {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 1.5rem;
+  height: 250px;
+  margin-bottom: 3rem;
+}
+
+/* --- Section 2: Special Offers --- */
+.offers-scroll-container {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 1rem; // เพิ่มพื้นที่ให้ scrollbar
+
+  // แต่ง scrollbar ให้สวยงาม
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #444;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 4px;
+  }
+}
+
+.offer-card {
+  background-color: #4a4a4a !important;
+  min-width: 200px;
+  border-radius: 10px !important;
+  position: relative;
+  overflow: visible; // ให้ tag แสดงผลได้
+
+  .offer-image-placeholder {
+    height: 120px;
+    background-color: #666;
+    border-radius: 10px 10px 0 0;
+  }
+
+  mat-card-content {
+    padding: 1rem !important;
+  }
+
+  .offer-title {
+    font-size: 0.9rem;
+    color: #e0e0e0;
+    margin-bottom: 1rem;
+    height: 40px; // กำหนดความสูงให้ title เท่ากัน
+  }
+
+  .top-up-btn {
+    background-color: #9FCC70 !important;
+    color: #333;
+    width: 100%;
+    border-radius: 8px !important;
+  }
+
+  .discount-tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #ff4d4d;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+}
+
+/* --- Section 3: News & Promotions --- */
+.news-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  grid-template-areas:
+    "large small1 small2"
+    "medium1 medium2 medium3";
+  height: 450px;
+}
+
+.news-card.large { grid-area: large; }
+.news-card.small:nth-of-type(2) { grid-area: small1; }
+.news-card.small:nth-of-type(3) { grid-area: small2; }
+.news-card.medium:nth-of-type(4) { grid-area: medium1; }
+.news-card.medium:nth-of-type(5) { grid-area: medium2; }
+.news-card.medium:nth-of-type(6) { grid-area: medium3; }
+
+/* พื้นหลังสีดำโปร่งแสงที่ครอบทั้งหน้าจอ */
+.popup-overlay {
+  position: fixed; /* ให้อยู่กับที่ ไม่เลื่อนตามหน้าเว็บ */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* สีดำโปร่งแสง 70% */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; /* กำหนดให้อยู่บนสุด ทับ Navbar */
+}
+
+/* การ์ด Popup ตรงกลาง */
+.popup-card {
+  position: relative; /* เพื่อให้ปุ่มปิด (X) อ้างอิงตำแหน่งได้ */
+  background-color: #d8e8e8 !important; /* สีพื้นหลังเขียวอมฟ้า */
+  border-radius: 20px !important;
+  padding: 2rem !important;
+  max-width: 450px;
+  width: 90%;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.4);
+}
+
+/* ปุ่มปิด (X) */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #555;
+}
+
+/* เนื้อหาใน Popup */
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.promo-icon {
+  font-size: 4rem;
+  width: 4rem;
+  height: 4rem;
+  color: #333;
+}
+
+.promo-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #2b7a7a; /* สีเขียวเข้ม */
+  margin: 0.5rem 0;
+}
+
+.promo-discount {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #d9534f; /* สีแดง */
+  margin: 0;
+}
+
+.promo-details {
+  font-size: 1.1rem;
+  color: #333;
+  margin: 1rem 0 2rem 0;
+}
+
+.promo-action-btn {
+  background-color: #62a862 !important; /* สีเขียว */
+  color: white;
+  border-radius: 50px !important;
+  padding: 0.8rem 2.5rem !important;
+  font-size: 1.1rem;
+}
