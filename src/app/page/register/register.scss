@@ -1,0 +1,184 @@
+// --- ใช้ ::ng-deep เพื่อ override สไตล์ของ Angular Material ---
+:host {
+    font-family: 'Inter', sans-serif;
+}
+
+.login-page-container {
+    height: 100vh;
+    width: 100%;
+    background-color: #383838;
+    /* สีพื้นหลังเทาเข้ม */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+/* --- Header --- */
+.page-header {
+    color: #9FCC70;
+    padding: 2rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+    z-index: 3; // ให้อยู่บนสุด
+}
+
+.page-header .logo-top {
+    font-family: 'New Rocker', cursive;
+    font-size: 2.5rem;
+}
+
+.page-header .page-title {
+    font-family: 'New Rocker', cursive;
+    font-size: 3.5rem;
+    color: #9FCC70;
+    position: absolute;
+    left: 45%;
+    transform: translateX(-50%);
+    margin-top: 300px;
+}
+
+/* --- Main Content (แบ่งเป็น 2 คอลัมน์) --- */
+.main-content {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: auto auto;
+    /* ให้การ์ดกว้างตามเนื้อหา */
+    justify-content: center;
+    /* จัดทุกอย่างให้อยู่กลาง */
+    align-items: center;
+    gap: 0;
+    /* ปรับระยะห่างตรงกลาง (เช่น 2rem หรือ 1.5rem) */
+    padding: 2rem 4rem;
+    margin-top: 200px;
+}
+
+
+/* การ์ดข้อมูล (ฝั่งซ้าย) */
+.info-pane {
+    width: 100%;
+    max-width: 450px;
+}
+
+.info-card {
+    background-color: #b8b7b7 !important;
+    /* เทาเข้ม */
+    color: black;
+    text-align: left;
+    padding: 0 2.5rem 3rem 2.5rem !important;
+    border-radius: 20px 0 0 20px;
+    height: 500px;
+    position: relative;
+    /* ต้องมี position: relative/absolute/fixed/sticky ก่อน */
+    z-index: 1;
+    /* ค่าน้อย อยู่ล่าง */
+}
+
+.info-card h2 {
+    font-family: 'New Rocker', cursive;
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: black;
+}
+
+.info-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: black;
+}
+
+.info-card p {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    color: black;
+}
+
+/* การ์ดล็อกอิน (ฝั่งขวา) */
+.login-pane {
+    width: 100%;
+    max-width: 450px;
+}
+
+.login-card {
+    background-color: white !important;
+    text-align: center;
+    padding: 1rem 2.5rem 3rem 2.5rem !important;
+    border-radius: 20px !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    height: 500px;
+    position: relative;
+    z-index: 10;
+    margin-left: -19px;
+}
+
+
+
+.login-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 2rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    color: #333;
+    text-align: center;
+}
+
+/* --- สไตล์ของฟอร์ม Input --- */
+.login-field {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+/* --- ส่วน Actions ใต้ฟอร์ม --- */
+.actions {
+    display: flex;
+    justify-content: center;
+    /* จัดให้อยู่ตรงกลางแนวนอน */
+    margin-top: 2rem;
+
+}
+
+
+.forgot-password {
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: #2A7CF5;
+}
+
+/* --- สไตล์ปุ่ม --- */
+.create-account-btn {
+    background-color: #9FCC70 !important;
+    color: rgb(255, 255, 255) !important;
+    width: 220px;
+    padding: 0 2.5rem !important;
+    font-size: 1.3rem;
+    border-radius: 50px !important;
+    margin-top: 1rem;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+    margin-left: 60px;
+}
+
+.login-btn {
+    background-color: #4A90E2 !important;
+    color: white !important;
+    border-radius: 50px !important;
+    padding: 0 2.5rem !important;
+    height: 50px;
+    font-size: 1.3rem;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* --- สำหรับรูปภาพตัวละคร --- */
+.character-image-container {
+    position: absolute;
+    right: 30%;
+    top: 16%;
+    z-index: 11; // ให้อยู่บนสุด
+    width: 100px;
+    // เพิ่มโค้ด img ใน html แล้ว uncomment ส่วนนี้
+    // img { width: 100%; }
+}
