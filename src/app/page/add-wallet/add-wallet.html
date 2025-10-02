@@ -1,0 +1,56 @@
+<app-navber></app-navber>
+<div class="wallet-container">
+
+  <h1 class="page-title">เติมเงิน</h1>
+  <div class="top-up-section">
+
+    <mat-card class="history-card">
+      <mat-card-header>
+        <mat-card-title>ประวัติการเติมเงิน</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ul class="history-list">
+          <li *ngFor="let item of topUpHistory">
+            <span>{{ item.date }}</span>
+            <span class="amount">{{ item.amount | number }} บาท</span>
+          </li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="form-card">
+      <mat-card-content>
+        <p>กรอกจำนวนเงินหรือเลือกจำนวนเงิน</p>
+        <mat-form-field appearance="outline" class="amount-field">
+          <mat-select placeholder="เลือกจำนวนเงิน">
+            <mat-option value="100">100 บาท</mat-option>
+            <mat-option value="300">300 บาท</mat-option>
+            <mat-option value="500">500 บาท</mat-option>
+            <mat-option value="1000">1,000 บาท</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-flat-button class="confirm-btn">ยืนยันการเติมเงิน</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <h1 class="page-title">ประวัติการซื้อเกมส์</h1>
+  <mat-card class="purchase-history-card">
+    <mat-card-header>
+      <mat-card-subtitle>จำนวนเกมส์ทั้งหมดในคลังของคุณ 3 เกมส์</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="purchase-item" *ngFor="let item of purchaseHistory">
+        <div class="game-info">
+          <img [src]="item.image" alt="{{ item.name }}">
+          <span>{{ item.name }}</span>
+        </div>
+        <div class="purchase-details">
+          <span>วันที่ซื้อ {{ item.date }}</span>
+          <span class="price">{{ item.price | number }} บาท</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+</div>

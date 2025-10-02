@@ -1,0 +1,130 @@
+:host {
+  color: #e0e0e0;
+}
+
+.wallet-container {
+  background-color: #545454;
+  padding: 2rem 6rem;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+
+/* --- ส่วนเติมเงิน --- */
+.top-up-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+mat-card {
+  background-color: #E6E6E6 !important;
+  color: #333;
+  border-radius: 20px !important;
+  padding: 1.5rem !important;
+}
+
+.history-card mat-card-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid #ccc;
+    font-size: 1.1rem;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .amount {
+      font-weight: bold;
+    }
+  }
+}
+
+.form-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  p {
+    font-size: 1.1rem;
+    color: #555;
+  }
+}
+
+.amount-field {
+  width: 80%;
+  margin: 1rem 0;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.confirm-btn {
+  background-color: #9FCC70 !important;
+  color: #333;
+  padding: 1.5rem 2rem !important;
+  font-size: 1.1rem;
+  border-radius: 12px !important;
+  width: 80%;
+}
+
+/* --- ส่วนประวัติการซื้อ --- */
+.purchase-history-card {
+  padding: 1rem 2rem !important;
+}
+
+.purchase-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  border-radius: 15px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.game-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+
+  img {
+    width: 150px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+}
+
+.purchase-details {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  font-size: 1.1rem;
+  color: #555;
+
+  .price {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #333;
+  }
+}

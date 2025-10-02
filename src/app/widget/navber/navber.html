@@ -1,25 +1,18 @@
 <mat-toolbar class="top-toolbar">
     <span class="logo">Game Oracle</span>
     <span class="spacer"></span>
-    <button mat-flat-button class="auth-button login-btn" routerLink="/login">SIGN IN</button>
+    <button mat-flat-button class="auth-button login-btn" routerLink="/login">LOGIN</button>
     <button mat-flat-button class="auth-button signup-btn" routerLink="/register">SIGN UP</button>
 </mat-toolbar>
 
 <div class="nav-action-bar">
-    <button mat-icon-button class="hamburger-menu-btn" [matMenuTriggerFor]="menu" aria-label="Menu Icon">
+    <button mat-icon-button class="hamburger-menu-btn" (click)="toggleProfileSidebar()" aria-label="Open Profile Menu">
         <mat-icon>menu</mat-icon>
     </button>
-    <mat-menu #menu="matMenu">
-        <button mat-menu-item>แนะนำ</button>
-        <button mat-menu-item>อันดับเกมขายดี</button>
-        <button mat-menu-item>เติมเงิน/ประวัติการซื้อ</button>
-        <button mat-menu-item>ประเภทเกม</button>
-    </mat-menu>
 
     <div class="nav-links-container">
         <button *ngFor="let link of navLinks" mat-button class="nav-link" [class.active]="link.name === activeLink"
-            (click)="setActiveLink(link.name)">
-            {{ link.name }}
+            (click)="setActiveLink(link.name)" [routerLink]="link.path"> {{ link.name }}
         </button>
     </div>
 
@@ -28,3 +21,54 @@
         <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 </div>
+
+
+<div class="profile-overlay" [class.open]="isProfileOpen" (click)="toggleProfileSidebar()">
+</div>
+
+<aside class="profile-sidebar" [class.open]="isProfileOpen">
+
+    <button mat-icon-button class="close-sidebar-btn" (click)="toggleProfileSidebar()" aria-label="Close Profile Menu">
+        <mat-icon>arrow_back_ios_new</mat-icon>
+    </button>
+
+    <div class="profile-details">
+        <div class="avatar-container">
+            <img src="assets/images/Messi.jpg" alt="User Avatar">
+        </div>
+        <h2>ข้อมูลส่วนตัว</h2>
+
+        <div class="info-field">
+            <label>Name User</label>
+            <div class="info-value">
+                <mat-icon>person</mat-icon>
+                <span>ลีโอเนล อันเดรส เมสซี</span>
+            </div>
+        </div>
+        <div class="info-field">
+            <label>Gmail User</label>
+            <div class="info-value">
+                <mat-icon>mail</mat-icon>
+                <span>Messi@gmail.com</span>
+            </div>
+        </div>
+        <div class="info-field">
+            <label>Wallet Balance</label>
+            <div class="info-value">
+                <mat-icon>account_balance_wallet</mat-icon>
+                <span>5,000,000</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-footer">
+        <button mat-flat-button class="footer-btn primary-btn" routerLink="/home">
+            <mat-icon>home</mat-icon>
+            <span>หน้าหลัก</span>
+        </button>
+        <button mat-flat-button class="footer-btn secondary-btn">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>ออกจากระบบ</span>
+        </button>
+    </div>
+</aside>
