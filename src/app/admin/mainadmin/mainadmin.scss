@@ -1,0 +1,149 @@
+/* General Body and Font Styles - Light Theme */
+.admin-container {
+  /* --- เพิ่มโค้ดสำหรับภาพพื้นหลังตรงนี้ --- */
+   background-image: url('/assets/images/back_ground.png');
+  background-size: cover; /* ทำให้รูปภาพเต็มพื้นที่ */
+  background-position: center; /* จัดให้รูปอยู่ตรงกลาง */
+  background-repeat: no-repeat; /* ไม่ให้รูปภาพซ้ำ */
+  background-attachment: fixed; /* ทำให้พื้นหลังอยู่กับที่ตอนเลื่อนจอ */
+  /* ------------------------------------ */
+
+  background-color: #f4f5f7; /* สีสำรองเผื่อรูปภาพไม่โหลด */
+  min-height: 100vh;
+  color: #1F2937; /* Default text color changed to dark gray */
+  font-family: sans-serif;
+  padding: 1rem;
+}
+
+.content-wrapper {
+  max-width: 64rem; /* Reduced max-width to make it more compact (from 80rem) */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Header Styles */
+.admin-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #000000; /* Changed to black as requested */
+  }
+
+  p {
+    color: #000000; /* Changed to black as requested */
+    margin-top: 0.5rem;
+  }
+}
+
+/* Main Content Styles */
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+   width: 900px;
+  margin-left: 50px;
+
+  h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #E79A4A;
+  }
+}
+
+/* Button Styles */
+.btn {
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  transition: opacity 0.2s ease-in-out;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.category-button {
+  background-color: #FF3B00; /* Changed color as requested */
+}
+
+.details-button {
+  background-color: #6B7280; /* Adjusted for dark item theme */
+  color: white;
+}
+
+
+/* Game List Styles */
+.game-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Reduced gap between items */
+}
+
+.game-item {
+  display: flex;
+  align-items: center;
+  background-color: rgba(37, 40, 46, 0.7); /* Changed to 70% opacity */
+  padding: 0.6rem; /* Adjusted padding */
+  border-radius: 0.75rem;
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+  border: none; /* Removed border */
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+  width: 900px;
+  margin-left: 50px;
+}
+
+.game-id-box {
+  flex-shrink: 0;
+  width: 2.25rem;   /* Reduced size */
+  height: 2.25rem;  /* Reduced size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem; /* Adjusted font size */
+  border-radius: 0.5rem;
+  margin-right: 0.75rem;
+}
+
+.game-id-number {
+  color: #FFBB00; /* Changed to yellow as requested */
+}
+
+.game-image-container {
+  flex-shrink: 0;
+  width: 5rem;    /* Adjusted width */
+  height: 2.5rem;   /* Adjusted height */
+  margin-right: 0.75rem;
+}
+
+.game-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.375rem;
+}
+
+.game-name {
+  flex-grow: 1;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #FFFFFF; /* Changed to white as requested */
+}
+
+.game-details-button-container {
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+

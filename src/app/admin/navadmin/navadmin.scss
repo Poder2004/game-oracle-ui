@@ -1,0 +1,112 @@
+/* --- 1. Import font from Google Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=New+Rocker&display=swap');
+
+/* --- General Navbar Styles --- */
+.navbar {
+  background-color: #ffffff;
+  border-bottom: 1px solid #dee2e6;
+  padding: 0.75rem 0;
+  width: 100%;
+  font-family: sans-serif;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* --- Left Side: Brand and Toggler --- */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.navbar-brand {
+  /* --- 2. Apply the 'New Rocker' font --- */
+  font-family: 'New Rocker', cursive;
+  font-size: 2rem;
+  font-weight: normal; /* ฟอนต์นี้ไม่ต้องใช้ bold */
+  color: #212529;
+  text-decoration: none;
+}
+
+.navbar-toggler {
+  display: none; /* ซ่อนไว้บนจอเดสก์ท็อป */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: none; /* ซ่อนในเดสก์ท็อป */
+  flex-direction: column;
+  gap: 5px;
+}
+
+.toggler-icon {
+  background-color: #343a40;
+  height: 3px;
+  width: 25px;
+  border-radius: 2px;
+}
+
+/* --- Center: Menu Links --- */
+.navbar-menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 1.5rem; /* ระยะห่างระหว่างเมนู */
+}
+
+.navbar-menu a {
+  text-decoration: none;
+  color: #495057;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.navbar-menu a:hover {
+  background-color: #f1f3f5;
+}
+
+/* --- สไตล์สำหรับเมนูที่ถูกเลือก (แก้ไขตามที่ขอ) --- */
+.navbar-menu a.active {
+  background-color: #ff3c0070; /* เปลี่ยนสีพื้นหลังเป็นสีดำตามที่ขอ */
+  color: #24140f; /* เปลี่ยนสีตัวอักษรเป็นสีขาวเพื่อให้มองเห็น */
+  text-decoration: underline; /* เพิ่มขีดเส้นใต้ */
+}
+
+/* --- Right Side: Search Bar --- */
+.navbar-search input {
+  border: 1px solid #ced4da;
+  background-color: #f1f3f5;
+  border-radius: 2rem; /* ทำให้โค้งมนมากๆ */
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  width: 250px;
+  transition: border-color 0.2s ease;
+}
+
+.navbar-search input:focus {
+  outline: none;
+  border-color: #80bdff;
+}
+
+/* --- Responsive Styles for Mobile --- */
+@media (max-width: 992px) {
+  .navbar-menu,
+  .navbar-search {
+    display: none; /* ซ่อนเมนูและช่องค้นหาเมื่อจอเล็ก */
+  }
+
+  .navbar-toggler {
+    display: flex; /* แสดงปุ่ม Hamburger */
+  }
+}
+

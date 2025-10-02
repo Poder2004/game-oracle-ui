@@ -1,0 +1,48 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <!-- ส่วนด้านซ้าย: โลโก้และปุ่มเมนู (สำหรับมือถือ) -->
+    <div class="navbar-left">
+      <button class="navbar-toggler" aria-label="Toggle navigation">
+        <span class="toggler-icon"></span>
+        <span class="toggler-icon"></span>
+        <span class="toggler-icon"></span>
+      </button>
+      <a [routerLink]="['/Mainadmin']" class="navbar-brand">GamePoint</a>
+    </div>
+
+    <!-- ส่วนตรงกลาง: รายการเมนู -->
+    <div class="navbar-menu">
+      <ul>
+        <!-- 3. ใช้ routerLink และ routerLinkActive -->
+        <li>
+          <a
+            [routerLink]="['/Mainadmin']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >หน้าหลัก</a
+          >
+        </li>
+        <li>
+          <a [routerLink]="['/addgame']" routerLinkActive="active"
+            >เพิ่มรายการใหม่</a
+          >
+        </li>
+        <li>
+          <a [routerLink]="['/discounts']" routerLinkActive="active"
+            >โค้ดส่วนลด</a
+          >
+        </li>
+        <li>
+          <a [routerLink]="['/history']" routerLinkActive="active"
+            >ประวัติการทำธุรกรรม</a
+          >
+        </li>
+      </ul>
+    </div>
+
+    <!-- ส่วนด้านขวา: ช่องค้นหา -->
+    <div class="navbar-search">
+      <input type="text" placeholder="ค้นหา" />
+    </div>
+  </div>
+</nav>

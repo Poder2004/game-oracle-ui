@@ -1,0 +1,253 @@
+/* --- Container หลักของหน้า --- */
+.page-container {
+
+margin-top: 100px;
+  background-color: #f8f9fa; /* สีพื้นหลังอ่อนๆ */
+  font-family: sans-serif;
+  display: flex;
+  align-items: center; /* จัดให้อยู่กลางแนวตั้ง */
+  justify-content: center; /* จัดให้อยู่กลางแนวนอน */
+}
+
+.content-wrapper {
+  max-width: 750px; /* ลดความกว้างสูงสุดลงเล็กน้อย */
+  width: 100%;
+}
+
+/* --- ส่วนหัวข้อและปุ่มด้านบน --- */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    font-size: 2rem; /* ลดขนาดฟอนต์ */
+    color: #333;
+  }
+}
+
+/* --- การ์ดฟอร์ม --- */
+.form-card {
+  background-color: #FFF1F1;
+  border-radius: 1rem;
+  padding: 2.5rem; /* ลด Padding */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* --- กลุ่มของ Label และ Input --- */
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem; /* ลดระยะห่าง */
+
+  label {
+    font-size: 1rem; /* ลดขนาดฟอนต์ */
+    font-weight: 500;
+    color: #555;
+    width: 110px; /* ปรับความกว้าง label */
+    flex-shrink: 0;
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    flex-grow: 1;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    padding: 0.7rem 1rem; /* ลด Padding */
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    
+    &:focus {
+      outline: none;
+      border-color: #ff8a8a;
+      box-shadow: 0 0 0 3px rgba(255, 138, 138, 0.2);
+    }
+  }
+}
+
+/* --- แถวสำหรับ input ที่อยู่ข้างกัน --- */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem; /* ลดระยะห่าง */
+  
+  .form-group {
+    margin-bottom: 0;
+
+    /* --- เพิ่มโค้ดนี้เพื่อปรับขนาดช่องตัวเลข --- */
+    .input-group {
+      flex-grow: 0; /* ป้องกันไม่ให้ group ขยาย */
+      
+      input[type="number"] {
+        width: 80px; /* กำหนดความกว้างให้สั้นลง */
+      }
+    }
+    /* ------------------------------------ */
+  }
+}
+
+/* --- กลุ่มของ Input และหน่วย (%, ใบ) --- */
+.input-group {
+  display: flex;
+  align-items: stretch; /* ทำให้ input และ span สูงเท่ากัน */
+  flex-grow: 1;
+
+  input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    /* ให้ input ยืดหยุ่นได้ แต่ไม่เกินพื้นที่ */
+    min-width: 0;
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+    background-color: #e9ecef; /* ปรับสีให้ดูดีขึ้น */
+    border: 1px solid #ddd;
+    border-left: none;
+    padding: 0 1rem; /* ปรับ Padding */
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    color: #495057;
+    font-weight: 500;
+    white-space: nowrap; /* ป้องกันการขึ้นบรรทัดใหม่ */
+  }
+}
+
+/* --- ส่วนปุ่ม Submit --- */
+.form-action {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem; /* ลดระยะห่าง */
+}
+
+/* --- สไตล์ปุ่มทั่วไป --- */
+.btn {
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.7rem 1.8rem; /* ลด Padding */
+  font-size: 0.95rem; /* ลดขนาดฟอนต์ */
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.view-coupons-btn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 0.6rem 1.3rem;
+}
+
+.submit-btn {
+  background-color: #d9534f;
+  color: #fff;
+  font-size: 1rem;
+  padding: 0.9rem 2.2rem;
+}
+
+/* --- 3. เพิ่มสไตล์สำหรับ Modal ทั้งหมด --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #f0f2f5; /* สีพื้นหลัง Modal */
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 650px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    color: #333;
+  }
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  line-height: 1;
+  color: #888;
+  cursor: pointer;
+  
+  &:hover {
+    color: #333;
+  }
+}
+
+.coupon-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.coupon-item {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e0e0e0;
+}
+
+.coupon-icon {
+  flex-shrink: 0;
+  width: 45px;
+  height: 45px;
+  border-radius: 0.5rem;
+  background-color: #6c757d;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 1.5rem;
+}
+
+.coupon-details {
+  flex-grow: 1;
+}
+
+.coupon-name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.coupon-description {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.coupon-quantity {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+  flex-shrink: 0;
+}
+

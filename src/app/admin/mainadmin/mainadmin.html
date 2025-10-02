@@ -1,0 +1,44 @@
+<app-navadmin></app-navadmin>
+<div class="admin-container">
+  <div class="content-wrapper">
+    <!-- ส่วนหัวข้อหลัก -->
+    <header class="admin-header">
+      <h1>Admin</h1>
+      <p>รายการ</p>
+    </header>
+
+    <!-- ส่วนเนื้อหาหลัก -->
+    <main>
+      <!-- ส่วนหัวของรายการเกม -->
+      <div class="list-header">
+        <h2>รายการเกมทั้งหมด</h2>
+        <button class="btn category-button">ประเภทเกม</button>
+      </div>
+
+      <!-- รายการเกมทั้งหมด -->
+      <div class="game-list">
+        <div *ngFor="let game of games" class="game-item">
+          <!-- คอลัมน์ที่ 1: หมายเลข -->
+          <div class="game-id-box">
+            <span class="game-id-number">{{ game.id }}</span>
+          </div>
+
+          <!-- คอลัมน์ที่ 2: รูปภาพเกม -->
+          <div class="game-image-container">
+            <img [src]="game.imageUrl" [alt]="game.name" class="game-image" />
+          </div>
+
+          <!-- คอลัมน์ที่ 3: ชื่อเกม -->
+          <div class="game-name">
+            {{ game.name }}
+          </div>
+
+          <!-- คอลัมน์ที่ 4: ปุ่มดูรายละเอียด -->
+          <div class="game-details-button-container">
+            <button class="btn details-button">ดูรายละเอียด</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

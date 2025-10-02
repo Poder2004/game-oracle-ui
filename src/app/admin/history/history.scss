@@ -1,0 +1,106 @@
+// ใช้สไตล์พื้นฐานจากหน้า mainadmin แต่ปรับเปลี่ยนสำหรับหน้า history
+
+/* --- Container หลักและ Font --- */
+.page-container {
+  /* --- เพิ่มโค้ดสำหรับภาพพื้นหลัง --- */
+  background-image: url('/assets/images/back_ground.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  /* ------------------------------------ */
+  
+  background-color: #f4f5f7; /* สีสำรองเผื่อรูปภาพไม่โหลด */
+  min-height: 100vh;
+  font-family: sans-serif;
+  padding: 2rem;
+}
+
+.content-wrapper {
+  //ปรับแก้โดยการลบ max-width และ margin เพื่อให้ list-header และ user-item กำหนดขนาดเอง
+}
+
+/* --- ส่วนหัวข้อของรายการ --- */
+.list-header {
+    
+  margin-bottom: 1.25rem;
+  width: 900px; /* กำหนดความกว้างตามที่อ้างอิง */
+  margin-left: 50px; /* กำหนดระยะห่างด้านซ้ายตามที่อ้างอิง */
+
+  h2 {
+    font-size: 1.125rem; /* ปรับขนาดฟอนต์ให้ตรงกัน */
+    font-weight: 600;
+    color: #E79A4A;
+      margin-left: 200px;
+  }
+}
+
+/* --- สไตล์ปุ่ม --- */
+.btn {
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  transition: opacity 0.2s ease-in-out;
+  cursor: pointer;
+  font-size: 0.75rem; /* ปรับขนาดฟอนต์ให้ตรงกัน */
+  padding: 0.5rem 1rem; /* ปรับ padding ให้ตรงกัน */
+  font-weight: 600;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.details-button {
+  background-color: #6B7280;
+  color: white;
+}
+
+/* --- รายการผู้ใช้ --- */
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* ปรับระยะห่างให้ตรงกัน */
+  margin-left: 200px;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+    background-color: rgba(37, 40, 46, 0.7);// ใช้ Opacity 70% เหมือนกัน
+  padding: 0.6rem; /* ปรับ padding ให้ตรงกัน */
+  border-radius: 0.75rem;
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+  width: 900px; /* กำหนดความกว้างตามที่อ้างอิง */
+  margin-left: 50px; /* กำหนดระยะห่างด้านซ้ายตามที่อ้างอิง */
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* --- รูปโปรไฟล์ (สำคัญ) --- */
+.user-avatar {
+  width: 45px;      /* ขนาดของรูป */
+  height: 45px;     /* ขนาดของรูป */
+  border-radius: 50%; /* ทำให้เป็นวงกลม */
+  object-fit: cover;  /* ทำให้รูปเต็มพื้นที่วงกลมโดยไม่เสียสัดส่วน */
+  margin-right: 1.25rem; /* ระยะห่างจากชื่อ */
+  border: 2px solid #555; /* เพิ่มขอบสีเทาเข้ม */
+}
+
+/* --- ชื่อผู้ใช้ --- */
+.user-name {
+  flex-grow: 1; /* ดันปุ่มไปทางขวาสุด */
+  font-weight: 600;
+  font-size: 0.875rem; /* ปรับขนาดฟอนต์ให้ตรงกัน */
+  color: #FFFFFF;
+}
+
+/* --- Container ของปุ่ม --- */
+.action-button-container {
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
