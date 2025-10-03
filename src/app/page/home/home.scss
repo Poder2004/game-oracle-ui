@@ -1,0 +1,218 @@
+/* 1. ตรวจสอบว่า .home-container ยังมี padding อยู่ (โค้ดเดิม) */
+.home-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 30px; /* <--- ต้องมี padding ตรงนี้อยู่ */
+  box-sizing: border-box;
+  
+}
+
+.container {
+    padding: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.section-subtitle {
+    color: #616161;
+    margin-bottom: 24px;
+}
+
+.section {
+    margin-bottom: 50px;
+}
+
+/* Banners Section */
+.banners-section {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* << แก้ตรงนี้: สั่งให้ทุก item สูงเท่ากัน */
+  gap: 20px;
+  width: 100%;
+}
+
+/* สไตล์สำหรับแบนเนอร์ด้านข้าง */
+.banner-side {
+  width: 300px;
+  flex-shrink: 0;
+}
+
+/* สไตล์สำหรับแบนเนอร์หลักตรงกลาง */
+.banner-main {
+  flex-grow: 1;
+  width: 500px;
+}
+
+/* สไตล์ของ "การ์ด" */
+.banner-card {
+  border-radius: 8px;
+  overflow: hidden;
+  line-height: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  height: 100%; /* << เพิ่มตรงนี้: ให้การ์ดสูงเต็มพื้นที่ที่ได้รับ */
+}
+
+/* ทำให้รูปภาพแสดงผลได้ถูกต้องในการ์ด */
+.banner-card img {
+  width: 100%;
+  height: 100%;        /* << เพิ่มตรงนี้: ให้รูปสูงเต็มการ์ด */
+  object-fit: cover; /* << เพิ่มตรงนี้: ทำให้รูปเต็มกรอบโดยไม่เสียสัดส่วน */
+  display: block;
+}
+
+
+/* Coupons Section */
+.horizontal-scroll-container {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+}
+
+
+.coupon-card {
+    flex: 0 0 190px;
+    background-color: #FDF4E3 !important;
+    border: 1px solid #EADDC6;
+    text-align: center;
+}
+
+
+
+/* === สไตล์ปุ่มที่เราสร้างเอง === */
+
+.custom-buy-button {
+  background-color: #00a246; /* สีพื้นหลัง (สีเขียว) */
+  color: white;             /* สีตัวอักษร (สีขาว) */
+  
+  border: none;             /* เอาเส้นขอบเดิมๆ ของปุ่มออก */
+  border-radius: 8px;       /* ทำให้ขอบปุ่มโค้งมน */
+  
+  padding: 12px 24px;       /* เพิ่มระยะห่างภายในปุ่ม (บนล่าง 12px, ซ้ายขวา 24px) */
+  font-size: 1rem;          /* ขนาดตัวอักษร (16px) */
+  font-weight: bold;        /* ทำให้ตัวอักษรเป็นตัวหนา */
+  
+  cursor: pointer;          /* เปลี่ยนเมาส์เป็นรูปมือเมื่อชี้ */
+  
+  transition: background-color 0.2s ease; /* เพิ่มเอฟเฟกต์ตอนเปลี่ยนสีให้ดูนุ่มนวล */
+}
+
+/* สไตล์เมื่อเอาเมาส์ไปชี้ (Hover) */
+.custom-buy-button:hover {
+  background-color: #008f3c; /* ทำให้สีพื้นหลังเข้มขึ้นเล็กน้อย */
+}
+
+/* สไตล์เมื่อกำลังคลิกปุ่ม (Active) */
+.custom-buy-button:active {
+  background-color: #007c34; /* ทำให้สีพื้นหลังเข้มขึ้นไปอีก */
+  transform: translateY(1px); /* ทำให้ปุ่มดูเหมือนถูกกดลงไปเล็กน้อย */
+}
+
+.coupon-card h3 {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.coupon-card .discount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #d32f2f;
+    margin: 4px 0;
+}
+
+.coupon-card .details {
+    font-size: 0.8rem;
+    color: #616161;
+    margin-bottom: 16px;
+}
+
+/* Special Offers Section */
+/* โค้ดใหม่ (ไม่มีแถบเลื่อน, รายการจะตกไปบรรทัดใหม่) */
+.offers-scroll-container {
+    display: flex;
+    flex-wrap: wrap;
+    /* <--- เพิ่ม property นี้เข้าไป */
+    gap: 1.5rem;
+    /* overflow-x: auto; <-- ลบหรือคอมเมนต์บรรทัดนี้ออก */
+    padding-bottom: 1rem;
+}
+
+
+.offer-card {
+    background-color: #4a4a4a;
+    width: 200px;
+    height: 200px;
+    border-radius: 10px ;
+    position: relative;
+    overflow: visible;
+}
+
+.offer-card .offer-image-placeholder {
+    height: 120px;
+    background-color: #666;
+    border-radius: 10px 10px 0 0;
+}
+
+.offer-card mat-card-content {
+    padding: 1rem !important;
+}
+
+.offer-card .offer-title {
+    font-size: 0.9rem;
+    color: #e0e0e0;
+    margin-bottom: 1rem;
+    height: 40px;
+}
+
+.offer-card .top-up-btn {
+    background-color: #9FCC70 !important;
+    color: #333;
+    width: 100%;
+    border-radius: 8px !important;
+}
+
+.offer-card .discount-tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #ff4d4d;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* News Section */
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.news-card .mdc-card__media {
+    height: 180px;
+}
+
+.news-card-content {
+    padding: 16px;
+}
+
+.news-card h3 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.news-card p {
+    font-size: 0.8rem;
+    color: #757575;
+}
