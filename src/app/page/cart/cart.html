@@ -1,0 +1,104 @@
+<div class="cart-page-container">
+    <mat-toolbar class="top-toolbar">
+        <span class="logo">Game Oracle</span>
+    </mat-toolbar>
+    <button mat-icon-button class="hamburger-menu-btn" (click)="toggleProfileSidebar()" aria-label="Open Profile Menu">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <h1 class="page-title">ตะกร้าชำระเงิน</h1>
+
+    <mat-card class="cart-card">
+        <h2 class="section-title">ตะกร้า</h2>
+        <div class="cart-items-list">
+            <div class="cart-item" *ngFor="let item of cartItems">
+                <div class="item-details">
+                    <img [src]="item.image" [alt]="item.name">
+                    <span>{{ item.name }}</span>
+                </div>
+                <div class="item-actions">
+                    <span class="price">{{ item.price | number }} บาท</span>
+                    <button mat-icon-button color="warn" (click)="removeItem(item)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">ใช้คูปอง</h2>
+        <mat-radio-group class="coupon-group" [(ngModel)]="selectedCoupon" (change)="calculateTotals()">
+            <mat-radio-button *ngFor="let coupon of coupons" [value]="coupon" [disabled]="subtotal < coupon.minValue">
+                {{ coupon.name }}
+            </mat-radio-button>
+        </mat-radio-group>
+
+        <div class="summary-section">
+            <div class="summary-row">
+                <span>ราคารวมการสั่งซื้อ</span>
+                <span>{{ subtotal | number }} บาท</span>
+            </div>
+            <div class="summary-row">
+                <span>ใช้คูปองส่วนลด</span>
+                <span class="discount-amount">-{{ discount | number }} บาท</span>
+            </div>
+            <hr>
+            <div class="summary-row total-row">
+                <span>ยอดชำระเงินทั้งหมด</span>
+                <span>{{ total | number }} บาท</span>
+            </div>
+        </div>
+
+        <mat-card-actions align="end">
+            <button mat-stroked-button class="cancel-btn">ยกเลิก</button>
+            <button mat-flat-button color="primary" class="checkout-btn">ดำเนินการชำระเงิน</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
+<div class="profile-overlay" [class.open]="isProfileOpen" (click)="toggleProfileSidebar()">
+</div>
+
+<aside class="profile-sidebar" [class.open]="isProfileOpen">
+
+    <button mat-icon-button class="close-sidebar-btn" (click)="toggleProfileSidebar()" aria-label="Close Profile Menu">
+        <mat-icon>arrow_back_ios_new</mat-icon>
+    </button>
+
+    <div class="profile-details">
+        <div class="avatar-container">
+            <img src="assets/images/Messi.jpg" alt="User Avatar">
+        </div>
+        <h2>ข้อมูลส่วนตัว</h2>
+
+        <div class="info-field">
+            <label>Name User</label>
+            <div class="info-value">
+                <mat-icon>person</mat-icon>
+                <span>ลีโอเนล อันเดรส เมสซี</span>
+            </div>
+        </div>
+        <div class="info-field">
+            <label>Gmail User</label>
+            <div class="info-value">
+                <mat-icon>mail</mat-icon>
+                <span>Messi@gmail.com</span>
+            </div>
+        </div>
+        <div class="info-field">
+            <label>Wallet Balance</label>
+            <div class="info-value">
+                <mat-icon>account_balance_wallet</mat-icon>
+                <span>5,000,000</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-footer">
+        <button mat-flat-button class="footer-btn primary-btn" routerLink="/main">
+            <mat-icon>home</mat-icon>
+            <span>หน้าหลัก</span>
+        </button>
+        <button mat-flat-button class="footer-btn secondary-btn">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>ออกจากระบบ</span>
+        </button>
+    </div>
+</aside>

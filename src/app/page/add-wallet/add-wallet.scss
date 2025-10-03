@@ -57,6 +57,13 @@ mat-card {
   }
 }
 
+mat-card-header {
+  /* ทำให้ header กินความกว้างเต็ม 100% */
+  width: 100%; 
+  display: flex;
+  justify-content: center; /* จัดให้ item ที่อยู่ข้างใน (title) อยู่กึ่งกลางแนวนอน */
+}
+
 .form-card {
   display: flex;
   flex-direction: column;
@@ -75,7 +82,8 @@ mat-card {
   margin: 1rem 0;
   background-color: white;
   border-radius: 8px;
-}
+  height:53px; 
+}  
 
 .confirm-btn {
   background-color: #9FCC70 !important;

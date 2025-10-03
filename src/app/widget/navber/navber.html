@@ -15,6 +15,9 @@
             (click)="setActiveLink(link.name)" [routerLink]="link.path"> {{ link.name }}
         </button>
     </div>
+    <button mat-icon-button routerLink="/cart" aria-label="Open Shopping Cart">
+    <mat-icon>shopping_cart</mat-icon>
+  </button>
 
     <mat-form-field class="search-form-field" appearance="outline">
         <input matInput placeholder="ค้นหา">

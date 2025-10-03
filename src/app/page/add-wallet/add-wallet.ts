@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 // --- Modules ที่จำเป็น ---
 import { CommonModule } from '@angular/common';
@@ -9,6 +9,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { Navber } from "../../widget/navber/navber"; // สำหรับ Dropdown
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-wallet',
@@ -20,14 +25,20 @@ import { Navber } from "../../widget/navber/navber"; // สำหรับ Dropd
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatSelectModule // เพิ่ม MatSelectModule
-    ,
+    MatSelectModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule,
     Navber
 ],
   templateUrl: './add-wallet.html',
   styleUrl: './add-wallet.scss'
 })
-export class AddWallet {
+export class AddWallet implements OnInit {
+
+
+  amountControl = new FormControl('');
+  options: string[] = ['100', '300', '500', '1000'];
+  filteredOptions!: Observable<string[]>;
 
   // ข้อมูลจำลองสำหรับประวัติการเติมเงิน
   topUpHistory = [
@@ -45,4 +56,16 @@ export class AddWallet {
   ];
 
   constructor() { }
+
+    ngOnInit() {
+    this.filteredOptions = this.amountControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value || '')),
+    );
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+  }
 }
