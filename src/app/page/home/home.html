@@ -1,0 +1,184 @@
+<div class="home-container">
+
+    <!-- Banners Section -->
+    <section class="section banners-section ">
+        <div class="banner-side">
+            <div class="mdc-card mdc-card--outlined banner-card">
+                <img src="https://placehold.co/200x250/A3E635/333?text=Game+Banner+1" alt="Banner 1">
+            </div>
+        </div>
+        <div class="banner-main">
+            <div class="mdc-card banner-card">
+                <img src="https://placehold.co/800x250/F97316/FFF?text=SPIKE+AT+NEW+HEIGHTS!"
+                    alt="Spike At New Heights!" class="main-banner-img">
+            </div>
+        </div>
+        <div class="banner-side">
+            <div class="mdc-card mdc-card--outlined banner-card">
+                <img src="https://placehold.co/200x250/60A5FA/333?text=Game+Banner+2" alt="Banner 3">
+            </div>
+        </div>
+    </section>
+
+    <!-- Coupons Section -->
+    <section class="section">
+        <h2>คูปองที่มีอยู่</h2>
+        <p class="section-subtitle">ถ้ามีโค้ดส่วนลดของคุณอยู่แล้ว รีบใช้สำหรับการประหยัดเพิ่มเติมสิ! อย่ารอช้า!</p>
+
+        <div class="horizontal-scroll-container">
+            <!-- Coupon Card Example -->
+            <div class="mdc-card mdc-card--outlined coupon-card" v-for="i in 6">
+                <div style="padding: 16px 16px 0;">
+                    <h3>โปรโมชั่น</h3>
+                    <p class="discount">ลดกระหน่ำ 70%</p>
+                    <p class="details">เพียงแค่สมัครสมาชิกใหม่</p>
+                </div>
+                <div class="mdc-card__actions">
+                    <button class="custom-buy-button">
+                        รับโค้ด
+                    </button>
+                </div>
+            </div>
+            <!-- Repeat for demonstration -->
+            <div class="mdc-card mdc-card--outlined coupon-card">
+                <div style="padding: 16px 16px 0;">
+                    <h3>โปรโมชั่น</h3>
+                    <p class="discount">ลด 50%</p>
+                    <p class="details">สำหรับลูกค้าปัจจุบัน</p>
+                </div>
+                <div class="mdc-card__actions">
+                    <button class="custom-buy-button">
+                        รับโค้ด
+                    </button>
+                </div>
+            </div>
+            <div class="mdc-card mdc-card--outlined coupon-card">
+                <div style="padding: 16px 16px 0;">
+                    <h3>โปรโมชั่น</h3>
+                    <p class="discount">ส่วนลด ฿100</p>
+                    <p class="details">เมื่อซื้อครบ ฿500</p>
+                </div>
+                <div class="mdc-card__actions">
+                    <button class="custom-buy-button">
+                        รับโค้ด
+                    </button>
+                </div>
+            </div>
+            <div class="mdc-card mdc-card--outlined coupon-card">
+                <div style="padding: 16px 16px 0;">
+                    <h3>โปรโมชั่น</h3>
+                    <p class="discount">ลดกระหน่ำ 70%</p>
+                    <p class="details">เพียงแค่สมัครสมาชิกใหม่</p>
+                </div>
+              <div class="mdc-card__actions">
+                    <button class="custom-buy-button">
+                        รับโค้ด
+                    </button>
+                </div>
+            </div>
+            <div class="mdc-card mdc-card--outlined coupon-card">
+                <div style="padding: 16px 16px 0;">
+                    <h3>โปรโมชั่น</h3>
+                    <p class="discount">ลด 50%</p>
+                    <p class="details">สำหรับลูกค้าปัจจุบัน</p>
+                </div>
+                <div class="mdc-card__actions">
+                    <button class="custom-buy-button">
+                        รับโค้ด
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Special Offers Section -->
+    <section class="offers-section">
+        <h2>ข้อเสนอพิเศษ</h2>
+        <p>อย่าพลาดโอกาสที่จะได้รับข้อเสนอพิเศษจากเรา! ค้นหาสิ่งที่คุณชื่นชอบวันนี้!</p>
+
+        <div class="offers-scroll-container">
+            <mat-card class="offer-card" *ngFor="let offer of specialOffers">
+                <div class="offer-image-placeholder" [style.background-color]="offer.imagePlaceholder"></div>
+                <mat-card-content>
+                    <p class="offer-title">{{ offer.name }}</p>
+                    <button mat-flat-button class="top-up-btn">เติมเงิน</button>
+                </mat-card-content>
+                <span class="discount-tag">{{ offer.discount }}</span>
+            </mat-card>
+        </div>
+    </section>
+
+
+    <!-- News Section -->
+    <section class="section">
+        <h2>ข่าว & การโปรโมชั่น</h2>
+        <div class="news-grid">
+            <mat-card class="news-card">
+                <img mat-card-image src="https://placehold.co/600x400/818CF8/FFFFFF?text=News+Image"
+                    alt="PUBG Mobile's Spooky 4.0 Lucky Draw Campaign">
+                <mat-card-header>
+                    <mat-card-title>PUBG Mobile's Spooky 4.0 Lucky Draw Campaign</mat-card-title>
+                    <mat-card-subtitle>by Terry, 18/09/2025 - 0 comment</mat-card-subtitle>
+                </mat-card-header>
+
+            </mat-card>
+
+            <mat-card class="news-card">
+
+                <img mat-card-image src="https://placehold.co/600x400/F472B6/FFFFFF?text=News+Image"
+                    alt="Mega Lucky Draw: Top Up & Win Big">
+                <mat-card-header>
+                    <mat-card-title>Mega Lucky Draw: Top Up & Win Big</mat-card-title>
+                    <mat-card-subtitle>by Terry, 18/09/2025 - 0 comment</mat-card-subtitle>
+                </mat-card-header>
+
+            </mat-card>
+
+            <mat-card class="news-card">
+
+                <img mat-card-image src="https://placehold.co/600x400/34D399/FFFFFF?text=News+Image"
+                    alt="Nintendo Switch Promo! 25% OFF">
+                <mat-card-header>
+                    <mat-card-title>Nintendo Switch Promo! 25% OFF</mat-card-title>
+                    <mat-card-subtitle>by Terry, 18/09/2025 - 0 comment</mat-card-subtitle>
+                </mat-card-header>
+
+            </mat-card>
+
+            <mat-card class="news-card">
+
+                <img mat-card-image src="https://placehold.co/600x400/FBBF24/FFFFFF?text=News+Image"
+                    alt="Haikyuu!! Collaboration Event">
+                <mat-card-header>
+                    <mat-card-title>Haikyuu!! Collaboration Event</mat-card-title>
+                    <mat-card-subtitle>by Terry, 18/09/2025 - 0 comment</mat-card-subtitle>
+                </mat-card-header>
+
+            </mat-card>
+
+            <mat-card class="news-card">
+
+                <img mat-card-image src="https://placehold.co/600x400/60A5FA/FFFFFF?text=News+Image"
+                    alt="Metro Hero Promo is here">
+                <mat-card-header>
+                    <mat-card-title>Metro Hero Promo is here</mat-card-title>
+                    <mat-card-subtitle>by Terry, 18/09/2025 - 0 comment</mat-card-subtitle>
+                </mat-card-header>
+
+            </mat-card>
+
+            <mat-card class="news-card">
+
+                <img mat-card-image src="https://placehold.co/600x400/A78BFA/FFFFFF?text=News+Image"
+                    alt="Spooky 4.0 Lucky Draw Returns!">
+                <mat-card-header>
+                    <mat-card-title>Spooky 4.0 Lucky Draw Returns!</mat-card-title>
+                    <mat-card-subtitle>by Terry, 18/09/2025 - 0 comment</mat-card-subtitle>
+                </mat-card-header>
+
+            </mat-card>
+        </div>
+    </section>
+
+</div>
