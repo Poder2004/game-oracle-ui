@@ -83,39 +83,66 @@ export class EditProfile implements OnInit { // แก้ไขชื่อ Clas
     }
   }
 
-  onSubmit(): void {
+   // 👇 แก้ไขฟังก์ชันนี้ทั้งหมด
+    onSubmit(): void {
     this.successMessage = null;
     this.errorMessage = null;
 
-    if (this.editForm.invalid) { return; }
-
-    const formData = new FormData();
-    formData.append('username', this.editForm.get('username')?.value);
-    formData.append('email', this.editForm.get('email')?.value);
-
-    const password = this.editForm.get('password')?.value;
-    if (password) {
-      formData.append('password', password);
+    if (this.editForm.invalid) {
+      this.errorMessage = "ข้อมูลในฟอร์มไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง";
+      return;
     }
 
-    const imageFile = this.editForm.get('imageProfile')?.value;
+    const formData = new FormData();
+    const controls = this.editForm.controls;
+
+    if (controls['username'].dirty) {
+      formData.append('username', controls['username'].value);
+    }
+    if (controls['email'].dirty) {
+      formData.append('email', controls['email'].value);
+    }
+   const passwordControl = controls['password'];
+    // เช็คว่า: 1. ผู้ใช้ได้แก้ไขช่องนี้จริง และ 2. มันมีค่า (ไม่เป็นค่าว่าง)
+    if (passwordControl.dirty && passwordControl.value) {
+      formData.append('password', passwordControl.value);
+    }
+    const imageFile = controls['imageProfile'].value;
     if (imageFile) {
       formData.append('imageProfile', imageFile);
+    }
+
+    // --- 👇 [ส่วนที่เพิ่มเข้ามา] Log ข้อมูลใน FormData ---
+    console.log("--- DEBUG: Submitting FormData ---");
+    // เราไม่สามารถ log formData ตรงๆ ได้ ต้องวนลูปดูค่าข้างใน
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ', pair[1]);
+    }
+    console.log("---------------------------------");
+    // --- 👆 [สิ้นสุดส่วนที่เพิ่มเข้ามา] ---
+
+
+    if (!formData.keys().next().value) {
+      this.successMessage = "ไม่มีข้อมูลที่เปลี่ยนแปลง";
+      return;
     }
 
     this.userService.updateProfile(formData).subscribe({
       next: (response) => {
         this.successMessage = "อัปเดตโปรไฟล์สำเร็จ!";
         localStorage.setItem('currentUser', JSON.stringify(response.user));
+        this.editForm.markAsPristine();
         setTimeout(() => {
-          this.router.navigate(['/main']).then(() => window.location.reload());
+          this.router.navigate(['/main']);
         }, 2000);
       },
       error: (err) => {
         this.errorMessage = err.error?.error || "เกิดข้อผิดพลาดในการอัปเดต";
+        console.error("Update profile error:", err); // Log error จริงๆ ที่ได้จาก server
       }
     });
   }
+
 
     public isProfileOpen = false; 
   // ฟังก์ชันสำหรับสลับสถานะ (เปิด/ปิด)
