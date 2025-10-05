@@ -15,6 +15,9 @@
             (click)="setActiveLink(link.name)" [routerLink]="link.path"> {{ link.name }}
         </button>
     </div>
+    <button mat-icon-button routerLink="/cart" aria-label="Open Shopping Cart">
+    <mat-icon>shopping_cart</mat-icon>
+  </button>
 
     <mat-form-field class="search-form-field" appearance="outline">
         <input matInput placeholder="ค้นหา">
@@ -62,7 +65,7 @@
     </div>
 
     <div class="sidebar-footer">
-        <button mat-flat-button class="footer-btn primary-btn" routerLink="/home">
+        <button mat-flat-button class="footer-btn primary-btn" routerLink="/main">
             <mat-icon>home</mat-icon>
             <span>หน้าหลัก</span>
         </button>

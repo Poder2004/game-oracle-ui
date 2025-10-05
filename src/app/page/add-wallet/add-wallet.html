@@ -22,12 +22,14 @@
       <mat-card-content>
         <p>กรอกจำนวนเงินหรือเลือกจำนวนเงิน</p>
         <mat-form-field appearance="outline" class="amount-field">
-          <mat-select placeholder="เลือกจำนวนเงิน">
-            <mat-option value="100">100 บาท</mat-option>
-            <mat-option value="300">300 บาท</mat-option>
-            <mat-option value="500">500 บาท</mat-option>
-            <mat-option value="1000">1,000 บาท</mat-option>
-          </mat-select>
+          <input type="text" placeholder="กรอกหรือเลือกจำนวนเงิน" matInput [formControl]="amountControl"
+            [matAutocomplete]="auto">
+
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{ option }} บาท
+            </mat-option>
+          </mat-autocomplete>
         </mat-form-field>
         <button mat-flat-button class="confirm-btn">ยืนยันการเติมเงิน</button>
       </mat-card-content>

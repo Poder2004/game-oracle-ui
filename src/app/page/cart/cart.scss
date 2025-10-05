@@ -1,29 +1,135 @@
-/* --- การตั้งค่า Font (เหมือนเดิม) --- */
-/* ตรวจสอบว่ามี Link ของ Google Fonts ใน index.html แล้ว */
-
 :host {
-    font-family: 'Noto Sans Thai', sans-serif;
-    background-color: #dfffdb;
-    /* สีพื้นหลังอ่อนๆ */
-    display: block;
-    padding: 1rem 40px 0 40px;
-    /* เพิ่ม padding ด้านล่าง */
-    border-bottom-left-radius: 40px;
-    border-bottom-right-radius: 40px;
-    overflow: hidden;
+  color: #333;
 }
 
-.spacer {
-    flex: 1 1 auto;
+.cart-page-container {
+  background-color: #545454;
+  min-height: 100vh;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page-title {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+
+.cart-card {
+  background-color: #E6E6E6 !important;
+  border-radius: 20px !important;
+  padding: 2rem !important;
+  width: 100%;
+  max-width: 800px;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #ccc;
+}
+
+/* --- รายการสินค้า --- */
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.item-details {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 1.1rem;
+
+  img {
+    width: 120px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+}
+
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  .price {
+    font-weight: bold;
+    width: 100px;
+    text-align: right;
+  }
+}
+
+/* --- คูปอง --- */
+.coupon-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+/* --- สรุปยอด --- */
+.summary-section {
+  margin: 2rem 0;
+  font-size: 1.1rem;
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+  }
+
+  .discount-amount {
+    color: #d9534f;
+    font-weight: bold;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 1rem 0;
+  }
+
+  .total-row {
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
+}
+
+/* --- ปุ่ม --- */
+mat-card-actions {
+  gap: 1rem;
+  padding: 0 !important;
+  justify-content: center;
+}
+
+.cancel-btn, .checkout-btn {
+  padding: 1.5rem 2rem !important;
+  font-size: 1rem;
+  border-radius: 12px !important;
+}
+
+.checkout-btn {
+  background-color: #4A90E2 !important;
+}
+
+.cancel-btn{
+    background-color: #e0e0e0 ;
 }
 
 /* --- Header ด้านบนสุด (เหมือนเดิม) --- */
 .top-toolbar {
     background-color: transparent;
-    color: #333;
-    padding: 0;
-    margin-bottom: 1.5rem;
-    /* เพิ่มระยะห่างระหว่างแถบบนกับแถบล่าง */
+    color: #9FCC70;
+    margin: -20px;
 }
 
 .logo {
@@ -32,104 +138,18 @@
     font-weight: 400;
 }
 
-.auth-button {
-    height: 40px;
-    padding: 0 20px;
-    border-radius: 8px;
-    font-weight: 500;
-    margin-left: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.auth-button.login-btn {
-    background-color: #71BA7F;
-    color: #143A16;
-}
-
-.auth-button.signup-btn {
-    background-color: #71BA7F;
-    color: #143A16;
-}
-
-
-/* --- แถบเมนูด้านล่าง (สไตล์ใหม่) --- */
-.nav-action-bar {
-    display: flex;
-    justify-content: space-between;
-    /* <-- หัวใจสำคัญ: จัดวาง ซ้าย, กลาง, ขวา */
-    align-items: center;
-    width: 100%;
-}
-
-.nav-action-bar .mat-icon-button .mat-icon {
-    font-size: 36px;
-    /* ขยายขนาดไอคอน 3 ขีด */
-    width: 36px;
-    height: 36px;
-    color: #333;
-}
-
-.nav-links-container {
-    width: 800px;
-    height: 60px;
-    background-color: #62EB72;
-    border-radius: 25px 25px 0 0;
-    padding: 5px 5px 0 5px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    /* <-- เพิ่มตัวนี้เพื่อจัดเรียงปุ่มให้สวยงาม */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* --- แก้ไขสไตล์ฟอนต์ในส่วนนี้ --- */
-.nav-links-container .nav-link {
-    /* --- เพิ่ม/แก้ไข 3 บรรทัดนี้ --- */
-    font-family: 'Inter', sans-serif;
-    /* เปลี่ยนฟอนต์เป็น Inter */
-    font-size: 20px;
-    /* เปลี่ยนขนาดเป็น 32px */
-    font-weight: 500;
-    /* เปลี่ยนความหนาเป็น 600 (Semi-bold) */
-
-    /* --- สไตล์เดิม --- */
-    min-width: unset;
-    padding: 0 15px;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 20px 15px 0 0;
-    color: #000000;
-}
-
-/* สไตล์ .nav-link.active เหมือนเดิม */
-.nav-links-container .nav-link.active {
-    height: 50px;
-    background-color: #C5F4FF;
-    color: #2A7CF5;
-    font-weight: 600;
-    /* ความหนาเท่าเดิม */
-    box-shadow: none;
-    margin-bottom: -10px;
-}
-
-/* --- ช่องค้นหา (กำหนดขนาดและทำให้พื้นหลังเป็นสีขาว) --- */
-.search-form-field {
-    width: 350px;
-    background-color: white;
-    height: 55px;
-    border-radius: 10px;
-    margin-top: -22px;
-}
-
 .hamburger-menu-btn {
   /* --- ส่วนของการขยับตำแหน่ง (ของเดิม) --- */
   position: relative;
-  top: -30px;
+  top: 30px;
 
   /* --- เพิ่ม/แก้ไข ส่วนของการขยายขนาดปุ่ม --- */
   width: 48px;  /* ขยายความกว้างปุ่ม (ปกติคือ 40px) */
   height: 48px; /* ขยายความสูงปุ่ม (ปกติคือ 40px) */
+  color: #ddd;
+  margin-left: -96%;
 }
+
 
 /* --- เพิ่มส่วนนี้ เพื่อขยายขนาดไอคอนข้างใน --- */
 :host ::ng-deep .hamburger-menu-btn .mat-icon {
