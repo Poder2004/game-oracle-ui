@@ -58,16 +58,14 @@ export class Login {
       next: (response) => {
         // --- กรณี Login สำเร็จ ---
         console.log('Login successful:', response);
-        // เก็บ token ไว้ใน localStorage เพื่อใช้งานต่อ
+        // เก็บ token
         localStorage.setItem('authToken', response.token);
-        // นำทางไปยังหน้าหลัก (หรือหน้าที่ต้องการ)
-        this.router.navigate(['/main']); // <-- แก้ไข path ตามที่ต้องการ
+        // ⭐️ เพิ่มบรรทัดนี้: เก็บข้อมูล user ทั้ง object เป็น JSON string
+        localStorage.setItem('currentUser', JSON.stringify(response.user));
+
+        // นำทางไปยังหน้าหลัก
+        this.router.navigate(['/main']);
       },
-      error: (err) => {
-        // --- กรณี Login ล้มเหลว ---
-        console.error('Login failed:', err);
-        this.loginError = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'; // แสดงข้อความ error
-      }
     });
   }
 }

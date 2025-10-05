@@ -30,6 +30,7 @@ export class Register {
   public hidePassword = true;
   public registerForm: FormGroup; // 1. สร้างตัวแปรสำหรับฟอร์ม
   public registerError: string | null = null; // 2. สร้างตัวแปรสำหรับเก็บ Error Message
+    public imagePreview: string | ArrayBuffer | null = null;
 
   constructor(
     private fb: FormBuilder, // 3. Inject FormBuilder
@@ -40,11 +41,28 @@ export class Register {
     this.registerForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(4)]],
       email: ['', [Validators.required, Validators.email]], // เพิ่ม validator สำหรับเช็ค format email
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      imageProfile: [null] 
     });
   }
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      
+      // เก็บข้อมูลไฟล์ลงใน Form
+      this.registerForm.patchValue({ imageProfile: file });
+      this.registerForm.get('imageProfile')?.updateValueAndValidity();
 
-  // 7. สร้างฟังก์ชันสำหรับ submit ฟอร์ม
+      // สร้างภาพ Preview
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   onSubmit(): void {
     this.registerError = null; // เคลียร์ error เก่า
     if (this.registerForm.invalid) {
@@ -69,5 +87,6 @@ export class Register {
         this.registerError = err.error?.error || 'เกิดข้อผิดพลาดในการสมัครสมาชิก';
       }
     });
+    console.log(this.registerForm.value);
   }
 }

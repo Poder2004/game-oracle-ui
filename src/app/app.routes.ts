@@ -8,6 +8,7 @@ import { Historyuser } from './admin/history/history';
 import { Discounts } from './admin/discounts/discounts';
 import { AddWallet } from './page/add-wallet/add-wallet';
 import { Cart } from './page/cart/cart';
+import { Home } from './page/home/home';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -15,7 +16,7 @@ export const routes: Routes = [
   { path: 'addwallet', component: AddWallet },
    { path: 'cart', component: Cart },
 
-   { path: 'home', component: Main }, 
+   { path: 'home', component: Home }, 
    { path: 'main', component: Main }, 
   { path: '', redirectTo: '/main', pathMatch: 'full' }, 
   { path: 'Mainadmin', component: Mainadmin },

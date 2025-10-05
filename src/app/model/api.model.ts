@@ -10,7 +10,7 @@ export interface UserRegister {
   username: string;
   password: string; // Backend รับเป็น 'password'
   email: string;
-  ImageProfile?: string; // field นี้อาจจะไม่ถูกส่งไปเสมอ ทำให้เป็น optional
+  ImageProfile: string; // field นี้อาจจะไม่ถูกส่งไปเสมอ ทำให้เป็น optional
 }
 
 /**

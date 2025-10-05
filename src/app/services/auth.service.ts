@@ -10,6 +10,11 @@ import { LoginResponse, RegisterResponse, UserLogin, UserRegister } from '../mod
   providedIn: 'root'
 })
 export class AuthService {
+    // เพิ่มฟังก์ชันนี้เข้าไป
+  isLoggedIn(): boolean {
+    const token = localStorage.getItem('authToken');
+    return token != null; // ถ้ามี token ให้ return true, ถ้าไม่มี return false
+  }
 
   // 1. ประกาศตัวแปรไว้เฉยๆ โดยยังไม่กำหนดค่า
   private readonly API_ENDPOINT: string;

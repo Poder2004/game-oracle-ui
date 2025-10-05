@@ -8,7 +8,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { User } from '../../model/api.model';
 
 @Component({
   selector: 'app-navber',
@@ -27,6 +29,8 @@ import { RouterModule } from '@angular/router';
   styleUrl: './navber.scss'
 })
 export class Navber {
+   public isUserLoggedIn: boolean = false
+   public currentUser: User | null = null; 
 
     navLinks = [
     { name: 'แนะนำ', path: '/main' }, // ตัวอย่าง: ลิงก์ไปหน้า home
@@ -49,5 +53,28 @@ export class Navber {
   }
 
 
-  constructor() { }
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) { 
+    this.isUserLoggedIn = this.authService.isLoggedIn();
+
+    // 2. ดึงข้อมูลผู้ใช้จาก localStorage ถ้ามี
+    if (this.isUserLoggedIn) {
+      const userJson = localStorage.getItem('currentUser');
+      if (userJson) {
+        this.currentUser = JSON.parse(userJson); // แปลง JSON string กลับเป็น Object
+      }
+    }
+  }
+  
+  // 3. สร้างฟังก์ชันสำหรับ Logout
+  logout(): void {
+    localStorage.removeItem('authToken'); // ลบ token
+    localStorage.removeItem('currentUser'); // ลบข้อมูล user
+    this.router.navigate(['/login']); // กลับไปหน้า login
+    
+    // (Optional) รีเฟรชหน้าเพื่อให้ component อัปเดตสถานะทันที
+    window.location.reload(); 
+  }
 }
