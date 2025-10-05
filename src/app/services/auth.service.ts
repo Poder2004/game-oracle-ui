@@ -32,9 +32,12 @@ export class AuthService {
    * @param userData ข้อมูลของผู้ใช้ที่ต้องการลงทะเบียน
    * @returns Observable ของ RegisterResponse
    */
-  register(userData: UserRegister): Observable<RegisterResponse> {
+  register(formData: FormData): Observable<RegisterResponse> {
     const url = `${this.API_ENDPOINT}/register`;
-    return this.http.post<RegisterResponse>(url, userData);
+    
+    // 💥 เมื่อส่ง FormData เราไม่ต้องตั้งค่า 'Content-Type' เอง
+    // เบราว์เซอร์จะจัดการให้เป็น 'multipart/form-data' พร้อม boundary ที่ถูกต้องโดยอัตโนมัติ
+    return this.http.post<RegisterResponse>(url, formData);
   }
 
   /**

@@ -64,7 +64,7 @@
             <mat-form-field appearance="fill" class="login-field">
               <mat-icon matPrefix>lock</mat-icon>
               <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'"
-                placeholder="รหัสผ่าน">
+               placeholder="กรอกรหัสผ่านใหม่อย่างน้อย 6 ตัว">
               <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
                 aria-label="Toggle password visibility">
                 <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>

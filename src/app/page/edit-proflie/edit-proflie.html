@@ -1,4 +1,3 @@
-
 <mat-toolbar class="top-toolbar">
     <span class="logo">Game Oracle</span>
 </mat-toolbar>
@@ -28,7 +27,7 @@
                 <div class="profile-pic-section">
                     <div class="profile-pic-container" (click)="fileInput.click()"
                         matTooltip="คลิกเพื่อเปลี่ยนรูปโปรไฟล์">
-                        <img [src]="imagePreview || currentUser?.ImageProfile || 'assets/images/default-avatar.png'"
+                        <img [src]="imagePreview || userImageUrl || 'assets/images/default-avatar.png'"
                             alt="Profile Preview">
                         <div class="overlay">
                             <mat-icon>photo_camera</mat-icon>
@@ -54,6 +53,11 @@
                             <mat-label>อีเมล</mat-label>
                             <mat-icon matPrefix>mail_outline</mat-icon>
                             <input matInput formControlName="email" type="email">
+
+                            <!-- 👇 เพิ่มส่วนนี้เข้าไป -->
+                            <mat-error *ngIf="editForm.get('email')?.hasError('email')">
+                                รูปแบบอีเมลไม่ถูกต้อง
+                            </mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="outline">

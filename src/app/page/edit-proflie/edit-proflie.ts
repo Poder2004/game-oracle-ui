@@ -12,6 +12,7 @@ import { User } from '../../model/api.model';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { Constants } from '../../config/constants';
 
 @Component({
   selector: 'app-edit-profile', // แนะนำให้เปลี่ยน selector ให้ตรง
@@ -36,17 +37,19 @@ export class EditProfile implements OnInit { // แก้ไขชื่อ Clas
   successMessage: string | null = null;
   errorMessage: string | null = null;
   imagePreview: string | ArrayBuffer | null = null;
+  userImageUrl: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private constants: Constants
   ) {
     this.editForm = this.fb.group({
-      username: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      username: [''],
+      email: ['', [Validators.email]], 
       password: [''],
-      imageProfile: [null] // แก้ไข: เพิ่ม comma ที่ขาดไป
+      imageProfile: [null]
     });
   }
 
@@ -58,6 +61,11 @@ export class EditProfile implements OnInit { // แก้ไขชื่อ Clas
         username: this.currentUser?.username,
         email: this.currentUser?.email
       });
+
+       // 👈 4. สร้าง URL ที่สมบูรณ์สำหรับรูปภาพปัจจุบัน
+      if (this.currentUser && this.currentUser.ImageProfile) {
+        this.userImageUrl = `${this.constants.API_ENDPOINT}/${this.currentUser.ImageProfile}`;
+      }
     } else {
       this.router.navigate(['/login']);
     }

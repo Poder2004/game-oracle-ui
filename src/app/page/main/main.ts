@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-main',
   standalone: true,
@@ -35,7 +36,7 @@ export class Main {
   // ฟังก์ชันสำหรับปิด Popup
   closePopup(): void {
     this.showPromotionPopup = false;
+    this.router.navigate(['/register']); // พาไปหน้าสมัครสมาชิก
   }
-
-  constructor() { }
+ constructor(private router: Router) { }
 }

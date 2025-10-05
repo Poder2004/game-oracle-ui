@@ -63,30 +63,37 @@ export class Register {
     }
   }
 
-  onSubmit(): void {
-    this.registerError = null; // เคลียร์ error เก่า
+ onSubmit(): void {
+    this.registerError = null;
     if (this.registerForm.invalid) {
-      return; // ถ้าฟอร์มไม่ถูกต้อง ให้หยุดทำงาน
+      return;
     }
 
-    // Backend ของคุณไม่ได้ใช้ fullName แต่ถ้าต้องการเพิ่ม ก็แค่เพิ่มในฟอร์มและ Model
-    const userData: UserRegister = this.registerForm.value;
+    // 1. สร้าง FormData object
+    const formData = new FormData();
 
-    this.authService.register(userData).subscribe({
+    // 2. นำข้อมูลแต่ละ field จากฟอร์มมาใส่ใน formData
+    formData.append('username', this.registerForm.get('username')?.value);
+    formData.append('email', this.registerForm.get('email')?.value);
+    formData.append('password', this.registerForm.get('password')?.value);
+    
+    // 3. นำไฟล์มาใส่ (ถ้ามี)
+    const imageFile = this.registerForm.get('imageProfile')?.value;
+    if (imageFile) {
+      formData.append('imageProfile', imageFile);
+    }
+
+    // 4. ส่ง formData ไปที่ Service แทน userData เดิม
+    this.authService.register(formData).subscribe({
       next: (response) => {
-        // --- กรณี Register สำเร็จ ---
         console.log('Registration successful:', response);
-        // สามารถแสดงข้อความ "สมัครสำเร็จ" หรือจะพาไปหน้า Login เลยก็ได้
         alert('สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ');
-        this.router.navigate(['/login']); // พาไปหน้า Login
+        this.router.navigate(['/login']);
       },
       error: (err) => {
-        // --- กรณี Register ล้มเหลว ---
         console.error('Registration failed:', err);
-        // ตรวจสอบว่ามี error message จาก backend หรือไม่
         this.registerError = err.error?.error || 'เกิดข้อผิดพลาดในการสมัครสมาชิก';
       }
     });
-    console.log(this.registerForm.value);
   }
 }
