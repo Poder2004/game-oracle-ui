@@ -27,24 +27,36 @@
             <mat-card class="login-card">
                 <mat-card-content>
                     <h2 class="login-title">ลงชื่อเข้าใช้</h2>
-                    <form>
+
+                    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
                         <mat-form-field appearance="fill" class="login-field">
                             <mat-icon matPrefix>person</mat-icon>
-                            <input matInput>
+                            <input matInput formControlName="username" placeholder="ชื่อผู้ใช้">
                         </mat-form-field>
 
                         <mat-form-field appearance="fill" class="login-field">
                             <mat-icon matPrefix>lock</mat-icon>
-                            <input matInput [type]="hidePassword ? 'password' : 'text'">
-                            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+                            <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'"
+                                placeholder="รหัสผ่าน">
+                            <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
                                 aria-label="Toggle password visibility">
                                 <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                             </button>
                         </mat-form-field>
-                        <a href="#" class="forgot-password">ลืมรหัสผ่าน?</a>
-                        <div class="actions">
-                            <button mat-flat-button class="login-btn">เข้าสู่ระบบ</button>
+
+                        <div *ngIf="loginError" class="login-error-message">
+                            {{ loginError }}
                         </div>
+
+                        <a href="#" class="forgot-password">ลืมรหัสผ่าน?</a>
+
+                        <div class="actions">
+                            <button type="submit" mat-flat-button class="login-btn" [disabled]="loginForm.invalid">
+                                เข้าสู่ระบบ
+                            </button>
+                        </div>
+
                     </form>
                 </mat-card-content>
             </mat-card>

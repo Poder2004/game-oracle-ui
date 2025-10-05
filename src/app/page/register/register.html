@@ -21,8 +21,8 @@
           <li>กรอกแบบฟอร์มสมัครสมาชิกให้เรียบร้อย</li>
           <li>กรุณาคลิกปุ่มสร้างบัญชี</li>
         </ol>
-         <button mat-flat-button class="create-account-btn" routerLink="/login">เข้าสู่ระบบ</button>
-        </mat-card>
+        <button mat-flat-button class="create-account-btn" routerLink="/login">เข้าสู่ระบบ</button>
+      </mat-card>
     </div>
 
     <div class="login-pane">
@@ -34,28 +34,36 @@
           </button>
 
           <h2 class="login-title">สมัครสมาชิก</h2>
-          <form>
+
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
             <mat-form-field appearance="fill" class="login-field">
               <mat-icon matPrefix>person</mat-icon>
-              <input matInput>
+              <input matInput formControlName="username" placeholder="ชื่อผู้ใช้">
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="login-field">
               <mat-icon matPrefix>mail</mat-icon>
-              <input matInput>
+              <input matInput formControlName="email" type="email" placeholder="อีเมล">
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="login-field">
               <mat-icon matPrefix>lock</mat-icon>
-              <input matInput [type]="hidePassword ? 'password' : 'text'">
-              <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+              <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'"
+                placeholder="รหัสผ่าน">
+              <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
                 aria-label="Toggle password visibility">
                 <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
               </button>
             </mat-form-field>
 
+            <div *ngIf="registerError" class="login-error-message">
+              {{ registerError }}
+            </div>
+
             <div class="actions">
-              <button mat-flat-button class="login-btn">สร้างบัญชี</button>
+              <button type="submit" mat-flat-button class="login-btn"
+                [disabled]="registerForm.invalid">สร้างบัญชี</button>
             </div>
           </form>
         </mat-card-content>
