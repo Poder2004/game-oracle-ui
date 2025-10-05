@@ -33,7 +33,7 @@ export class Navber {
    public currentUser: User | null = null; 
 
     navLinks = [
-    { name: 'แนะนำ', path: '/main' }, // ตัวอย่าง: ลิงก์ไปหน้า home
+    { name: 'แนะนำ', path: '/home' }, // ตัวอย่าง: ลิงก์ไปหน้า home
     { name: 'อันดับเกมขายดี', path: '/top-selling' }, // ตัวอย่าง
     { name: 'เติมเงิน/ประวัติการซื้อ', path: '/addwallet' }, // <-- นี่คือลิงก์เป้าหมายของคุณ
     { name: 'ประเภทเกม', path: '/genres' } // ตัวอย่าง

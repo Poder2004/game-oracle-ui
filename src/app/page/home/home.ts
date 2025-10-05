@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { Navber } from "../../widget/navber/navber";
 @Component({
   selector: 'app-main',
   standalone: true,
@@ -12,8 +13,9 @@ import { MatDividerModule } from '@angular/material/divider';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatDividerModule
-  ],
+    MatDividerModule,
+    Navber
+],
   templateUrl: './home.html',
   styleUrls: ['./home.scss']   // ✅ ต้องเป็น styleUrls (array)
 })

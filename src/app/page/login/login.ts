@@ -64,7 +64,7 @@ export class Login {
         localStorage.setItem('currentUser', JSON.stringify(response.user));
 
         // นำทางไปยังหน้าหลัก
-        this.router.navigate(['/main']);
+        this.router.navigate(['/home']);
       },
     });
   }
