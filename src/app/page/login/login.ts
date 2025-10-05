@@ -63,8 +63,13 @@ export class Login {
         // ⭐️ เพิ่มบรรทัดนี้: เก็บข้อมูล user ทั้ง object เป็น JSON string
         localStorage.setItem('currentUser', JSON.stringify(response.user));
 
-        // นำทางไปยังหน้าหลัก
-        this.router.navigate(['/home']);
+         if (response.user.role === 'admin') {
+          // ถ้าเป็น 'admin' ให้ไปที่หน้า Mainadmin
+          this.router.navigate(['/Mainadmin']);
+        } else {
+          // ถ้าเป็น Role อื่นๆ (เช่น 'member') ให้ไปที่หน้า main
+          this.router.navigate(['/home']);
+        }
       },
     });
   }

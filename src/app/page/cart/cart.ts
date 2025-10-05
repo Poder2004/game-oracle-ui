@@ -9,7 +9,9 @@ import { MatRadioModule } from '@angular/material/radio'; // สำหรับ 
 import { FormsModule } from '@angular/forms';
 import { Navber } from "../../widget/navber/navber"; // สำหรับ ngModel
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { User } from '../../model/api.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-cart',
@@ -30,6 +32,8 @@ import { RouterModule } from '@angular/router';
   styleUrl: './cart.scss'
 })
 export class Cart implements OnInit{
+  public currentUser: User | null = null; 
+     public isUserLoggedIn: boolean = false
 
   // ข้อมูลจำลอง
   cartItems = [
@@ -49,7 +53,30 @@ export class Cart implements OnInit{
   discount = 0;
   total = 0;
 
-  constructor() { }
+   constructor(
+    private authService: AuthService,
+    private router: Router
+  ) { 
+    this.isUserLoggedIn = this.authService.isLoggedIn();
+
+    // 2. ดึงข้อมูลผู้ใช้จาก localStorage ถ้ามี
+    if (this.isUserLoggedIn) {
+      const userJson = localStorage.getItem('currentUser');
+      if (userJson) {
+        this.currentUser = JSON.parse(userJson); // แปลง JSON string กลับเป็น Object
+      }
+    }
+  }
+  
+  // 3. สร้างฟังก์ชันสำหรับ Logout
+  logout(): void {
+    localStorage.removeItem('authToken'); // ลบ token
+    localStorage.removeItem('currentUser'); // ลบข้อมูล user
+    this.router.navigate(['/login']); // กลับไปหน้า login
+    
+    // (Optional) รีเฟรชหน้าเพื่อให้ component อัปเดตสถานะทันที
+    window.location.reload(); 
+  }
 
   ngOnInit(): void {
     this.calculateTotals();

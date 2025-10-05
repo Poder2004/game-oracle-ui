@@ -66,3 +66,10 @@ export interface ProfileResponse {
         email: string;
     }
 }
+
+export interface UserUpdatePayload {
+  username?: string;
+  email?: string;
+  imageProfile?: string;
+  password?: string;
+}

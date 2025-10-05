@@ -9,12 +9,14 @@ import { Discounts } from './admin/discounts/discounts';
 import { AddWallet } from './page/add-wallet/add-wallet';
 import { Cart } from './page/cart/cart';
 import { Home } from './page/home/home';
+import { EditProfile } from './page/edit-proflie/edit-proflie';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'addwallet', component: AddWallet },
    { path: 'cart', component: Cart },
+    { path: 'editprofile', component: EditProfile },
 
    { path: 'home', component: Home }, 
    { path: 'main', component: Main }, 

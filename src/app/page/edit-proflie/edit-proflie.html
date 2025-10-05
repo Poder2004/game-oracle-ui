@@ -1,0 +1,143 @@
+
+<mat-toolbar class="top-toolbar">
+    <span class="logo">Game Oracle</span>
+</mat-toolbar>
+<button mat-icon-button class="hamburger-menu-btn" (click)="toggleProfileSidebar()" aria-label="Open Profile Menu">
+    <mat-icon>menu</mat-icon>
+</button>
+<div class="edit-profile-page">
+
+    <mat-card class="profile-card">
+
+        <!-- เพิ่มส่วน Header เข้ามา -->
+        <div class="card-header">
+            <mat-card-title>แก้ไขข้อมูลส่วนตัว</mat-card-title>
+            <button mat-icon-button routerLink="/main" aria-label="Back to main page">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+
+        <mat-card-content>
+            <!-- 
+        ใช้ Flexbox แบ่งโซนรูปภาพกับฟอร์มออกจากกัน
+        เพื่อให้จัดวางได้ง่ายและสวยงาม
+      -->
+            <div class="content-wrapper">
+
+                <!-- ===== โซนรูปภาพ (ซ้าย) ===== -->
+                <div class="profile-pic-section">
+                    <div class="profile-pic-container" (click)="fileInput.click()"
+                        matTooltip="คลิกเพื่อเปลี่ยนรูปโปรไฟล์">
+                        <img [src]="imagePreview || currentUser?.ImageProfile || 'assets/images/default-avatar.png'"
+                            alt="Profile Preview">
+                        <div class="overlay">
+                            <mat-icon>photo_camera</mat-icon>
+                            <span>เปลี่ยนรูป</span>
+                        </div>
+                    </div>
+                    <input hidden type="file" #fileInput (change)="onFileSelected($event)"
+                        accept="image/png, image/jpeg">
+                    <p class="pic-hint">อัปโหลดรูปภาพ .jpg หรือ .png</p>
+                </div>
+
+                <!-- ===== โซนฟอร์ม (ขวา) ===== -->
+                <div class="form-section">
+                    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>ชื่อผู้ใช้</mat-label>
+                            <mat-icon matPrefix>person_outline</mat-icon>
+                            <input matInput formControlName="username">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>อีเมล</mat-label>
+                            <mat-icon matPrefix>mail_outline</mat-icon>
+                            <input matInput formControlName="email" type="email">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>รหัสผ่านใหม่ (ถ้าต้องการเปลี่ยน)</mat-label>
+                            <mat-icon matPrefix>lock_outline</mat-icon>
+                            <input matInput formControlName="password" type="password"
+                                placeholder="กรอกรหัสผ่านใหม่อย่างน้อย 6 ตัว">
+                        </mat-form-field>
+
+                        <!-- แสดงข้อความ Success/Error -->
+                        <div *ngIf="successMessage" class="message success">
+                            <mat-icon>check_circle</mat-icon>
+                            <span>{{ successMessage }}</span>
+                        </div>
+                        <div *ngIf="errorMessage" class="message error">
+                            <mat-icon>error</mat-icon>
+                            <span>{{ errorMessage }}</span>
+                        </div>
+
+                        <!-- ส่วนของปุ่ม -->
+                        <div class="actions">
+                            <button mat-stroked-button color="basic" routerLink="/main">ยกเลิก</button>
+                            <button mat-raised-button color="primary" type="submit"
+                                [disabled]="editForm.invalid || editForm.pristine">
+                                บันทึกการเปลี่ยนแปลง
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
+
+<div class="profile-overlay" [class.open]="isProfileOpen" (click)="toggleProfileSidebar()">
+</div>
+
+<aside class="profile-sidebar" [class.open]="isProfileOpen">
+    <div *ngIf="currentUser" class="profile-details">
+        <div class="avatar-container">
+            <img [src]="currentUser.ImageProfile" alt="User Avatar">
+        </div>
+        <h2>ข้อมูลส่วนตัว</h2>
+
+        <div class="info-field">
+            <label>Name User</label>
+            <div class="info-value">
+                <mat-icon>person</mat-icon>
+                <span>{{ currentUser.username }}</span>
+            </div>
+        </div>
+        <div class="info-field">
+            <label>Gmail User</label>
+            <div class="info-value">
+                <mat-icon>mail</mat-icon>
+                <span>{{ currentUser.email }}</span>
+            </div>
+        </div>
+        <div class="info-field">
+            <label>Wallet Balance</label>
+            <div class="info-value">
+                <mat-icon>account_balance_wallet</mat-icon>
+                <span>{{ currentUser.wallet | number:'1.2-2' }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-footer">
+
+        <button mat-flat-button class="footer-btn primary-btn" routerLink="/editprofile">
+            <mat-icon>person</mat-icon>
+            <span>แก้ไขโปรไฟล์</span>
+        </button>
+
+        <button mat-flat-button class="footer-btn primary-btn" routerLink="/home">
+            <mat-icon>home</mat-icon>
+            <span>หน้าหลัก</span>
+        </button>
+
+        <button mat-flat-button class="footer-btn secondary-btn" (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>ออกจากระบบ</span>
+        </button>
+
+    </div>
+</aside>

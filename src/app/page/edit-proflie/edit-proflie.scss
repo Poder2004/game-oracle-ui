@@ -1,29 +1,174 @@
-/* --- การตั้งค่า Font (เหมือนเดิม) --- */
-/* ตรวจสอบว่ามี Link ของ Google Fonts ใน index.html แล้ว */
-
+// ใช้ CSS Variables เพื่อให้แก้ไขสีได้ง่าย
 :host {
-    font-family: 'Noto Sans Thai', sans-serif;
-    background-color: #dfffdb;
-    /* สีพื้นหลังอ่อนๆ */
-    display: block;
-    padding: 1rem 40px 0 40px;
-    /* เพิ่ม padding ด้านล่าง */
-    border-bottom-left-radius: 40px;
-    border-bottom-right-radius: 40px;
-    overflow: hidden;
+  --page-bg: #838383;         // พื้นหลังหลักตามที่คุณต้องการ
+  --card-bg: #2c2c2e;          // สีพื้นหลังของการ์ด (เทาเข้ม)
+  --text-primary: #f2f2f7;     // สีตัวอักษรหลัก (ขาวนวล)
+  --text-secondary: #8e8e93;    // สีตัวอักษรรอง (เทา)
+  --accent-color: #0A84FF;     // สีที่ใช้เน้น เช่น ตอนกดฟอร์ม (ฟ้าสด)
+  --border-color: #48484a;     // สีเส้นขอบ
+  --success-color: #30d158;    // สีเขียวสำหรับข้อความสำเร็จ
+  --error-color: #ff453a;      // สีแดงสำหรับข้อความผิดพลาด
+}
+.edit-profile-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 64px); // ให้เต็มจอ (ลบความสูงของ Navbar ออก)
+  background-color: var(--light-gray-color);
+  padding: 1rem;
+  margin-top: -80px;
+  box-sizing: border-box; // ป้องกัน padding ทำให้เกิด scrollbar
 }
 
-.spacer {
-    flex: 1 1 auto;
+.profile-card {
+  max-width: 850px;
+  width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem 0;
+  border-bottom: 1px solid #eee;
+  
+  mat-card-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+}
+
+.content-wrapper {
+  display: flex;
+  gap: 2.5rem;
+  padding: 1.5rem;
+
+  // ทำให้เป็นแนวตั้งในจอเล็ก
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+// --- ส่วนรูปภาพ ---
+.profile-pic-section {
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-pic-container {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  cursor: pointer;
+  overflow: hidden;
+  border: 4px solid white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover {
+    img {
+      transform: scale(1.1);
+    }
+    .overlay {
+      opacity: 1;
+    }
+  }
+}
+
+.pic-hint {
+  font-size: 0.8rem;
+  color: #888;
+  text-align: center;
+}
+
+// --- ส่วนฟอร์ม ---
+.form-section {
+  flex: 1;
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  mat-icon[matPrefix] {
+    margin-right: 8px;
+    color: #999;
+  }
+}
+
+// --- ส่วนข้อความและปุ่ม ---
+.message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-weight: 500;
+
+  &.success {
+    background-color: #e8f5e9;
+    color: var(--success-color);
+  }
+  &.error {
+    background-color: #ffebee;
+    color: var(--error-color);
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+
+  button {
+    min-width: 120px;
+    padding: 0 24px;
+    height: 40px;
+    border-radius: 20px;
+  }
 }
 
 /* --- Header ด้านบนสุด (เหมือนเดิม) --- */
 .top-toolbar {
     background-color: transparent;
-    color: #333;
-    padding: 0;
-    margin-bottom: 1.5rem;
-    /* เพิ่มระยะห่างระหว่างแถบบนกับแถบล่าง */
+    color: #9FCC70;
+    margin: 20px;
 }
 
 .logo {
@@ -32,104 +177,16 @@
     font-weight: 400;
 }
 
-.auth-button {
-    height: 40px;
-    padding: 0 20px;
-    border-radius: 8px;
-    font-weight: 500;
-    margin-left: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.auth-button.login-btn {
-    background-color: #71BA7F;
-    color: #143A16;
-}
-
-.auth-button.signup-btn {
-    background-color: #71BA7F;
-    color: #143A16;
-}
-
-
-/* --- แถบเมนูด้านล่าง (สไตล์ใหม่) --- */
-.nav-action-bar {
-    display: flex;
-    justify-content: space-between;
-    /* <-- หัวใจสำคัญ: จัดวาง ซ้าย, กลาง, ขวา */
-    align-items: center;
-    width: 100%;
-}
-
-.nav-action-bar .mat-icon-button .mat-icon {
-    font-size: 36px;
-    /* ขยายขนาดไอคอน 3 ขีด */
-    width: 36px;
-    height: 36px;
-    color: #333;
-}
-
-.nav-links-container {
-    width: 800px;
-    height: 60px;
-    background-color: #62EB72;
-    border-radius: 25px 25px 0 0;
-    padding: 5px 5px 0 5px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    /* <-- เพิ่มตัวนี้เพื่อจัดเรียงปุ่มให้สวยงาม */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* --- แก้ไขสไตล์ฟอนต์ในส่วนนี้ --- */
-.nav-links-container .nav-link {
-    /* --- เพิ่ม/แก้ไข 3 บรรทัดนี้ --- */
-    font-family: 'Inter', sans-serif;
-    /* เปลี่ยนฟอนต์เป็น Inter */
-    font-size: 20px;
-    /* เปลี่ยนขนาดเป็น 32px */
-    font-weight: 500;
-    /* เปลี่ยนความหนาเป็น 600 (Semi-bold) */
-
-    /* --- สไตล์เดิม --- */
-    min-width: unset;
-    padding: 0 15px;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 20px 15px 0 0;
-    color: #000000;
-}
-
-/* สไตล์ .nav-link.active เหมือนเดิม */
-.nav-links-container .nav-link.active {
-    height: 50px;
-    background-color: #C5F4FF;
-    color: #2A7CF5;
-    font-weight: 600;
-    /* ความหนาเท่าเดิม */
-    box-shadow: none;
-    margin-bottom: -10px;
-}
-
-/* --- ช่องค้นหา (กำหนดขนาดและทำให้พื้นหลังเป็นสีขาว) --- */
-.search-form-field {
-    width: 350px;
-    background-color: white;
-    height: 55px;
-    border-radius: 10px;
-    margin-top: -22px;
-}
-
 .hamburger-menu-btn {
   /* --- ส่วนของการขยับตำแหน่ง (ของเดิม) --- */
   position: relative;
-  top: -30px;
-
   /* --- เพิ่ม/แก้ไข ส่วนของการขยายขนาดปุ่ม --- */
   width: 48px;  /* ขยายความกว้างปุ่ม (ปกติคือ 40px) */
   height: 48px; /* ขยายความสูงปุ่ม (ปกติคือ 40px) */
+  color: #ddd;
+  margin-left: 50px;
 }
+
 
 /* --- เพิ่มส่วนนี้ เพื่อขยายขนาดไอคอนข้างใน --- */
 :host ::ng-deep .hamburger-menu-btn .mat-icon {

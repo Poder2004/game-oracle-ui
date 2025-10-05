@@ -1,14 +1,6 @@
 /* General Body and Font Styles - Light Theme */
 .admin-container {
-  /* --- เพิ่มโค้ดสำหรับภาพพื้นหลังตรงนี้ --- */
-   background-image: url('/assets/images/back_ground.png');
-  background-size: cover; /* ทำให้รูปภาพเต็มพื้นที่ */
-  background-position: center; /* จัดให้รูปอยู่ตรงกลาง */
-  background-repeat: no-repeat; /* ไม่ให้รูปภาพซ้ำ */
-  background-attachment: fixed; /* ทำให้พื้นหลังอยู่กับที่ตอนเลื่อนจอ */
-  /* ------------------------------------ */
-
-  background-color: #f4f5f7; /* สีสำรองเผื่อรูปภาพไม่โหลด */
+  background-color: #838383; /* สีสำรองเผื่อรูปภาพไม่โหลด */
   min-height: 100vh;
   color: #1F2937; /* Default text color changed to dark gray */
   font-family: sans-serif;
@@ -29,11 +21,11 @@
   h1 {
     font-size: 2.25rem;
     font-weight: 700;
-    color: #000000; /* Changed to black as requested */
+    color: #ffffff; /* Changed to black as requested */
   }
 
   p {
-    color: #000000; /* Changed to black as requested */
+    color: #ffffff; /* Changed to black as requested */
     margin-top: 0.5rem;
   }
 }
@@ -50,13 +42,13 @@
   h2 {
     font-size: 1.125rem;
     font-weight: 600;
-    color: #E79A4A;
+    color: #ffffff;
   }
 }
 
 /* Button Styles */
 .btn {
-  color: white;
+  color: #FF3B00;
   border: none;
   border-radius: 0.5rem;
   transition: opacity 0.2s ease-in-out;
@@ -71,7 +63,7 @@
 }
 
 .category-button {
-  background-color: #FF3B00; /* Changed color as requested */
+  background-color: #D9D9D9; /* Changed color as requested */
 }
 
 .details-button {
