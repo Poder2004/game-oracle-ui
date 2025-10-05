@@ -73,3 +73,9 @@ export interface UserUpdatePayload {
   imageProfile?: string;
   password?: string;
 }
+
+export interface GetProfileResponse {
+  status: string;
+  message: string;
+  user: User;
+}

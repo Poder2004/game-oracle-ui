@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'; // 👈 Import HttpHeaders
 import { Observable, of } from 'rxjs';
 import { Constants } from '../config/constants';
-import { ProfileResponse, User, UserUpdatePayload } from '../model/api.model'; // 👈 Import User
+import { GetProfileResponse, ProfileResponse, User, UserUpdatePayload } from '../model/api.model'; // 👈 Import User
 
 
 @Injectable({
@@ -23,22 +23,30 @@ export class UserService {
     this.API_ENDPOINT = this.constants.API_ENDPOINT;
   }
 
+  // --- 👇 [เพิ่มฟังก์ชันนี้เข้าไปใหม่] ---
   /**
-   * ฟังก์ชันสำหรับดึงข้อมูลโปรไฟล์ผู้ใช้จาก Backend
-   * @param userId ID ของผู้ใช้ที่ต้องการดึงข้อมูล
-   * @returns Observable ของ ProfileResponse
+   * ดึงข้อมูลโปรไฟล์ของผู้ใช้ที่ล็อกอินอยู่
+   * @returns Observable ที่มีข้อมูลโปรไฟล์
    */
-  getProfile(userId: number): Observable<ProfileResponse> {
-    const url = `${this.API_ENDPOINT}/profile`;
+  getProfile(): Observable<GetProfileResponse> {
+    const url = `${this.API_ENDPOINT}/api/profile`;
+    const token = localStorage.getItem('authToken');
 
-    // สร้าง HttpParams สำหรับส่ง user_id ไปในรูปแบบ Query String
-    // จะได้ URL เป็น http://localhost:8080/profile?user_id=123
-    const params = new HttpParams().set('user_id', userId.toString());
+    if (!token) {
+      // ถ้าไม่มี token ให้ return Observable ว่างๆ หรือจัดการ error
+      return of({} as GetProfileResponse); 
+    }
 
-    return this.http.get<ProfileResponse>(url, { params });
+    // สร้าง Header พร้อมแนบ JWT Token
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    // ส่ง GET request พร้อม header
+    return this.http.get<GetProfileResponse>(url, { headers: headers });
   }
 
-  // 👇 เพิ่มฟังก์ชันนี้เข้าไปใหม่
+  // --- 👆 [สิ้นสุดฟังก์ชันที่เพิ่มเข้ามา] ---
   /**
    * อัปเดตข้อมูลโปรไฟล์ผู้ใช้
    * @param userData ข้อมูลที่ต้องการอัปเดต
@@ -50,6 +58,6 @@ export class UserService {
       Authorization: `Bearer ${token}`
     });
 
-    return this.http.put<any>(`${this.API_ENDPOINT}/profile`, formData, { headers });
+    return this.http.put<any>(`${this.API_ENDPOINT}/api/updateprofile`, formData, { headers });
   }
 }
