@@ -151,9 +151,11 @@ export class EditProfile implements OnInit { // แก้ไขชื่อ Clas
   }
 
   logout(): void {
-    localStorage.removeItem('authToken'); // ลบ token
-    localStorage.removeItem('currentUser'); // ลบข้อมูล user
-    this.router.navigate(['/login']); // กลับไปหน้า login
+
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('currentUser');
+
+   this.router.navigate(['/login']); // กลับไปหน้า login
     
     // (Optional) รีเฟรชหน้าเพื่อให้ component อัปเดตสถานะทันที
     window.location.reload(); 

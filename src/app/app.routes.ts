@@ -88,6 +88,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '/main', // หากเข้า path ที่ไม่มีอยู่จริง ให้กลับไปหน้า main
+    redirectTo: '/home', // หากเข้า path ที่ไม่มีอยู่จริง ให้กลับไปหน้า main
   },
 ];

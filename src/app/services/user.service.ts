@@ -38,26 +38,18 @@ export class UserService {
     return this.http.get<ProfileResponse>(url, { params });
   }
 
-    // 👇 เพิ่มฟังก์ชันนี้เข้าไปใหม่
+  // 👇 เพิ่มฟังก์ชันนี้เข้าไปใหม่
   /**
    * อัปเดตข้อมูลโปรไฟล์ผู้ใช้
    * @param userData ข้อมูลที่ต้องการอัปเดต
    * @returns Observable ที่มีข้อมูล user ที่อัปเดตแล้ว
    */
-   updateProfile(formData: FormData): Observable<{ status: string, message: string, user: User }> {
-    const url = `${this.API_ENDPOINT}/api/profile`;
-    const token = localStorage.getItem('authToken');
-
-    if (!token) {
-      return of(); 
-    }
-
-    // เมื่อส่ง FormData ไม่ต้องกำหนด Content-Type เอง
-    // เบราว์เซอร์จะจัดการให้เป็น multipart/form-data โดยอัตโนมัติ
+  updateProfile(formData: FormData): Observable<any> {
+    const token = localStorage.getItem('authToken'); // ดึง token ที่เก็บไว้หลัง login
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     });
 
-    return this.http.put<{ status: string, message: string, user: User }>(url, formData, { headers: headers });
+    return this.http.put<any>(`${this.API_ENDPOINT}/profile`, formData, { headers });
   }
 }
