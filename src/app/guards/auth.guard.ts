@@ -25,8 +25,6 @@ export const authGuard: CanActivateFn = (route, state) => {
     }
   }
 
-  // สำหรับฝั่งเซิร์ฟเวอร์, ไม่อนุญาตให้เข้าถึงถ้าไม่มีข้อมูล และส่งไปหน้า login
-  // เพื่อป้องกันการพยายาม render หน้าที่ต้อง login บน server
   router.navigate(['/login']);
   return false;
 };

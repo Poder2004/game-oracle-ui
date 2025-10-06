@@ -28,6 +28,5 @@ export const loginGuard: CanActivateFn = (route, state) => {
     }
   }
 
-  // สำหรับฝั่ง Server-side Rendering, ถ้าไม่มี token ก็อนุญาตให้แสดงผลหน้า login ได้
   return true;
 };
