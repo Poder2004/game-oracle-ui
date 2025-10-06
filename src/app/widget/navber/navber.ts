@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 import { User } from '../../model/api.model';
 import { Constants } from '../../config/constants';
 
+
 @Component({
   selector: 'app-navber',
   standalone: true,
@@ -59,6 +60,7 @@ export class Navber {
     private constants: Constants,
     private authService: AuthService,
     private router: Router
+
   ) {
     this.isUserLoggedIn = this.authService.isLoggedIn();
 

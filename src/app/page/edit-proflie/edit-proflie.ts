@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core'; // [แก้ไข] เพิ่ม OnDestroy
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -6,16 +6,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { Subscription } from 'rxjs'; // [เพิ่ม] import Subscription
 
 import { User } from '../../model/api.model';
 import { UserService } from '../../services/user.service';
-import { Router } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { Constants } from '../../config/constants';
+import { AuthService } from '../../services/auth.service'; // [แก้ไข] แก้ path import ให้ถูกต้อง
 
 @Component({
-  selector: 'app-edit-profile', // แนะนำให้เปลี่ยน selector ให้ตรง
+  selector: 'app-edit-profile',
   standalone: true,
   imports: [
     CommonModule,
@@ -28,10 +29,10 @@ import { Constants } from '../../config/constants';
     MatToolbarModule,
     RouterModule
   ],
-  templateUrl: './edit-proflie.html', // แนะนำให้เปลี่ยนชื่อไฟล์
-  styleUrl: './edit-proflie.scss'     // แนะนำให้เปลี่ยนชื่อไฟล์
+  templateUrl: './edit-proflie.html',
+  styleUrl: './edit-proflie.scss'
 })
-export class EditProfile implements OnInit { // แก้ไขชื่อ Class
+export class EditProfile implements OnInit, OnDestroy { // [แก้ไข] implement OnDestroy
   editForm: FormGroup;
   currentUser: User | null = null;
   successMessage: string | null = null;
@@ -39,35 +40,47 @@ export class EditProfile implements OnInit { // แก้ไขชื่อ Clas
   imagePreview: string | ArrayBuffer | null = null;
   userImageUrl: string | null = null;
 
+  private userSubscription!: Subscription; // [เพิ่ม] ตัวแปรสำหรับเก็บ Subscription
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
     private router: Router,
-    private constants: Constants
+    private constants: Constants,
+    private authService: AuthService
   ) {
     this.editForm = this.fb.group({
       username: [''],
-      email: ['', [Validators.email]], 
+      email: ['', [Validators.email]],
       password: [''],
       imageProfile: [null]
     });
   }
 
   ngOnInit(): void {
-    const userJson = localStorage.getItem('currentUser');
-    if (userJson) {
-      this.currentUser = JSON.parse(userJson);
-      this.editForm.patchValue({
-        username: this.currentUser?.username,
-        email: this.currentUser?.email
-      });
+    // [แก้ไข] เปลี่ยนมาดึงข้อมูลจาก AuthService เพื่อให้เป็นมาตรฐานเดียวกัน
+    this.userSubscription = this.authService.currentUser$.subscribe(user => {
+      if (user) {
+        this.currentUser = user;
+        this.editForm.patchValue({
+          username: this.currentUser?.username,
+          email: this.currentUser?.email
+        });
 
-       // 👈 4. สร้าง URL ที่สมบูรณ์สำหรับรูปภาพปัจจุบัน
-      if (this.currentUser && this.currentUser.ImageProfile) {
-        this.userImageUrl = `${this.constants.API_ENDPOINT}/${this.currentUser.ImageProfile}`;
+        if (this.currentUser?.ImageProfile) {
+          this.userImageUrl = `${this.constants.API_ENDPOINT}/${this.currentUser.ImageProfile}`;
+        }
+      } else {
+        // ถ้าไม่มี user ในระบบ ให้ redirect ไปหน้า login
+        this.router.navigate(['/login']);
       }
-    } else {
-      this.router.navigate(['/login']);
+    });
+  }
+
+  ngOnDestroy(): void {
+    // [เพิ่ม] ยกเลิก Subscription เพื่อป้องกัน memory leak
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
     }
   }
 
@@ -76,15 +89,14 @@ export class EditProfile implements OnInit { // แก้ไขชื่อ Clas
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       this.editForm.patchValue({ imageProfile: file });
-      
+
       const reader = new FileReader();
       reader.onload = () => { this.imagePreview = reader.result; };
       reader.readAsDataURL(file);
     }
   }
 
-   // 👇 แก้ไขฟังก์ชันนี้ทั้งหมด
-    onSubmit(): void {
+  onSubmit(): void {
     this.successMessage = null;
     this.errorMessage = null;
 
@@ -96,31 +108,13 @@ export class EditProfile implements OnInit { // แก้ไขชื่อ Clas
     const formData = new FormData();
     const controls = this.editForm.controls;
 
-    if (controls['username'].dirty) {
-      formData.append('username', controls['username'].value);
-    }
-    if (controls['email'].dirty) {
-      formData.append('email', controls['email'].value);
-    }
-   const passwordControl = controls['password'];
-    // เช็คว่า: 1. ผู้ใช้ได้แก้ไขช่องนี้จริง และ 2. มันมีค่า (ไม่เป็นค่าว่าง)
-    if (passwordControl.dirty && passwordControl.value) {
-      formData.append('password', passwordControl.value);
-    }
+    // (ส่วนนี้เหมือนเดิม)
+    if (controls['username'].dirty) formData.append('username', controls['username'].value);
+    if (controls['email'].dirty) formData.append('email', controls['email'].value);
+    const passwordControl = controls['password'];
+    if (passwordControl.dirty && passwordControl.value) formData.append('password', passwordControl.value);
     const imageFile = controls['imageProfile'].value;
-    if (imageFile) {
-      formData.append('imageProfile', imageFile);
-    }
-
-    // --- 👇 [ส่วนที่เพิ่มเข้ามา] Log ข้อมูลใน FormData ---
-    console.log("--- DEBUG: Submitting FormData ---");
-    // เราไม่สามารถ log formData ตรงๆ ได้ ต้องวนลูปดูค่าข้างใน
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ': ', pair[1]);
-    }
-    console.log("---------------------------------");
-    // --- 👆 [สิ้นสุดส่วนที่เพิ่มเข้ามา] ---
-
+    if (imageFile) formData.append('imageProfile', imageFile);
 
     if (!formData.keys().next().value) {
       this.successMessage = "ไม่มีข้อมูลที่เปลี่ยนแปลง";
@@ -130,34 +124,38 @@ export class EditProfile implements OnInit { // แก้ไขชื่อ Clas
     this.userService.updateProfile(formData).subscribe({
       next: (response) => {
         this.successMessage = "อัปเดตโปรไฟล์สำเร็จ!";
-        localStorage.setItem('currentUser', JSON.stringify(response.user));
-        this.editForm.markAsPristine();
-        setTimeout(() => {
-          this.router.navigate(['/main']);
-        }, 2000);
+
+        // --- 👇 [นี่คือส่วนที่แก้ไขตามคำแนะนำ!] ---
+        // 1. เรียกใช้ฟังก์ชัน refreshUserProfile() จาก AuthService
+        // 2. ฟังก์ชันนี้จะไปดึงข้อมูลใหม่, อัปเดต localStorage และแจ้งเตือนทุกคอมโพเนนต์เอง
+        this.authService.refreshUserProfile().subscribe(() => {
+          console.log('User profile has been refreshed across the app.');
+          // 3. เมื่อข้อมูลอัปเดตทั่วแอปแล้ว ค่อยย้ายหน้า
+          this.editForm.markAsPristine();
+          setTimeout(() => {
+            this.router.navigate(['/home']);
+          }, 1000); // เพิ่มเวลาเล็กน้อยให้ผู้ใช้เห็นข้อความ
+        });
+        // --- 👆 [สิ้นสุดส่วนที่แก้ไข] ---
+
       },
       error: (err) => {
         this.errorMessage = err.error?.error || "เกิดข้อผิดพลาดในการอัปเดต";
-        console.error("Update profile error:", err); // Log error จริงๆ ที่ได้จาก server
+        console.error("Update profile error:", err);
       }
     });
   }
 
-
-    public isProfileOpen = false; 
-  // ฟังก์ชันสำหรับสลับสถานะ (เปิด/ปิด)
+  // ส่วน toggleProfileSidebar เหมือนเดิม
+  public isProfileOpen = false;
   toggleProfileSidebar(): void {
     this.isProfileOpen = !this.isProfileOpen;
   }
 
+  // [แก้ไข] เรียกใช้ logout จาก AuthService เพื่อความเป็นระเบียบ
   logout(): void {
-
-  localStorage.removeItem('authToken');
-  localStorage.removeItem('currentUser');
-
-   this.router.navigate(['/login']); // กลับไปหน้า login
-    
-    // (Optional) รีเฟรชหน้าเพื่อให้ component อัปเดตสถานะทันที
-    window.location.reload(); 
+    this.authService.logout();
+    this.router.navigate(['/login']);
+    // ไม่ต้อง reload หน้าเว็บอีกต่อไป
   }
 }

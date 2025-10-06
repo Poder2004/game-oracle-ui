@@ -75,6 +75,7 @@ export interface UserUpdatePayload {
 }
 
 export interface GetProfileResponse {
+  [x: string]: any;
   status: string;
   message: string;
   user: User;
