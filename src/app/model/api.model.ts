@@ -80,3 +80,32 @@ export interface GetProfileResponse {
   message: string;
   user: User;
 }
+
+/**
+ * Interface สำหรับข้อมูลเกมที่ได้รับจาก API
+ */
+export interface Game {
+  game_id: number;
+  title: string;
+  description: string;
+  price: number;
+  image_game: string;
+  release_date: string; // หรือ Date
+  category_id: number;
+}
+
+/**
+ * Interface สำหรับการตอบกลับหลังจากสร้างเกมสำเร็จ
+ */
+export interface CreateGameResponse {
+  message: string;
+  data: Game;
+}
+
+/**
+ * Interface สำหรับข้อมูลประเภทเกม
+ */
+export interface Category {
+  category_id: number;
+  category_name: string;
+}

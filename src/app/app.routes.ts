@@ -61,23 +61,19 @@ export const routes: Routes = [
   // --- Routes สำหรับ Admin ที่ต้องล็อกอินก่อน ---
   {
     path: 'Mainadmin', // ปรับ path เป็น kebab-case
-    component: Mainadmin,
-    canActivate: [authGuard, adminGuard],
+    component: Mainadmin
   },
   {
     path: 'addgame', // ปรับ path เป็น kebab-case
-    component: Addgame,
-    canActivate: [authGuard, adminGuard],
+    component: Addgame
   },
   {
     path: 'history',
-    component: Historyuser,
-    canActivate: [authGuard, adminGuard],
+    component: Historyuser
   },
   {
     path: 'discounts',
-    component: Discounts,
-    canActivate: [authGuard, adminGuard],
+    component: Discounts
   },
 
   // --- Route เริ่มต้นและ Wildcard ---
