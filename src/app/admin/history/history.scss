@@ -1,119 +1,125 @@
-// ใช้สไตล์พื้นฐานจากหน้า mainadmin แต่ปรับเปลี่ยนสำหรับหน้า history
+// --- 1. ประกาศสีเป็น Sass Variables ก่อน ---
+$bg-primary: #1a1d21;
+$bg-secondary: #25282e;
+$text-primary: #e1e3e6;
+$text-secondary: #8a939f;
+$border-color: #363b42;
+$accent-color: #e79a4a;
 
-/* --- Container หลักและ Font --- */
-.page-container {
-  /* --- เพิ่มโค้ดสำหรับภาพพื้นหลัง --- */
-  background-image: url('/assets/images/back_ground.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  /* ------------------------------------ */
-  
-  background-color: #f4f5f7; /* สีสำรองเผื่อรูปภาพไม่โหลด */
+// --- 2. นำ Sass Variables ไปกำหนดค่าให้ CSS Variables ---
+:host {
+  --bg-primary: #{$bg-primary};
+  --bg-secondary: #{$bg-secondary};
+  --text-primary: #{$text-primary};
+  --text-secondary: #{$text-secondary};
+  --border-color: #{$border-color};
+  --accent-color: #{$accent-color};
+}
+
+// --- Container หลัก ---
+.history-page-container {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   min-height: 100vh;
-  font-family: sans-serif;
-  padding: 2rem;
+  padding: 1.5rem 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.admin-header {
+// --- Header ---
+.page-header {
   text-align: center;
-  margin-bottom: 2.5rem;
-
-  h1 {
-    font-size: 2.25rem;
-    font-weight: 700;
-    color: #000000; /* Changed to black as requested */
-  }
-
-  p {
-    color: #000000; /* Changed to black as requested */
-    margin-top: 0.5rem;
-  }
+  margin-bottom: 3rem;
+  h1 { font-size: 2.5rem; font-weight: 700; margin: 0; }
+  p { color: var(--text-secondary); margin: 0.5rem 0 0; font-size: 1.1rem; }
 }
 
+// --- Content Area ---
+.content-area {
+  max-width: 900px;
+  margin: 0 auto;
+}
 
-/* --- ส่วนหัวข้อของรายการ --- */
 .list-header {
-    
-  margin-bottom: 1.25rem;
-  width: 900px; /* กำหนดความกว้างตามที่อ้างอิง */
-  margin-left: 50px; /* กำหนดระยะห่างด้านซ้ายตามที่อ้างอิง */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
 
-  h2 {
-    font-size: 1.125rem; /* ปรับขนาดฟอนต์ให้ตรงกัน */
-    font-weight: 600;
-    color: #E79A4A;
-      margin-left: 200px;
+  h2 { font-size: 1.25rem; font-weight: 600; margin: 0; }
+  .user-count {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    background-color: var(--bg-secondary);
+    padding: 0.3rem 0.8rem;
+    border-radius: 1rem;
   }
 }
 
-/* --- สไตล์ปุ่ม --- */
-.btn {
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  transition: opacity 0.2s ease-in-out;
-  cursor: pointer;
-  font-size: 0.75rem; /* ปรับขนาดฟอนต์ให้ตรงกัน */
-  padding: 0.5rem 1rem; /* ปรับ padding ให้ตรงกัน */
-  font-weight: 600;
-
-  &:hover {
-    opacity: 0.9;
-  }
-}
-
-.details-button {
-  background-color: #6B7280;
-  color: white;
-}
-
-/* --- รายการผู้ใช้ --- */
+// --- User List ---
 .user-list {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem; /* ปรับระยะห่างให้ตรงกัน */
-  margin-left: 200px;
+  gap: 0.75rem;
 }
 
 .user-item {
   display: flex;
   align-items: center;
-    background-color: rgba(37, 40, 46, 0.7);// ใช้ Opacity 70% เหมือนกัน
-  padding: 0.6rem; /* ปรับ padding ให้ตรงกัน */
-  border-radius: 0.75rem;
-  transition: transform 0.2s ease-in-out;
-  cursor: pointer;
-  width: 900px; /* กำหนดความกว้างตามที่อ้างอิง */
-  margin-left: 50px; /* กำหนดระยะห่างด้านซ้ายตามที่อ้างอิง */
+  background-color: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  transition: background-color 0.2s ease, transform 0.2s ease;
 
   &:hover {
+    // 3. ใช้ lighten() กับ Sass Variable ($)
+    background-color: lighten($bg-secondary, 5%);
     transform: translateY(-2px);
   }
 }
 
-/* --- รูปโปรไฟล์ (สำคัญ) --- */
 .user-avatar {
-  width: 45px;      /* ขนาดของรูป */
-  height: 45px;     /* ขนาดของรูป */
-  border-radius: 50%; /* ทำให้เป็นวงกลม */
-  object-fit: cover;  /* ทำให้รูปเต็มพื้นที่วงกลมโดยไม่เสียสัดส่วน */
-  margin-right: 1.25rem; /* ระยะห่างจากชื่อ */
-  border: 2px solid #555; /* เพิ่มขอบสีเทาเข้ม */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 1rem;
+  border: 2px solid var(--border-color);
 }
 
-/* --- ชื่อผู้ใช้ --- */
-.user-name {
-  flex-grow: 1; /* ดันปุ่มไปทางขวาสุด */
+.user-info {
+  flex-grow: 1;
+  .user-name { font-weight: 600; font-size: 1rem; color: var(--text-primary); }
+  .user-email { font-size: 0.85rem; color: var(--text-secondary); }
+}
+
+.btn-view-history {
+  background-color: var(--accent-color);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
   font-weight: 600;
-  font-size: 0.875rem; /* ปรับขนาดฟอนต์ให้ตรงกัน */
-  color: #FFFFFF;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    // 3. ใช้ lighten() กับ Sass Variable ($)
+    background-color: lighten($accent-color, 10%);
+  }
 }
 
-/* --- Container ของปุ่ม --- */
-.action-button-container {
-  flex-shrink: 0;
-  margin-left: 1rem;
+// --- Feedback Messages ---
+.feedback-message {
+  text-align: center;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-top: 1.5rem;
+  font-weight: 500;
+  
+  &.error { background-color: rgba(255, 69, 58, 0.1); color: #ff8a80; }
+  &.info { background-color: rgba(74, 144, 226, 0.1); color: #80bfff; }
 }
 

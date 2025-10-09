@@ -77,9 +77,9 @@ export class Navber {
       this.currentUser = JSON.parse(userJson);
 
       // 4. สร้าง URL ที่สมบูรณ์
-      if (this.currentUser && this.currentUser.ImageProfile) {
+      if (this.currentUser && this.currentUser.image_profile) {
         // นำ Base URL ของ API มาต่อกับ Path ของรูปภาพ
-        this.userImageUrl = `${this.constants.API_ENDPOINT}/${this.currentUser.ImageProfile}`;
+        this.userImageUrl = `${this.constants.API_ENDPOINT}/${this.currentUser.image_profile}`;
       }
     }
   }

@@ -1,37 +1,56 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateGameResponse, Category } from '../model/api.model';
+// 👈 1. Import 'GetAllGamesResponse' เพิ่มเข้ามา
+import { CreateGameResponse, Category, Game, GetAllGamesResponse } from '../model/api.model'; 
+import { Constants } from '../config/constants';
+
+// 👈 2. ลบ Interface ที่ซ้ำซ้อนออกจากที่นี่
+
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
+  private readonly API_ENDPOINT: string; 
 
-  private readonly API_URL = 'http://localhost:8080'; // URL ของ Backend API
-
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private constants: Constants 
+  ) {
+    this.API_ENDPOINT = this.constants.API_ENDPOINT;
+  }
 
   /**
-   * สร้างเกมใหม่โดยส่งข้อมูลแบบ FormData
-   * @param formData ข้อมูลฟอร์มที่ประกอบด้วย title, description, price, category_id และไฟล์ image
+   * ดึงข้อมูลเกมทั้งหมด (สำหรับ Admin)
    */
-  createGame(formData: FormData): Observable<CreateGameResponse> {
-    // ดึง token จาก localStorage (ต้องมีตอน Login)
-    const token = localStorage.getItem('token');
-
-    // สร้าง Headers เพื่อส่ง token ไปยืนยันตัวตน
+  getAllGames(): Observable<GetAllGamesResponse> {
+    const token = localStorage.getItem('authToken'); 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
 
-    // ไม่ต้องระบุ Content-Type, Angular จะจัดการให้เองเมื่อส่ง FormData
-    return this.http.post<CreateGameResponse>(`${this.API_URL}/admin/addgames`, formData, { headers });
+    // เรียกใช้เส้นทาง GET /admin/games
+    return this.http.get<GetAllGamesResponse>(`${this.API_ENDPOINT}/admin/games`, { headers });
   }
 
-   /**
-   * ดึงข้อมูลประเภทเกมทั้งหมด
+  /**
+   * สร้างเกมใหม่ (โค้ดเดิม)
+   */
+  createGame(formData: FormData): Observable<CreateGameResponse> {
+    const token = localStorage.getItem('authToken'); 
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post<CreateGameResponse>(`${this.API_ENDPOINT}/admin/addgames`, formData, { headers });
+  }
+
+  /**
+   * ดึงข้อมูลประเภทเกมทั้งหมด (โค้ดเดิม)
    */
   getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(`${this.API_URL}/api/categories`);
+    return this.http.get<Category[]>(`${this.API_ENDPOINT}/api/categories`);
   }
+
+  
 }
+

@@ -1,39 +1,45 @@
 <app-navadmin></app-navadmin>
 <div class="admin-container">
   <div class="content-wrapper">
-    <!-- ส่วนหัวข้อหลัก -->
     <header class="admin-header">
       <h1>Admin</h1>
       <p>รายการ</p>
     </header>
 
-    <!-- ส่วนเนื้อหาหลัก -->
     <main>
-      <!-- ส่วนหัวของรายการเกม -->
       <div class="list-header">
         <h2>รายการเกมทั้งหมด</h2>
         <button class="btn category-button">ประเภทเกม</button>
       </div>
+      
+      <!-- เพิ่มส่วนแสดงข้อความ Error -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
 
-      <!-- รายการเกมทั้งหมด -->
+      <!-- ส่วนแสดง "ไม่พบข้อมูล" -->
+      <div *ngIf="!errorMessage && games.length === 0" class="no-data-message">
+        <p>ยังไม่มีเกมในระบบ</p>
+      </div>
+
       <div class="game-list">
+        <!-- 1. แก้ไข property ให้ตรงกับ Model -->
         <div *ngFor="let game of games" class="game-item">
-          <!-- คอลัมน์ที่ 1: หมายเลข -->
           <div class="game-id-box">
-            <span class="game-id-number">{{ game.id }}</span>
+            <!-- game_id -->
+            <span class="game-id-number">{{ game.game_id }}</span>
           </div>
 
-          <!-- คอลัมน์ที่ 2: รูปภาพเกม -->
           <div class="game-image-container">
-            <img [src]="game.imageUrl" [alt]="game.name" class="game-image" />
+            <!-- 2. เรียกใช้ฟังก์ชัน getFullImageUrl() -->
+            <img [src]="getFullImageUrl(game.image_game)" [alt]="game.title" class="game-image" />
           </div>
 
-          <!-- คอลัมน์ที่ 3: ชื่อเกม -->
           <div class="game-name">
-            {{ game.name }}
+            <!-- title -->
+            {{ game.title }}
           </div>
 
-          <!-- คอลัมน์ที่ 4: ปุ่มดูรายละเอียด -->
           <div class="game-details-button-container">
             <button class="btn details-button">ดูรายละเอียด</button>
           </div>

@@ -79,7 +79,7 @@ export const routes: Routes = [
   // --- Route เริ่มต้นและ Wildcard ---
   {
     path: '',
-    redirectTo: '/main', // หน้าเริ่มต้นคือ /main
+    redirectTo: '/login', // หน้าเริ่มต้นคือ /main
     pathMatch: 'full',
   },
   {

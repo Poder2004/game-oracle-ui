@@ -1,79 +1,89 @@
 <app-navadmin></app-navadmin>
 <div class="page-container">
   <div class="content-wrapper">
-    <!-- ส่วนหัวข้อและปุ่มด้านขวา -->
     <div class="header-section">
       <h1>โค้ดส่วนลด</h1>
-      <!-- 1. เพิ่ม (click) event เพื่อเรียกฟังก์ชันเปิด Modal -->
       <button class="btn view-coupons-btn" (click)="openModal()">
         ดูคูปองทั้งหมด
       </button>
     </div>
 
-    <!-- การ์ดฟอร์มสำหรับสร้างโค้ดส่วนลด -->
-    <div class="form-card">
-      <!-- ชื่อคูปอง -->
+    <!-- เชื่อมต่อ Form กับ FormGroup และ (ngSubmit) -->
+    <form class="form-card" [formGroup]="couponForm" (ngSubmit)="onSubmit()">
+      
+      <!-- ชื่อโค้ด (NameCode) -->
       <div class="form-group">
-        <label for="couponName">ชื่อคูปอง :</label>
-        <input type="text" id="couponName" value="Sale70" />
+        <label for="name_code">ชื่อโค้ด (อังกฤษตัวใหญ่/ตัวเลข) :</label>
+        <input type="text" id="name_code" formControlName="name_code" />
       </div>
 
-      <!-- เนื้อหา -->
+      <!-- คำอธิบาย (Description) -->
       <div class="form-group">
-        <label for="couponContent">เนื้อหา :</label>
-        <input
-          type="text"
-          id="couponContent"
-          value="ซื้อขั้นต่ำ 1000 ลด 70 %"
-        />
+        <label for="description">เนื้อหา/คำอธิบาย :</label>
+        <input type="text" id="description" formControlName="description" />
       </div>
 
-      <!-- แถวสำหรับ ลดจำนวน และ จำนวนคูปอง -->
+      <!-- แถวสำหรับ Discount Value และ Type -->
       <div class="form-row">
-        <!-- ลดจำนวน -->
         <div class="form-group">
-          <label for="discountAmount">ลดจำนวน :</label>
+          <label for="discount_value">มูลค่าส่วนลด :</label>
           <div class="input-group">
-            <input type="number" id="discountAmount" value="70" />
-            <span>%</span>
+            <input type="number" id="discount_value" formControlName="discount_value" />
+            <span>{{ couponForm.get('discount_type')?.value === 'percent' ? '%' : 'บาท' }}</span>
           </div>
         </div>
-        <!-- จำนวนคูปอง -->
         <div class="form-group">
-          <label for="couponQuantity">จำนวนคูปอง :</label>
-          <div class="input-group">
-            <input type="number" id="couponQuantity" value="10" />
-            <span>ใบ</span>
+          <label>ประเภทส่วนลด :</label>
+          <div class="radio-group">
+            <label><input type="radio" value="percent" formControlName="discount_type" /> เปอร์เซ็นต์</label>
+            <label><input type="radio" value="fixed" formControlName="discount_type" /> จำนวนเงิน</label>
           </div>
         </div>
       </div>
+      
+      <!-- แถวสำหรับ Min Value และ Limit Usage -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="min_value">ยอดซื้อขั้นต่ำ (บาท) :</label>
+            <input type="number" id="min_value" formControlName="min_value" />
+        </div>
+        <div class="form-group">
+          <label for="limit_usage">จำนวนคูปองทั้งหมด (ใบ) :</label>
+            <input type="number" id="limit_usage" formControlName="limit_usage" />
+        </div>
+      </div>
+      
+      <!-- ส่วนแสดงข้อความ Feedback -->
+      <div *ngIf="submitSuccess" class="feedback-message success">{{ submitSuccess }}</div>
+      <div *ngIf="submitError" class="feedback-message error">{{ submitError }}</div>
 
-      <!-- ปุ่มประกาศโค้ด -->
+      <!-- ปุ่ม Submit -->
       <div class="form-action">
-        <button class="btn submit-btn">ประกาศโค้ดส่วนลด</button>
+        <button class="btn submit-btn" type="submit" [disabled]="couponForm.invalid">ประกาศโค้ดส่วนลด</button>
       </div>
-    </div>
+    </form>
   </div>
 </div>
 
-<!-- 2. เพิ่มโค้ด HTML สำหรับ Modal ทั้งหมด -->
+<!-- Modal สำหรับแสดงคูปองทั้งหมด -->
 <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <!-- Header ของ Modal -->
     <div class="modal-header">
       <h2>โค้ดส่วนลดทั้งหมด</h2>
       <button class="close-button" (click)="closeModal()">&times;</button>
     </div>
-
-    <!-- รายการคูปองใน Modal -->
+    
+    <div *ngIf="fetchError" class="feedback-message error">{{ fetchError }}</div>
+    
     <div class="coupon-list">
+      <!-- แสดงข้อมูลจริงจาก allCoupons -->
       <div class="coupon-item" *ngFor="let coupon of allCoupons">
         <div class="coupon-icon">%</div>
         <div class="coupon-details">
-          <div class="coupon-name">{{ coupon.name }}</div>
+          <div class="coupon-name">{{ coupon.name_code }}</div>
           <div class="coupon-description">{{ coupon.description }}</div>
         </div>
-        <div class="coupon-quantity">{{ coupon.quantity }} ใบ</div>
+        <div class="coupon-quantity">{{ coupon.limit_usage - coupon.used_count }} / {{ coupon.limit_usage }} ใบ</div>
       </div>
     </div>
   </div>

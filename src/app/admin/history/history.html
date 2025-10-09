@@ -1,29 +1,46 @@
 <app-navadmin></app-navadmin>
-<div class="page-container">
-  <div class="content-wrapper">
-    <header class="admin-header">
-      <h1>ประวัติ</h1>
-      <p>การทำธุระกรรม</p>
-    </header>
-    <!-- ส่วนหัวข้อของรายการ -->
+
+<div class="history-page-container">
+  <header class="page-header">
+    <h1>ประวัติ</h1>
+    <p>การทำธุรกรรม</p>
+  </header>
+
+  <main class="content-area">
     <div class="list-header">
-      <h2>ผู้ใช้ทั้งหมด</h2>
+      <h2>ผู้ใช้ทั้งหมดในระบบ</h2>
+      <div class="user-count">{{ users.length }} คน</div>
+    </div>
+    
+    <!-- แสดงข้อความ Error ถ้ามี -->
+    <div *ngIf="fetchError" class="feedback-message error">
+      {{ fetchError }}
+    </div>
+
+    <!-- แสดงข้อความ "ไม่พบผู้ใช้" ถ้าไม่มีข้อมูล -->
+    <div *ngIf="!fetchError && users.length === 0" class="feedback-message info">
+      <p>ไม่พบข้อมูลผู้ใช้ในระบบ</p>
     </div>
 
     <!-- รายการผู้ใช้ -->
     <div class="user-list">
-      <div *ngFor="let user of users" class="user-item">
-        <!-- รูปโปรไฟล์ (วงกลม) -->
-        <img [src]="user.imageUrl" alt="User Avatar" class="user-avatar" />
-
-        <!-- ชื่อผู้ใช้ -->
-        <span class="user-name">{{ user.name }}</span>
-
-        <!-- ปุ่มดูประวัติ -->
-        <div class="action-button-container">
-          <button class="btn details-button">ดูประวัติธุรกรรม</button>
+      <!-- 
+        1. เปลี่ยน div.user-identifier เป็น img.user-avatar
+        2. ใช้ [src] เรียกฟังก์ชัน getFullImageUrl()
+      -->
+      <div class="user-item" *ngFor="let user of users">
+        <img [src]="getFullImageUrl(user.image_profile)" alt="User Avatar" class="user-avatar">
+        
+        <div class="user-info">
+          <div class="user-name">{{ user.username }}</div>
+          <div class="user-email">{{ user.email }}</div>
+        </div>
+        
+        <div class="user-actions">
+          <button class="btn-view-history">ดูประวัติธุรกรรม</button>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </div>
+

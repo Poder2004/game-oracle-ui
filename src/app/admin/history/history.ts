@@ -1,56 +1,56 @@
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Navadmin } from "../navadmin/navadmin";
+import { Navadmin } from '../navadmin/navadmin';
+import { UserService } from '../../services/user.service';
+import { User } from '../../model/api.model';
+import { Constants } from '../../config/constants'; // 👈 1. Import Constants
 
 @Component({
-  selector: 'app-history',
+  selector: 'app-historyuser',
   standalone: true,
   imports: [CommonModule, Navadmin],
   templateUrl: './history.html',
-  styleUrl: './history.scss',
+  styleUrls: ['./history.scss']
 })
-export class Historyuser {
-  // ข้อมูลจำลองสำหรับแสดงรายชื่อผู้ใช้
-  users = [
-    {
-      id: 1,
-      name: '1mill',
-      imageUrl: 'https://placehold.co/60x60/EFEFEF/333333?text=1',
-    },
-    {
-      id: 2,
-      name: 'พ่อครูริน เซนเะฮิปฮอป',
-      imageUrl: 'https://placehold.co/60x60/EFEFEF/333333?text=พ',
-    },
-    {
-      id: 3,
-      name: '3mill',
-      imageUrl: 'https://placehold.co/60x60/EFEFEF/333333?text=3',
-    },
-    {
-      id: 4,
-      name: '4mill',
-      imageUrl: 'https://placehold.co/60x60/EFEFEF/333333?text=4',
-    },
-    {
-      id: 5,
-      name: '5mill',
-      imageUrl: 'https://placehold.co/60x60/EFEFEF/333333?text=5',
-    },
-    {
-      id: 6,
-      name: 'Young gu',
-      imageUrl: 'https://placehold.co/60x60/EFEFEF/333333?text=Y',
-    },
-    {
-      id: 7,
-      name: 'Young ohm',
-      imageUrl: 'https://placehold.co/60x60/EFEFEF/333333?text=Y',
-    },
-    {
-      id: 8,
-      name: 'jayjay',
-      imageUrl: 'https://placehold.co/60x60/EFEFEF/333333?text=J',
-    },
-  ];
+export class Historyuser implements OnInit {
+  
+  users: User[] = [];
+  fetchError: string | null = null;
+
+  // 👈 2. Inject Constants Service
+  constructor(
+    private userService: UserService,
+    private constants: Constants
+  ) {}
+
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+
+  loadUsers(): void {
+    this.fetchError = null;
+    this.userService.getAllUsers().subscribe({
+      next: (response) => {
+        if (response && response.data) {
+          this.users = response.data;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to fetch users:', err);
+        this.fetchError = 'ไม่สามารถดึงข้อมูลผู้ใช้ได้';
+      }
+    });
+  }
+
+  // 👇 3. สร้างฟังก์ชันสำหรับสร้าง URL รูปภาพที่สมบูรณ์
+  getFullImageUrl(imagePath: string): string {
+    // ถ้าไม่มี path รูปภาพ หรือ path เป็นค่าว่าง
+    if (!imagePath) {
+      // ให้ใช้รูป default จาก assets
+      return 'assets/images/userimage.jpg';
+    }
+    // นำ URL ของ API มาต่อกับ path ของรูปภาพ
+    return `${this.constants.API_ENDPOINT}/${imagePath}`;
+  }
 }
+

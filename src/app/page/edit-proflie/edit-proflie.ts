@@ -67,8 +67,8 @@ export class EditProfile implements OnInit, OnDestroy { // [แก้ไข] imp
           email: this.currentUser?.email
         });
 
-        if (this.currentUser?.ImageProfile) {
-          this.userImageUrl = `${this.constants.API_ENDPOINT}/${this.currentUser.ImageProfile}`;
+        if (this.currentUser?.image_profile) {
+          this.userImageUrl = `${this.constants.API_ENDPOINT}/${this.currentUser.image_profile}`;
         }
       } else {
         // ถ้าไม่มี user ในระบบ ให้ redirect ไปหน้า login

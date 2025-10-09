@@ -1,11 +1,4 @@
 // src/app/model/api.model.ts
-
-// --- Interfaces สำหรับ Request Body ---
-
-/**
- * Interface สำหรับข้อมูลที่ส่งไปตอนลงทะเบียน
- * ปรับแก้ 'passwordHash' เป็น 'password' ให้ตรงกับที่ backend รับ
- */
 export interface UserRegister {
   username: string;
   password: string; // Backend รับเป็น 'password'
@@ -33,7 +26,7 @@ export interface User {
   email: string;
   role: string;
   wallet: number;
-  ImageProfile: string;
+  image_profile: string; // 👈 [แก้ไข] เปลี่ยนจาก ImageProfile เป็น image_profile
 }
 
 /**
@@ -92,6 +85,7 @@ export interface Game {
   image_game: string;
   release_date: string; // หรือ Date
   category_id: number;
+  category?: Category; // 👈 [แก้ไข] เพิ่ม property นี้เข้ามา (เป็น optional)
 }
 
 /**
@@ -108,4 +102,60 @@ export interface CreateGameResponse {
 export interface Category {
   category_id: number;
   category_name: string;
+}
+
+export interface GetAllGamesResponse {
+  status: string;
+  message: string;
+  data: Game[];
+}
+
+/**
+ * Interface สำหรับข้อมูลคูปองส่วนลด
+ */
+export interface DiscountCode {
+  did: number;
+  name_code: string;
+  description: string;
+  discount_value: number;
+  discount_type: 'fixed' | 'percent';
+  min_value: number;
+  limit_usage: number;
+  used_count: number;
+}
+
+/**
+ * Interface สำหรับ Response การดึงคูปองทั้งหมด
+ */
+export interface GetAllCouponsResponse {
+  status: string;
+  message: string;
+  data: DiscountCode[];
+}
+
+/**
+ * Interface สำหรับ Response การสร้างคูปอง
+ */
+export interface CreateCouponResponse {
+  status: string;
+  message: string;
+  data: DiscountCode;
+}
+
+/**
+ * Interface สำหรับข้อมูลที่จะส่งไปสร้างคูปอง
+ */
+export interface CreateCouponPayload {
+  name_code: string;
+  description: string;
+  discount_value: number;
+  discount_type: 'fixed' | 'percent';
+  min_value: number;
+  limit_usage: number;
+}
+
+export interface GetAllUsersResponse {
+  status: string;
+  message: string;
+  data: User[];
 }

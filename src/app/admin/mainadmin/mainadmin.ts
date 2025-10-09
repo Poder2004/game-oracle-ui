@@ -1,66 +1,58 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core'; // 👈 1. Import OnInit
 import { CommonModule } from '@angular/common';
 import { Navadmin } from '../navadmin/navadmin';
 
+// --- 👇 2. Import ที่จำเป็น ---
+import { GameService } from '../../services/game.service';
+import { Game } from '../../model/api.model';
+import { Constants } from '../../config/constants';
+
 @Component({
   selector: 'app-mainadmin',
-  standalone: true, // 2. ทำให้เป็น Standalone Component
-  imports: [CommonModule, Navadmin], // 3. เพิ่ม CommonModule เข้าไปใน imports
+  standalone: true,
+  imports: [CommonModule, Navadmin],
   templateUrl: './mainadmin.html',
   styleUrl: './mainadmin.scss',
 })
-export class Mainadmin {
-  // ข้อมูลจำลองสำหรับแสดงรายการเกม
-  games = [
-    {
-      id: 1,
-      name: 'EA SPORTS FC 26',
-      imageUrl: 'https://placehold.co/150x75/25282E/E79A4A?text=Game+1',
-    },
-    {
-      id: 2,
-      name: 'EA SPORTS FC 26',
-      imageUrl: 'https://placehold.co/150x75/25282E/E79A4A?text=Game+2',
-    },
-    {
-      id: 3,
-      name: 'Monster Hunter Wilds',
-      imageUrl: 'https://placehold.co/150x75/25282E/E79A4A?text=Game+3',
-    },
-    {
-      id: 4,
-      name: 'PUBG: BATTLEGROUNDS',
-      imageUrl: 'https://placehold.co/150x75/25282E/E79A4A?text=Game+4',
-    },
-    {
-      id: 5,
-      name: 'Dead by Daylight',
-      imageUrl: 'https://placehold.co/150x75/25282E/E79A4A?text=Game+5',
-    },
-    {
-      id: 6,
-      name: 'Dota 2',
-      imageUrl: 'https://placehold.co/150x75/25282E/E79A4A?text=Game+6',
-    },
-    {
-      id: 7,
-      name: 'Red Dead Redemption 2',
-      imageUrl: 'https://placehold.co/150x75/25282E/E79A4A?text=Game+7',
-    },
-    {
-      id: 8,
-      name: 'Battlefield 6',
-      imageUrl: 'https://placehold.co/150x75/25282E/E79A4A?text=Game+8',
-    },
-    {
-      id: 9,
-      name: 'Counter-Strike 2',
-      imageUrl: 'https://placehold.co/150x75/25282E/E79A4A?text=Game+9',
-    },
-    {
-      id: 10,
-      name: 'Path of Exile 2',
-      imageUrl: 'https://placehold.co/150x75/25282E/E79A4A?text=Game+10',
-    },
-  ];
+export class Mainadmin implements OnInit { // 👈 3. Implement OnInit
+  
+  // 4. เปลี่ยน games เป็น array ว่างๆ ของ Game model
+  games: Game[] = [];
+  errorMessage: string | null = null;
+
+  // 5. Inject Services ที่ต้องใช้
+  constructor(
+    private gameService: GameService,
+    private constants: Constants
+  ) {}
+
+  // 6. ดึงข้อมูลเมื่อ Component เริ่มทำงาน
+  ngOnInit(): void {
+    this.loadGames();
+  }
+
+  loadGames(): void {
+    this.errorMessage = null;
+    this.gameService.getAllGames().subscribe({
+      next: (response) => {
+        if (response && response.data) {
+          this.games = response.data;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to fetch games:', err);
+        this.errorMessage = "ไม่สามารถดึงข้อมูลเกมได้ กรุณาลองอีกครั้ง";
+      }
+    });
+  }
+
+  // 7. สร้างฟังก์ชันสำหรับสร้าง URL รูปภาพที่สมบูรณ์
+  getFullImageUrl(imagePath: string): string {
+    if (!imagePath) {
+      // ถ้าไม่มี path รูปภาพ ให้ใช้ placeholder
+      return 'https://placehold.co/150x75/2c2c2e/f2f2f7?text=No+Image';
+    }
+    // นำ URL ของ API มาต่อกับ path ของรูปภาพ
+    return `${this.constants.API_ENDPOINT}/${imagePath}`;
+  }
 }
