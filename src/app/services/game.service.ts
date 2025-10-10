@@ -1,17 +1,15 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-// 👈 1. Import 'GetAllGamesResponse' เพิ่มเข้ามา
 import {
   CreateGameResponse,
   Category,
-  Game,
   GetAllGamesResponse,
+  GetGameResponse, // 👈 [แก้ไข] Import GetGameResponse
   SearchResponse,
+  UpdateGameResponse,
 } from '../model/api.model';
 import { Constants } from '../config/constants';
-
-// 👈 2. ลบ Interface ที่ซ้ำซ้อนออกจากที่นี่
 
 @Injectable({
   providedIn: 'root',
@@ -22,76 +20,83 @@ export class GameService {
   constructor(private http: HttpClient, private constants: Constants) {
     this.API_ENDPOINT = this.constants.API_ENDPOINT;
   }
- searchGames(term: string): Observable<SearchResponse> { // หรือ SearchResponse ตามที่คุณตั้งชื่อ
-  // 1. ตรวจสอบว่ามีคำค้นหาจริงๆ (ไม่ใช่แค่ช่องว่าง)
-  if (!term.trim()) {
-    return of({ status: 'success', message: 'Empty search term', data: [] });
-  }
 
-  // --- vvvv ส่วนที่เพิ่มเข้ามา vvvv ---
-  // 2. ดึง Token มาจาก localStorage
-  const token = localStorage.getItem('authToken');
-  // 3. สร้าง Headers สำหรับยืนยันตัวตน
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`,
-  });
-  // --- ^^^^ ส่วนที่เพิ่มเข้ามา ^^^^ ---
-
-  // 4. สร้าง URL สำหรับค้นหา
-  const searchUrl = `${this.API_ENDPOINT}/api/search`;
-
-  // 5. ส่ง GET request พร้อมกับ Headers และ query parameter
-  return this.http.get<SearchResponse>(searchUrl, {
-    headers: headers, // <-- เพิ่ม Headers เข้าไปใน options
-    params: { q: term }
-  });
-}
   /**
-   * ดึงข้อมูลเกมทั้งหมด (สำหรับ Admin)
+   * ฟังก์ชันช่วยสร้าง Header สำหรับการยืนยันตัวตน
+   * (โค้ดส่วนนี้ถูกต้องแล้ว)
    */
-  getAllGames(): Observable<GetAllGamesResponse> {
+  private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('authToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
     });
+  }
+  
+  /**
+   * ค้นหาเกม
+   */
+  searchGames(term: string): Observable<SearchResponse> {
+    if (!term.trim()) {
+      return of({ status: 'success', message: 'Empty search term', data: [] });
+    }
+    const searchUrl = `${this.API_ENDPOINT}/api/search`;
+    return this.http.get<SearchResponse>(searchUrl, {
+      // 👇 เรียกใช้ getAuthHeaders()
+      headers: this.getAuthHeaders(),
+      params: { q: term }
+    });
+  }
 
-    // เรียกใช้เส้นทาง GET /admin/games
-    return this.http.get<GetAllGamesResponse>(
-      `${this.API_ENDPOINT}/admin/games`,
-      { headers }
-    );
+ 
+ //ดึงข้อมูลเกมทั้งหมด (สำหรับ Admin)
+  
+  getAllGames(): Observable<GetAllGamesResponse> {
+    const url = `${this.API_ENDPOINT}/admin/games`;
+    // 👇 เรียกใช้ getAuthHeaders()
+    return this.http.get<GetAllGamesResponse>(url, { headers: this.getAuthHeaders() });
   }
 
   /**
-   * สร้างเกมใหม่ (โค้ดเดิม)
+   * สร้างเกมใหม่
    */
   createGame(formData: FormData): Observable<CreateGameResponse> {
-    const token = localStorage.getItem('authToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.post<CreateGameResponse>(
-      `${this.API_ENDPOINT}/admin/addgames`,
-      formData,
-      { headers }
-    );
+    // 💥 [แก้ไข] URL ให้ตรงกับ router ล่าสุดของคุณ
+    const url = `${this.API_ENDPOINT}/admin/games`; 
+    // 👇 เรียกใช้ getAuthHeaders()
+    return this.http.post<CreateGameResponse>(url, formData, { headers: this.getAuthHeaders() });
   }
 
   /**
-   * ดึงข้อมูลประเภทเกมทั้งหมด (โค้ดเดิม)
+   * ดึงข้อมูลประเภทเกมทั้งหมด
    */
   getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(`${this.API_ENDPOINT}/api/categories`);
+    const url = `${this.API_ENDPOINT}/api/categories`;
+    // 💥 [แนะนำ] เส้นทางนี้อาจจะต้องมีการยืนยันตัวตนเช่นกัน
+    return this.http.get<Category[]>(url, { headers: this.getAuthHeaders() });
   }
 
-  // เพิ่มฟังก์ชันใหม่สำหรับดึงข้อมูลเกมตาม ID
-  getGameById(
-    gameId: number
-  ): Observable<{ status: string; message: string; data: Game }> {
-    return this.http.get<{ status: string; message: string; data: Game }>(
-      `${this.API_ENDPOINT}/api/games/${gameId}`
-    );
+  /**
+   * ดึงข้อมูลเกมตาม ID
+   */
+  getGameById(gameId: number): Observable<GetGameResponse> {
+    // 💥 [แก้ไข] URL ให้ตรงกับ public route ของคุณ
+    const url = `${this.API_ENDPOINT}/api/games/${gameId}`; 
+    // เส้นทางนี้เป็น Public ไม่ต้องใช้ Token
+    return this.http.get<GetGameResponse>(url);
+  }
+
+  /**
+   * อัปเดตข้อมูลเกม
+   */
+  updateGame(id: number, formData: FormData): Observable<UpdateGameResponse> {
+    const url = `${this.API_ENDPOINT}/admin/games/${id}`;
+    // 👇 โค้ดส่วนนี้ถูกต้องอยู่แล้ว
+    return this.http.put<UpdateGameResponse>(url, formData, { headers: this.getAuthHeaders() });
+  }
+
+   deleteGame(id: number): Observable<Object> {
+    const url = `${this.API_ENDPOINT}/admin/games/${id}`;
+    return this.http.delete(url, { headers: this.getAuthHeaders(), observe: 'response' });
   }
 }
-
 

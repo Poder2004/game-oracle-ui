@@ -1,146 +1,320 @@
-/* --- Main Container --- */
-.container {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 20px;
+// --- Variables ---
+$page-bg: #838383;
+$card-bg: #afafaf;
+$text-primary: #f3f3f3;
+$text-secondary: #fffcfc;
+$btn-edit-bg: #4CAF50; // Green
+$btn-edit-hover: #45a049;
+$btn-delete-bg: #F44336; // Red
+$btn-delete-hover: #e53935;
+
+// --- Main Page Container ---
+.page-container {
+  min-height: 100vh;
+  background-color: $page-bg;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
 }
 
-/* --- Header Titles --- */
-.header-title {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.header-title h1 {
-    font-size: 2rem;
-    font-weight: 500;
-    color: #000000;
-    margin: 0;
-    margin-top: 100px;
-}
-
-.header-title h2 {
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: #000000;
-    margin: 5px 0;
-    margin-top: 20px;
-}
-
-.header-title h3 {
-    font-size: 2.8rem;
-    font-weight: bold;
-    color: #333;
-    margin-top: 20px;
-}
-
-/* --- Game Details Card --- */
-.game-details-card {
-    background-color: #ededed;
-    border-radius: 15px;
-    padding: 30px;
-    display: flex;
-    gap: 30px;
-    flex-wrap: wrap;
-}
-
-.game-cover {
-    flex: 1;
-    min-width: 200px;
-}
-
-.game-cover img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.game-info {
-    flex: 3;
-    min-width: 300px;
-}
-
-.game-info h2 {
+// --- Header ---
+.header-section {
+  text-align: center;
+  margin-bottom: 2rem;
+  h1 {
     font-size: 2.5rem;
-    font-weight: bold;
-    margin: 0 0 10px 0;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0;
+  }
 }
 
-.game-info .meta-data {
-    font-size: 1rem;
-    color: #555;
-    margin-bottom: 25px;
+// --- Detail Card ---
+.detail-card {
+  max-width: 1100px;
+  margin: 0 auto;
+  background-color: $card-bg;
+  padding: 2.5rem;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 2.5rem;
+
+  @media (max-width: 992px) {
+    flex-direction: column;
+  }
 }
 
-.game-info h4 {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-top: 0;
-    margin-bottom: 10px;
-    border-bottom: 2px solid #ccc;
-    padding-bottom: 5px;
+// --- Image Column ---
+.image-column {
+  flex: 0 0 300px; // กำหนดความกว้างคงที่
+  .game-cover-image {
+    width: 100%;
+    aspect-ratio: 3 / 4; // ทำให้รูปเป็นแนวตั้ง
+    object-fit: cover;
+    border-radius: 10px;
+  }
 }
 
-.game-info p {
-    font-size: 1rem;
-    line-height: 1.7;
-    text-align: justify;
-    color: #444;
+// --- Info Column ---
+.info-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-/* --- Action Buttons --- */
+.game-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+  line-height: 1.2;
+  color: $text-primary;
+}
+
+.game-meta {
+  display: flex;
+  flex-wrap: wrap; // ทำให้ขึ้นบรรทัดใหม่ในจอเล็ก
+  gap: 0.5rem 1rem; // ระยะห่างแนวตั้ง แนวนอน
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  color: $text-secondary;
+
+  .separator {
+    color: #ddd;
+  }
+}
+
+.game-description {
+  line-height: 1.8;
+  color: $text-secondary;
+  text-align: justify; // จัดข้อความให้สวยงาม
+}
+
+// --- Action Buttons ---
 .action-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 40px;
-    padding-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
 }
 
 .btn {
-    padding: 12px 60px;
-    font-size: 1rem;
-    font-weight: 500;
-    border: none;
+  padding: 1rem 3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &.btn-edit {
+    background-color: $btn-edit-bg;
+    &:hover { background-color: $btn-edit-hover; }
+  }
+  &.btn-delete {
+    background-color: $btn-delete-bg;
+    &:hover { background-color: $btn-delete-hover; }
+  }
+}
+
+// --- Loading/Error State ---
+.feedback-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  font-size: 1.2rem;
+  color: $text-secondary;
+}
+
+/* --- Header ด้านบนสุด (เหมือนเดิม) --- */
+.top-toolbar {
+    background-color: transparent;
+    color: #9FCC70;
+    margin: -20px;
+}
+
+.logo {
+    font-family: 'New Rocker', cursive;
+    font-size: 2.5rem;
+    font-weight: 400;
+}
+
+.hamburger-menu-btn {
+  /* --- ส่วนของการขยับตำแหน่ง (ของเดิม) --- */
+  position: relative;
+  top: 30px;
+
+  /* --- เพิ่ม/แก้ไข ส่วนของการขยายขนาดปุ่ม --- */
+  width: 48px;  /* ขยายความกว้างปุ่ม (ปกติคือ 40px) */
+  height: 48px; /* ขยายความสูงปุ่ม (ปกติคือ 40px) */
+  color: #ddd;
+}
+
+
+/* --- เพิ่มส่วนนี้ เพื่อขยายขนาดไอคอนข้างใน --- */
+:host ::ng-deep .hamburger-menu-btn .mat-icon {
+  font-size: 36px; /* <-- ปรับขนาดไอคอนที่นี่ */
+  width: 36px;     /* ควรตั้งให้เท่ากับ font-size */
+  height: 36px;    /* ควรตั้งให้เท่ากับ font-size */
+  line-height: 36px; /* ช่วยจัดตำแหน่งไอคอนให้อยู่กึ่งกลาง */
+}
+
+/* --- ========== สไตล์สำหรับ Profile Sidebar (เพิ่มใหม่ทั้งหมด) ========== --- */
+
+/* พื้นหลังสีดำโปร่งแสง */
+.profile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1900;
+  opacity: 0; /* ซ่อนไว้ตอนเริ่มต้น */
+  visibility: hidden; /* ซ่อนไว้ตอนเริ่มต้น */
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.profile-overlay.open {
+  opacity: 1; /* แสดงผลเมื่อมี class 'open' */
+  visibility: visible;
+}
+
+/* ตัว Sidebar หลัก */
+/* ตัว Sidebar หลัก */
+.profile-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 350px;
+  height: 100%;
+  background-color: #f5f5f5;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%); /* <-- ซ่อนไว้ด้านซ้ายตอนเริ่มต้น */
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+}
+
+.profile-sidebar.open {
+  transform: translateX(0); /* <-- เลื่อนเข้ามาเมื่อมี class 'open' */
+}
+
+/* --- ========== สไตล์สำหรับปุ่มปิด Sidebar========== --- */
+
+.sidebar-header {
+  display: none; /* หรือลบทิ้งไปเลย */
+}
+
+/* ปุ่มปิด Sidebar ใหม่ */
+.close-sidebar-btn {
+  position: absolute;
+  top: 50%;
+  right: -64px;
+  transform: translateY(-50%);
+  z-index: 2100;
+
+  width: 48px !important;
+  height: 48px !important;
+  background-color: white !important;
+  color: #333 !important;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  
+  /* --- เพิ่ม 2 บรรทัดนี้เข้าไป --- */
+  opacity: 0; /* ซ่อนปุ่มไว้ตอนเริ่มต้น */
+  transition: opacity 0.3s ease-in-out; /* เพิ่ม animation การจาง */
+
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* --- เพิ่มโค้ดส่วนนี้ เพื่อสั่งให้ปุ่มแสดงผลเมื่อ Sidebar เปิด --- */
+.profile-sidebar.open .close-sidebar-btn {
+  opacity: 1; /* ทำให้ปุ่มมองเห็นได้ */
+}
+.profile-details {
+  padding: 0 1.5rem;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.avatar-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 1rem;
+  border: 4px solid white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.profile-details h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.info-field {
+  text-align: left;
+  margin-bottom: 1.5rem;
+  label {
+    font-size: 0.9rem;
+    color: #777;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  .info-value {
+    background-color: #e0e0e0;
+    padding: 0.8rem 1rem;
     border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-edit {
-    background-color: #83d475;
-    color: white;
-
-    &:hover {
-        background-color: #72b966;
-    }
-}
-
-.btn-delete {
-    background-color: #ffffff;
+    display: flex;
+    align-items: center;
     color: #333;
-    border: 1px solid #ccc;
-
-    &:hover {
-        background-color: #f0f0f0;
-        border-color: #aaa;
+    font-weight: 500;
+    mat-icon {
+      margin-right: 0.8rem;
+      color: #555;
     }
+  }
 }
 
-/* --- Responsive Design for smaller screens --- */
-@media (max-width: 768px) {
-    .game-details-card {
-        flex-direction: column;
-        align-items: center;
-    }
-    .game-info {
-        text-align: center;
-    }
-    .game-info p {
-        text-align: left;
-    }
-    .game-info h2 {
-        font-size: 2rem;
-    }
+.sidebar-footer {
+  margin-top: auto; // ดันให้ไปอยู่ล่างสุด
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
+
+.footer-btn {
+  width: 100%;
+  padding: 1.5rem 0 !important;
+  font-size: 1.1rem;
+  border-radius: 12px !important;
+  display: flex;
+  gap: 0.8rem;
+}
+
+.footer-btn.primary-btn {
+  background-color: #72D2FB !important;
+  color: #004d66;
+}
+
+.footer-btn.secondary-btn {
+  background-color: #FFA4A4 !important;
+  color: #b71c1c;
+}
+

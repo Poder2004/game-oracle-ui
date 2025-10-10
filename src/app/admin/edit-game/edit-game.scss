@@ -5,8 +5,9 @@
   background-color: #f9f6f3; /* สีพื้นหลังอ่อนๆ ตามรูป */
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* จัดให้อยู่ด้านบน */
+  align-items: center; /* 👈 [แก้ไข] เปลี่ยนจาก flex-start เป็น center เพื่อจัดให้อยู่กึ่งกลางแนวตั้ง */
   font-family: sans-serif;
+  box-sizing: border-box; // ช่วยให้ padding ไม่ทำให้เกิด scrollbar
 }
 
 /* --- การ์ดฟอร์มตรงกลาง --- */
@@ -53,6 +54,7 @@
     background-color: #fafafa;
     font-size: 1rem;
     transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box; // เพิ่มเพื่อให้ padding ไม่ทำให้ขนาดเกิน
   }
 
   input:focus, textarea:focus, select:focus {
@@ -66,7 +68,7 @@
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3.5rem;
+  gap: 1.5rem; // ลดระยะห่างลงเล็กน้อย
 }
 
 /* --- ส่วนอัปโหลดรูปภาพ --- */
@@ -81,7 +83,7 @@
   cursor: pointer;
   transition: border-color 0.2s, background-color 0.2s;
   position: relative;
-  overflow: hidden; /* ป้องกันไม่ให้รูปเกินขอบ */
+  overflow: hidden;
   
   &:hover {
     border-color: #96d2a2;
@@ -89,7 +91,7 @@
   }
 
   input[type="file"] {
-    display: none; /* ซ่อน input จริง */
+    display: none;
   }
 
   .upload-prompt {
@@ -117,6 +119,25 @@
   }
 }
 
+/* --- ส่วนแสดงข้อความ Feedback --- */
+.feedback-message {
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  text-align: center;
+
+  &.success {
+    background-color: #e8f5e9;
+    color: #4caf50;
+  }
+  &.error {
+    background-color: #ffebee;
+    color: #f44336;
+  }
+}
+
+
 /* --- ส่วนปุ่ม --- */
 .form-actions {
   display: flex;
@@ -134,13 +155,18 @@
   cursor: pointer;
   transition: opacity 0.2s;
 
-  &:hover {
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
     opacity: 0.9;
   }
 }
 
 .btn-add {
-  background-color: #83CC96; /* สีเขียวตามรูป */
+  background-color: #83CC96;
   color: #ffffff;
 }
 

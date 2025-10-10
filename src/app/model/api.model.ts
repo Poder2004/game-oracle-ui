@@ -186,3 +186,15 @@ export interface SearchResponse {
   message: string;
   data: Game[]; // data เป็น Array ของ Game
 }
+
+export interface UpdateGameResponse {
+  status: string;
+  message: string;
+  data: Game;
+}
+
+export interface GetGameResponse {
+  status: string;
+  message: string;
+  data: Game;
+}
