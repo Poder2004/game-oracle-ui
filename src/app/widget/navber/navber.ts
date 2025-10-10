@@ -12,6 +12,7 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../model/api.model';
 import { Constants } from '../../config/constants';
+import { GameService } from '../../services/game.service';
 
 
 @Component({
@@ -59,7 +60,8 @@ export class Navber {
   constructor(
     private constants: Constants,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private gameService: GameService
 
   ) {
     this.isUserLoggedIn = this.authService.isLoggedIn();
@@ -81,6 +83,12 @@ export class Navber {
         // นำ Base URL ของ API มาต่อกับ Path ของรูปภาพ
         this.userImageUrl = `${this.constants.API_ENDPOINT}/${this.currentUser.image_profile}`;
       }
+    }
+  }
+  public onSearch(term: string): void {
+    if (term && term.trim() !== '') {
+      // สั่งให้ Router เปลี่ยนหน้าไปที่ '/search-results' พร้อมกับส่งคำค้นหาไปด้วย
+      this.router.navigate(['/SearchResults'], { queryParams: { q: term.trim() } });
     }
   }
 

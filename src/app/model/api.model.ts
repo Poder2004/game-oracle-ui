@@ -171,3 +171,8 @@ export interface WalletTopUpRes {
   message: string;
   wallet: number;    // ยอดเงินคงเหลือหลังเติม
 }
+export interface SearchResponse {
+  status: string;
+  message: string;
+  data: Game[]; // data เป็น Array ของ Game
+}

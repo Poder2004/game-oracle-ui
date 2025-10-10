@@ -1,0 +1,79 @@
+// ตัวแปรสี (ปรับแก้ได้ตามธีมเว็บของคุณ)
+$card-bg: #fff;
+$shadow-color: rgba(0, 0, 0, 0.1);
+$primary-color: #3f51b5; // สีของปุ่ม
+
+.search-results-page {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+  }
+
+  .loading-message,
+  .no-games-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #777;
+    padding: 3rem 0;
+  }
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.offer-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .offer-image-placeholder {
+    background-color: #f0f0f0;
+
+    .game-image {
+      width: 100%;
+      aspect-ratio: 4 / 5; // ปรับสัดส่วนรูปภาพได้ตามต้องการ
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  mat-card-content {
+    padding: 1rem;
+
+    .offer-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin: 0 0 0.25rem 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis; // ทำให้ชื่อยาวๆ มี ... ต่อท้าย
+    }
+
+    .offer-price {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: $primary-color;
+      margin-bottom: 0.5rem;
+    }
+
+    .nav-links-row {
+      margin-top: 0.5rem;
+      text-align: center;
+
+      .game-btn {
+        width: 100%;
+      }
+    }
+  }
+}

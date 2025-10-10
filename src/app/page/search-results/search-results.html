@@ -1,0 +1,46 @@
+<app-navber></app-navber>
+<div class="search-results-page">
+  <h1>ผลการค้นหาเกมส์สำหรับ: "{{ searchTerm }}"</h1>
+
+  <ng-container *ngIf="games$ | async as games; else loading">
+
+    <div *ngIf="games.length > 0; else noResults" class="results-grid">
+
+      <mat-card class="offer-card" *ngFor="let game of games">
+        <div class="offer-image-placeholder">
+          <img
+            [src]="getFullImageUrl(game.image_game)"
+            [alt]="game.title"
+            class="game-image"
+          />
+        </div>
+
+        <mat-card-content>
+          <p class="offer-title">{{ game.title }}</p>
+          <p class="offer-price">฿{{ game.price | number : "1.2-2" }}</p>
+
+          <div class="nav-links-row">
+            <button
+              mat-button
+              class="nav-link game-btn"
+              [routerLink]="['/GameDetails', game.game_id]"
+            >
+              รายละเอียด
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="loading-message">กำลังค้นหา...</div>
+  </ng-template>
+
+  <ng-template #noResults>
+    <div class="no-games-message">
+      ไม่พบเกมที่ตรงกับคำค้นหา "{{ searchTerm }}"
+    </div>
+  </ng-template>
+</div>

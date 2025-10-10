@@ -19,6 +19,7 @@ import { Addgame } from './admin/addgame/addgame';
 import { Historyuser } from './admin/history/history';
 import { adminGuard } from './guards/admin.guard';
 import { GameDetails } from './page/game-details/game-details';
+import { SearchResults } from './page/search-results/search-results';
 
 export const routes: Routes = [
   // --- Routes ที่ไม่ต้องล็อกอิน (Public Routes) ---
@@ -56,6 +57,11 @@ export const routes: Routes = [
   {
     path: 'editprofile',
     component: EditProfile,
+    canActivate: [authGuard],
+  },
+   {
+    path: 'SearchResults',
+    component: SearchResults,
     canActivate: [authGuard],
   },
   {

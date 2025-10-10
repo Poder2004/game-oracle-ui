@@ -28,7 +28,7 @@
     </div>
 
     <mat-form-field class="search-form-field" appearance="outline">
-        <input matInput placeholder="ค้นหา">
+        <input matInput placeholder="ค้นหา" #searchInput (keyup.enter)="onSearch(searchInput.value)">
         <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 </div>
