@@ -140,6 +140,7 @@ h2 {
     text-align: center;
 }
 
+
 .code-condition {
     font-size: 0.75rem;
     color: #007c34; /* สีเขียวสำหรับเงื่อนไข */
@@ -208,6 +209,14 @@ h2 {
     height: 120px;
     background-color: #666;
     border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    position: relative;
+}
+.offer-image-placeholder .game-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* ทำให้รูปภาพครอบคลุมพื้นที่โดยไม่เสียสัดส่วน */
+        display: block;
 }
 
 .offer-card mat-card-content {

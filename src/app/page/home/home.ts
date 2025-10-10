@@ -6,13 +6,18 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
-import { Navber } from "../../widget/navber/navber";
+import { Navber } from '../../widget/navber/navber';
 import { GameService } from '../../services/game.service';
 // ✅ เพิ่ม CouponService
 import { CouponService } from '../../services/coupon.service';
 // ✅ เพิ่ม Model ที่เกี่ยวข้องกับ Game และ Coupon
-import { Game, GetAllGamesResponse, DiscountCode, GetAllCouponsResponse } from '../../model/api.model';
-
+import {
+  Game,
+  GetAllGamesResponse,
+  DiscountCode,
+  GetAllCouponsResponse,
+} from '../../model/api.model';
+import { Constants } from '../../config/constants';
 
 @Component({
   selector: 'app-main',
@@ -23,13 +28,12 @@ import { Game, GetAllGamesResponse, DiscountCode, GetAllCouponsResponse } from '
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
-    Navber
-],
+    Navber,
+  ],
   templateUrl: './home.html',
-  styleUrls: ['./home.scss']
+  styleUrls: ['./home.scss'],
 })
 export class Home implements OnInit {
-
   // --- ตัวแปรสำหรับข้อมูลเกม (Game Data) ---
   public games: Game[] = [];
   public loadingGames = true;
@@ -48,8 +52,10 @@ export class Home implements OnInit {
 
   constructor(
     private gameService: GameService,
+
     // ✅ 3. Inject CouponService เข้ามาใน constructor
-    private couponService: CouponService
+    private couponService: CouponService,
+    private constants: Constants
   ) {}
 
   ngOnInit(): void {
@@ -73,7 +79,7 @@ export class Home implements OnInit {
         console.error('Error fetching games:', error);
         this.loadingGames = false;
         this.games = [];
-      }
+      },
     });
   }
 
@@ -93,7 +99,16 @@ export class Home implements OnInit {
         console.error('Error fetching coupons:', error);
         this.loadingCoupons = false;
         this.coupons = [];
-      }
+      },
     });
+  }
+  // 7. สร้างฟังก์ชันสำหรับสร้าง URL รูปภาพที่สมบูรณ์
+  getFullImageUrl(imagePath: string): string {
+    if (!imagePath) {
+      // ถ้าไม่มี path รูปภาพ ให้ใช้ placeholder
+      return 'https://placehold.co/150x75/2c2c2e/f2f2f7?text=No+Image';
+    }
+    // นำ URL ของ API มาต่อกับ path ของรูปภาพ
+    return `${this.constants.API_ENDPOINT}/${imagePath}`;
   }
 }

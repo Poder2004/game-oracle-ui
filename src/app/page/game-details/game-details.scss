@@ -1,0 +1,132 @@
+
+
+// --- สไตล์สำหรับ Host Component ---
+:host {
+  display: block;
+  background-color: #f8f9fa; 
+}
+
+// --- Container หลักของหน้า ---
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem; // เพิ่ม padding ให้กับ container หลัก
+}
+
+// --- สไตล์ของหัวข้อที่ย้ายออกมา ---
+/* --- สไตล์ของหัวข้อที่ย้ายออกมา --- */
+.breadcrumbs {
+  color: #000000;
+  margin: 0;
+  text-align: center; 
+  font-size: 2rem;/* << เพิ่มบรรทัดนี้ */
+}
+.breadcrumbss {
+  color: #000000;
+  margin: 0;
+  margin-top: 20px;
+  text-align: center; 
+  font-size: 2rem;/* << เพิ่มบรรทัดนี้ */
+}
+
+.main-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0.5rem 0 2rem 0;
+  text-align: center; /* << เพิ่มบรรทัดนี้ */
+  margin-top: 20px;
+}
+
+
+// --- Container สีขาว มีขอบมนและเงา ---
+.detail-container {
+  display: flex;
+  gap: 3rem;
+  background-color: #bd9292;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  margin-top: 50px;
+
+  @media (max-width: 992px) {
+    flex-direction: column;
+    padding: 1.5rem;
+  }
+}
+
+// ... (สไตล์ส่วนอื่นๆ ของ .image-column, .info-column, ฯลฯ ใช้ของเดิมได้เลย) ...
+.image-column {
+  flex: 0 0 40%;
+  img {
+    width: 70%;
+    border-radius: 12px;
+  }
+}
+
+.info-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0;
+}
+
+.game-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0 2rem 0;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 1.5rem;
+  span {
+    background-color: #f1f3f5;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
+  }
+}
+
+.about-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.game-description {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #495057;
+  flex-grow: 1;
+}
+
+.cta-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.add-to-cart-btn {
+  background: linear-gradient(45deg, #007bff, #0056b3);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5);
+  }
+}
