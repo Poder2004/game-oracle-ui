@@ -14,7 +14,6 @@ export interface UserLogin {
   password: string; // Backend รับเป็น 'password'
 }
 
-
 // --- Interfaces สำหรับ Response Body ---
 
 /**
@@ -52,12 +51,12 @@ export interface LoginResponse {
  * Interface สำหรับข้อมูลโปรไฟล์ที่ได้รับกลับมาจาก endpoint /profile
  */
 export interface ProfileResponse {
-    status: string;
-    message: string;
-    user: {
-        username: string;
-        email: string;
-    }
+  status: string;
+  message: string;
+  user: {
+    username: string;
+    email: string;
+  };
 }
 
 export interface UserUpdatePayload {
@@ -122,6 +121,7 @@ export interface DiscountCode {
   min_value: number;
   limit_usage: number;
   used_count: number;
+  isClaimed?: boolean; // ✅ เพิ่ม property นี้ (optional)
 }
 
 /**
@@ -163,11 +163,21 @@ export interface GetAllUsersResponse {
 // --- Interfaces สำหรับ Wallet Top-Up ---
 
 export interface WalletTopUpReq {
-  user_id: number;   // ใช้ของจริงจาก /api/profile
+  user_id: number; // ใช้ของจริงจาก /api/profile
   amount: number;
 }
 
 export interface WalletTopUpRes {
   message: string;
-  wallet: number;    // ยอดเงินคงเหลือหลังเติม
+  wallet: number; // ยอดเงินคงเหลือหลังเติม
+}
+export interface ClaimCouponResponse {
+  status: string;
+  message: string;
+}
+
+export interface GetMyCouponsResponse {
+  status: string;
+  message: string;
+  data: number[]; // Backend จะส่งข้อมูลกลับมาเป็น Array ของตัวเลข (did)
 }

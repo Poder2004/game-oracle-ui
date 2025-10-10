@@ -2,11 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Constants } from '../config/constants';
-import { CreateCouponPayload, CreateCouponResponse, GetAllCouponsResponse } from '../model/api.model';
-
+import {
+  ClaimCouponResponse,
+  CreateCouponPayload,
+  CreateCouponResponse,
+  GetAllCouponsResponse,
+  GetMyCouponsResponse,
+} from '../model/api.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CouponService {
   private readonly API_ENDPOINT: string;
@@ -19,7 +24,7 @@ export class CouponService {
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('authToken');
     return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
   }
 
@@ -28,7 +33,9 @@ export class CouponService {
    */
   getAllCoupons(): Observable<GetAllCouponsResponse> {
     const url = `${this.API_ENDPOINT}/admin/allcoupons`;
-    return this.http.get<GetAllCouponsResponse>(url, { headers: this.getAuthHeaders() });
+    return this.http.get<GetAllCouponsResponse>(url, {
+      headers: this.getAuthHeaders(),
+    });
   }
 
   /**
@@ -36,6 +43,25 @@ export class CouponService {
    */
   createCoupon(payload: CreateCouponPayload): Observable<CreateCouponResponse> {
     const url = `${this.API_ENDPOINT}/admin/coupons`;
-    return this.http.post<CreateCouponResponse>(url, payload, { headers: this.getAuthHeaders() });
+    return this.http.post<CreateCouponResponse>(url, payload, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  getMyClaimedCoupons(): Observable<GetMyCouponsResponse> {
+    const url = `${this.API_ENDPOINT}/api/my-coupons`;
+    return this.http.get<GetMyCouponsResponse>(url, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  claimCoupon(couponId: number): Observable<ClaimCouponResponse> {
+    // POST /api/coupons/:did/claim
+    const url = `${this.API_ENDPOINT}/api/coupons/${couponId}/claim`;
+    return this.http.post<ClaimCouponResponse>(
+      url,
+      {},
+      { headers: this.getAuthHeaders() }
+    ); // ส่ง body ว่างๆ ไป
   }
 }

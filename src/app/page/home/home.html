@@ -65,8 +65,23 @@
           <p class="code-condition" *ngIf="coupon.min_value === 0">
             * ไม่มีขั้นต่ำ
           </p>
-          <button mat-flat-button color="primary" class="custom-buy-button">
-            รับโค้ด
+          <button
+            mat-flat-button
+            color="primary"
+            class="custom-buy-button"
+            (click)="claimCoupon(coupon)"
+            [disabled]="claimingCouponIds.has(coupon.did) || coupon.isClaimed"
+          >
+            <span *ngIf="claimingCouponIds.has(coupon.did)"
+              >กำลังดำเนินการ...</span
+            >
+            <span *ngIf="!claimingCouponIds.has(coupon.did) && coupon.isClaimed"
+              >รับแล้ว</span
+            >
+            <span
+              *ngIf="!claimingCouponIds.has(coupon.did) && !coupon.isClaimed"
+              >รับโค้ด</span
+            >
           </button>
         </div>
       </div>
@@ -107,7 +122,6 @@
           <p class="offer-price">฿{{ game.price | number : "1.2-2" }}</p>
           <!-- Nav buttons (ตามรูปแบบที่ขอ) -->
           <div class="nav-links-row">
-
             <button
               mat-button
               class="nav-link game-btn"

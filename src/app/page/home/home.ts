@@ -8,17 +8,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { Navber } from '../../widget/navber/navber';
 import { GameService } from '../../services/game.service';
-// ✅ เพิ่ม CouponService
 import { CouponService } from '../../services/coupon.service';
-// ✅ เพิ่ม Model ที่เกี่ยวข้องกับ Game และ Coupon
 import {
   Game,
   GetAllGamesResponse,
   DiscountCode,
   GetAllCouponsResponse,
+  ClaimCouponResponse, // ✅ เพิ่ม Model สำหรับ Response การ Claim
 } from '../../model/api.model';
 import { Constants } from '../../config/constants';
 import { RouterModule } from '@angular/router';
+import Swal from 'sweetalert2'; // ✅ 1. Import SweetAlert2
+import { forkJoin } from 'rxjs'; // ✅ 2. Import forkJoin
 
 @Component({
   selector: 'app-main',
@@ -36,46 +37,40 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./home.scss'],
 })
 export class Home implements OnInit {
-  // ภายในคลาส Home
-  navLinks = [
-    { name: 'GameDetails', path: '/GameDetails' }, // ต้องตรงกับ path ใน routes
-  ];
-
+  // --- ส่วนของ Navigation (โค้ดเดิม) ---
+  navLinks = [{ name: 'GameDetails', path: '/GameDetails' }];
   activeLink = 'GameDetails';
-
-  setActiveLink(name: string) {
-    this.activeLink = name;
-  }
-  
 
   // --- ตัวแปรสำหรับข้อมูลเกม (Game Data) ---
   public games: Game[] = [];
   public loadingGames = true;
 
   // --- ตัวแปรสำหรับข้อมูลคูปอง (Coupon Data) ---
-  // ✅ 1. เพิ่มตัวแปรสำหรับคูปองจริง
   public coupons: DiscountCode[] = [];
-  // ✅ 2. เพิ่มตัวแปรสถานะการโหลดคูปอง
   public loadingCoupons = true;
 
+  // --- ตัวแปรสำหรับจัดการสถานะ UI ---
+  public claimingCouponIds = new Set<number>();
   public showPromotionPopup = true;
-
-  closePopup(): void {
-    this.showPromotionPopup = false;
-  }
 
   constructor(
     private gameService: GameService,
-
-    // ✅ 3. Inject CouponService เข้ามาใน constructor
     private couponService: CouponService,
     private constants: Constants
   ) {}
 
   ngOnInit(): void {
     this.getAllGames();
-    // ✅ 4. เรียกใช้ฟังก์ชันดึงคูปองเมื่อ Component เริ่มทำงาน
-    this.getAllCoupons();
+    // ✅ 3. เปลี่ยนไปเรียกฟังก์ชันใหม่ที่ตรวจสอบสถานะคูปอง
+    this.loadCouponsWithClaimedStatus();
+  }
+
+  setActiveLink(name: string) {
+    this.activeLink = name;
+  }
+
+  closePopup(): void {
+    this.showPromotionPopup = false;
   }
 
   /**
@@ -98,31 +93,78 @@ export class Home implements OnInit {
   }
 
   /**
-   * ✅ 5. เพิ่มฟังก์ชันดึงข้อมูลคูปองทั้งหมดจาก CouponService
+   * ✅ 4. สร้างฟังก์ชันใหม่สำหรับโหลดคูปองพร้อมตรวจสอบสถานะการรับ
    */
-  getAllCoupons(): void {
-    this.couponService.getAllCoupons().subscribe({
-      next: (response: GetAllCouponsResponse) => {
-        // API ควรส่งข้อมูลคูปองมาใน Field ที่ชื่อว่า data
-        if (response.data) {
-          this.coupons = response.data;
-        }
+  loadCouponsWithClaimedStatus(): void {
+    this.loadingCoupons = true;
+
+    forkJoin({
+      allCouponsRes: this.couponService.getAllCoupons(),
+      myCouponsRes: this.couponService.getMyClaimedCoupons(),
+    }).subscribe({
+      next: ({ allCouponsRes, myCouponsRes }) => {
+        const allCoupons = allCouponsRes.data || [];
+        const myClaimedIds = new Set(myCouponsRes.data || []);
+
+        this.coupons = allCoupons.map((coupon) => ({
+          ...coupon,
+          isClaimed: myClaimedIds.has(coupon.did),
+        }));
+
         this.loadingCoupons = false;
       },
       error: (error) => {
-        console.error('Error fetching coupons:', error);
+        console.error('Error fetching coupons data:', error);
         this.loadingCoupons = false;
         this.coupons = [];
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด!',
+          text: 'ไม่สามารถโหลดข้อมูลคูปองได้',
+        });
       },
     });
   }
-  // 7. สร้างฟังก์ชันสำหรับสร้าง URL รูปภาพที่สมบูรณ์
+
+  /**
+   * ✅ 5. เพิ่มฟังก์ชันสำหรับจัดการการกดรับคูปอง
+   */
+  claimCoupon(coupon: DiscountCode): void {
+    this.claimingCouponIds.add(coupon.did);
+
+    this.couponService.claimCoupon(coupon.did).subscribe({
+      next: (response: ClaimCouponResponse) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'รับคูปองสำเร็จ!',
+          text: `คุณได้รับคูปอง ${coupon.name_code} เรียบร้อยแล้ว`,
+          timer: 2500,
+          showConfirmButton: false,
+        });
+        coupon.isClaimed = true;
+      },
+      error: (error) => {
+        const errorMessage =
+          error.error?.error || 'เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ';
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด!',
+          text: errorMessage,
+        });
+      },
+      complete: () => {
+        this.claimingCouponIds.delete(coupon.did);
+      },
+    });
+  }
+
+  /**
+   * สร้างฟังก์ชันสำหรับสร้าง URL รูปภาพที่สมบูรณ์
+   */
   getFullImageUrl(imagePath: string): string {
     if (!imagePath) {
-      // ถ้าไม่มี path รูปภาพ ให้ใช้ placeholder
       return 'https://placehold.co/150x75/2c2c2e/f2f2f7?text=No+Image';
     }
-    // นำ URL ของ API มาต่อกับ path ของรูปภาพ
     return `${this.constants.API_ENDPOINT}/${imagePath}`;
   }
 }
