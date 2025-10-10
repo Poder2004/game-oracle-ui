@@ -7,11 +7,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio'; // สำหรับ Radio Button
 import { FormsModule } from '@angular/forms';
-import { Navber } from "../../widget/navber/navber"; // สำหรับ ngModel
+import { Navber } from '../../widget/navber/navber'; // สำหรับ ngModel
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule } from '@angular/router';
 import { User } from '../../model/api.model';
 import { AuthService } from '../../services/auth.service';
+import { CartService, CartItem } from '../../services/cart.service'; // ✅ เพิ่ม
+import { Location } from '@angular/common'; // ✅ เพิ่ม
 
 @Component({
   selector: 'app-cart',
@@ -26,25 +28,21 @@ import { AuthService } from '../../services/auth.service';
     MatToolbarModule,
     RouterModule,
 
-    Navber
-],
-   templateUrl: './cart.html',
-  styleUrl: './cart.scss'
+    Navber,
+  ],
+  templateUrl: './cart.html',
+  styleUrl: './cart.scss',
 })
-export class Cart implements OnInit{
-  public currentUser: User | null = null; 
-     public isUserLoggedIn: boolean = false
+export class Cart implements OnInit {
+  public currentUser: User | null = null;
+  public isUserLoggedIn: boolean = false;
 
-  // ข้อมูลจำลอง
-  cartItems = [
-    { name: 'EA SPORTS FC 26', price: 1000, image: 'assets/images/fc26.jpg' },
-    { name: 'Battlefield 6', price: 200, image: 'assets/images/bf6.jpg' },
-    { name: 'PUBG: BATTLEGROUNDS', price: 300, image: 'assets/images/pubg.jpg' },
-  ];
+  // ✅ ใช้ของจริงจาก service
+  cartItems: CartItem[] = [];
 
   coupons = [
     { name: 'ส่วนลด ซื้อขั้นต่ำ 1000 ลด 30%', value: 300, minValue: 1000 },
-    { name: 'ส่วนลด ซื้อขั้นต่ำ 500 ลด 10%', value: 50, minValue: 500 }
+    { name: 'ส่วนลด ซื้อขั้นต่ำ 500 ลด 10%', value: 50, minValue: 500 },
   ];
 
   // ตัวแปรสำหรับเก็บค่า
@@ -53,10 +51,12 @@ export class Cart implements OnInit{
   discount = 0;
   total = 0;
 
-   constructor(
+  constructor(
     private authService: AuthService,
-    private router: Router
-  ) { 
+    private router: Router,
+    private cartService: CartService,
+    private location: Location // ✅ เพิ่ม
+  ) {
     this.isUserLoggedIn = this.authService.isLoggedIn();
 
     // 2. ดึงข้อมูลผู้ใช้จาก localStorage ถ้ามี
@@ -67,18 +67,19 @@ export class Cart implements OnInit{
       }
     }
   }
-  
+
   // 3. สร้างฟังก์ชันสำหรับ Logout
   logout(): void {
     localStorage.removeItem('authToken'); // ลบ token
     localStorage.removeItem('currentUser'); // ลบข้อมูล user
     this.router.navigate(['/login']); // กลับไปหน้า login
-    
+
     // (Optional) รีเฟรชหน้าเพื่อให้ component อัปเดตสถานะทันที
-    window.location.reload(); 
+    window.location.reload();
   }
 
   ngOnInit(): void {
+    this.cartItems = this.cartService.getItems(); // ✅ โหลดจาก localStorage
     this.calculateTotals();
   }
 
@@ -100,13 +101,26 @@ export class Cart implements OnInit{
   }
 
   // ฟังก์ชันสำหรับลบ item
-  removeItem(itemToRemove: any): void {
-    this.cartItems = this.cartItems.filter(item => item !== itemToRemove);
-    this.calculateTotals(); // คำนวณใหม่ทุกครั้งที่ลบ
+  removeItem(itemToRemove: CartItem): void {
+    const idx = this.cartItems.indexOf(itemToRemove);
+    if (idx > -1) {
+      this.cartService.removeItem(idx);
+      this.cartItems.splice(idx, 1);
+      this.calculateTotals();
+    }
   }
-  public isProfileOpen = false; 
+
+  public isProfileOpen = false;
   // ฟังก์ชันสำหรับสลับสถานะ (เปิด/ปิด)
   toggleProfileSidebar(): void {
     this.isProfileOpen = !this.isProfileOpen;
+  }
+  goBackToGame(): void {
+    const id = localStorage.getItem('lastGameId');
+    if (id) {
+      this.router.navigate(['/GameDetails', Number(id)]);
+    } else {
+      this.location.back();
+    }
   }
 }

@@ -110,23 +110,38 @@
   margin-top: 2rem;
 }
 
-.add-to-cart-btn {
-  background: linear-gradient(45deg, #007bff, #0056b3);
-  color: white;
-  border: none;
-  padding: 1rem 2.5rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.btn-cart {
+  /* โทนสีและทรงปุ่ม */
+  --btn-bg: #27a5ff;          /* ฟ้าโทนเดียวกับภาพ */
+  --btn-bg-hover: #1e96ee;
+  --btn-bg-active: #1986d6;
+
+  background: var(--btn-bg);
+  color: #fff;
+  border: 0;
+  border-radius: 10px;        /* มุมโค้งแบบในภาพ */
+  padding: 0.9rem 1.4rem;     /* ระยะขอบ */
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+  gap: .6rem;                 /* ระยะห่างตัวอักษรกับไอคอน */
+  font-weight: 700;
+  font-size: clamp(1rem, 2.5vw, 1.25rem);  /* ขนาดตัวอักษรใหญ่พอดี */
+  line-height: 1;
+  cursor: pointer;
 
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5);
-  }
+  box-shadow: 0 3px 8px rgba(0,0,0,.15);
+  transition: background-color .15s ease, transform .08s ease, box-shadow .15s ease;
+
+  &:hover { background: var(--btn-bg-hover); box-shadow: 0 4px 12px rgba(0,0,0,.18); }
+  &:active { background: var(--btn-bg-active); transform: translateY(1px); box-shadow: 0 2px 6px rgba(0,0,0,.14); }
+  &:focus-visible { outline: 3px solid rgba(39,165,255,.35); outline-offset: 2px; }
 }
+
+.btn-cart .icon {
+  width: 1.25em;              /* ไอคอนสเกลตามฟอนต์ */
+  height: 1.25em;
+  display: inline-block;
+  flex: 0 0 auto;
+  color: currentColor;        /* ให้สีตามตัวอักษร (ขาว) */
+}
+
