@@ -18,6 +18,7 @@ import {
   GetAllCouponsResponse,
 } from '../../model/api.model';
 import { Constants } from '../../config/constants';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -29,11 +30,24 @@ import { Constants } from '../../config/constants';
     MatIconModule,
     MatDividerModule,
     Navber,
+    RouterModule,
   ],
   templateUrl: './home.html',
   styleUrls: ['./home.scss'],
 })
 export class Home implements OnInit {
+  // ภายในคลาส Home
+  navLinks = [
+    { name: 'GameDetails', path: '/GameDetails' }, // ต้องตรงกับ path ใน routes
+  ];
+
+  activeLink = 'GameDetails';
+
+  setActiveLink(name: string) {
+    this.activeLink = name;
+  }
+  
+
   // --- ตัวแปรสำหรับข้อมูลเกม (Game Data) ---
   public games: Game[] = [];
   public loadingGames = true;
