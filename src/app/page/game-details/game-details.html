@@ -1,4 +1,3 @@
-
 <div class="page-container" *ngIf="game as g">
   <p class="breadcrumbs">อันดับเกมขายดี</p>
   <h1 class="breadcrumbss">รายละเอียดเกมส์</h1>
@@ -12,20 +11,35 @@
       <h2 class="game-title">{{ g.title }}</h2>
 
       <div class="game-meta">
-        <span>ราคา : {{ g.price | number:'1.2-2' }} ฿</span>
-        <span>ประเภท : {{ g.category?.category_name || ('หมวด #' + g.category_id) }}</span>
-        <span>วันที่วางจำหน่าย : {{ g.release_date | date:'dd MMM yyyy' }}</span>
+        <span>ราคา : {{ g.price | number : "1.2-2" }} ฿</span>
+        <span
+          >ประเภท :
+          {{ g.category?.category_name || "หมวด #" + g.category_id }}</span
+        >
+        <span
+          >วันที่วางจำหน่าย : {{ g.release_date | date : "dd MMM yyyy" }}</span
+        >
       </div>
 
       <h3 class="about-title">เกี่ยวกับเกมนี้</h3>
       <p class="game-description">
         {{ g.description }}
       </p>
-
+      
       <div class="cta-container">
-        <button class="add-to-cart-btn">
-          <!-- ไอคอนเดิมคงไว้ -->
+        <button type="button" class="btn-cart" (click)="addToCart(g)">
           <span>เพิ่มลงตะกร้า</span>
+          <!-- ไอคอนตะกร้า (SVG ไม่ต้องพึ่งไลบรารี) -->
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M7 10h10l-1 9H8l-1-9zm12-2h-3.2l-2.4-4H10.6l-2.4 4H5a1 1 0 0 0 0 2h14a1 1 0 1 0 0-2zM10 12v5m4-5v5"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </button>
       </div>
     </div>
