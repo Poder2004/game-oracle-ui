@@ -159,3 +159,15 @@ export interface GetAllUsersResponse {
   message: string;
   data: User[];
 }
+
+// --- Interfaces สำหรับ Wallet Top-Up ---
+
+export interface WalletTopUpReq {
+  user_id: number;   // ใช้ของจริงจาก /api/profile
+  amount: number;
+}
+
+export interface WalletTopUpRes {
+  message: string;
+  wallet: number;    // ยอดเงินคงเหลือหลังเติม
+}

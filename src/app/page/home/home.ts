@@ -1,10 +1,19 @@
-import { Component } from '@angular/core';
+// file: home.ts
+
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { Navber } from "../../widget/navber/navber";
+import { GameService } from '../../services/game.service';
+// ✅ เพิ่ม CouponService
+import { CouponService } from '../../services/coupon.service';
+// ✅ เพิ่ม Model ที่เกี่ยวข้องกับ Game และ Coupon
+import { Game, GetAllGamesResponse, DiscountCode, GetAllCouponsResponse } from '../../model/api.model';
+
+
 @Component({
   selector: 'app-main',
   standalone: true,
@@ -17,41 +26,74 @@ import { Navber } from "../../widget/navber/navber";
     Navber
 ],
   templateUrl: './home.html',
-  styleUrls: ['./home.scss']   // ✅ ต้องเป็น styleUrls (array)
+  styleUrls: ['./home.scss']
 })
-export class Home {
-  // ข้อมูลจำลองสำหรับส่วน "ข้อเสนอพิเศษ"
-  specialOffers = [
-    { name: 'Free Fire Diamonds', discount: '-4.0%', imagePlaceholder: '#4a7a96' },
-    { name: 'Delta Force Global Top Up', discount: '-8.0%', imagePlaceholder: '#8c5c4a' },
-    { name: 'LifeAfter Credits & Packages', discount: '-6.0%', imagePlaceholder: '#5c8c4a' },
-    { name: 'Garena Speed Drifter Diamonds', discount: '-4.0%', imagePlaceholder: '#964a4a' },
-    { name: 'Blood Strike Golds', discount: '-4.0%', imagePlaceholder: '#6a4a96' },
-    { name: 'Identity V Echoes(Global)', discount: '-7.0%', imagePlaceholder: '#968c4a' },
-    { name: 'Identity V Echoes(Global)', discount: '-7.0%', imagePlaceholder: '#966d4aff' },
-    { name: 'Free Fire Diamonds', discount: '-4.0%', imagePlaceholder: '#4a7a96' },
-    { name: 'Delta Force Global Top Up', discount: '-8.0%', imagePlaceholder: '#8c5c4a' },
-    { name: 'LifeAfter Credits & Packages', discount: '-6.0%', imagePlaceholder: '#5c8c4a' },
-    { name: 'Garena Speed Drifter Diamonds', discount: '-4.0%', imagePlaceholder: '#964a4a' },
-    { name: 'Blood Strike Golds', discount: '-4.0%', imagePlaceholder: '#6a4a96' },
-    { name: 'Identity V Echoes(Global)', discount: '-7.0%', imagePlaceholder: '#968c4a' },
-    { name: 'Identity V Echoes(Global)', discount: '-7.0%', imagePlaceholder: '#966d4aff' },
-  ];
+export class Home implements OnInit {
 
-  // ✅ ข้อมูลจำลองสำหรับส่วน "คูปอง"
-  coupons = [
-    { discount: 'ลด 70%', details: 'สมัครสมาชิกใหม่' },
-    { discount: 'ลด 50%', details: 'ลูกค้าปัจจุบัน' },
-    { discount: 'ส่วนลด ฿100', details: 'เมื่อซื้อครบ ฿500' },
-    { discount: 'ลด 30%', details: 'เมื่อซื้อครั้งแรกของเดือน' },
-  ];
+  // --- ตัวแปรสำหรับข้อมูลเกม (Game Data) ---
+  public games: Game[] = [];
+  public loadingGames = true;
 
-  public showPromotionPopup = true; // กำหนดให้ Popup แสดงตอนเริ่มต้น
+  // --- ตัวแปรสำหรับข้อมูลคูปอง (Coupon Data) ---
+  // ✅ 1. เพิ่มตัวแปรสำหรับคูปองจริง
+  public coupons: DiscountCode[] = [];
+  // ✅ 2. เพิ่มตัวแปรสถานะการโหลดคูปอง
+  public loadingCoupons = true;
 
-  // ฟังก์ชันสำหรับปิด Popup
+  public showPromotionPopup = true;
+
   closePopup(): void {
     this.showPromotionPopup = false;
   }
 
-  constructor() {}
+  constructor(
+    private gameService: GameService,
+    // ✅ 3. Inject CouponService เข้ามาใน constructor
+    private couponService: CouponService
+  ) {}
+
+  ngOnInit(): void {
+    this.getAllGames();
+    // ✅ 4. เรียกใช้ฟังก์ชันดึงคูปองเมื่อ Component เริ่มทำงาน
+    this.getAllCoupons();
+  }
+
+  /**
+   * ดึงข้อมูลเกมทั้งหมดจาก GameService
+   */
+  getAllGames(): void {
+    this.gameService.getAllGames().subscribe({
+      next: (response: GetAllGamesResponse) => {
+        if (response.data) {
+          this.games = response.data;
+        }
+        this.loadingGames = false;
+      },
+      error: (error) => {
+        console.error('Error fetching games:', error);
+        this.loadingGames = false;
+        this.games = [];
+      }
+    });
+  }
+
+  /**
+   * ✅ 5. เพิ่มฟังก์ชันดึงข้อมูลคูปองทั้งหมดจาก CouponService
+   */
+  getAllCoupons(): void {
+    this.couponService.getAllCoupons().subscribe({
+      next: (response: GetAllCouponsResponse) => {
+        // API ควรส่งข้อมูลคูปองมาใน Field ที่ชื่อว่า data
+        if (response.data) {
+          this.coupons = response.data;
+        }
+        this.loadingCoupons = false;
+      },
+      error: (error) => {
+        console.error('Error fetching coupons:', error);
+        this.loadingCoupons = false;
+        this.coupons = [];
+      }
+    });
+  }
 }
