@@ -198,3 +198,13 @@ export interface GetGameResponse {
   message: string;
   data: Game;
 }
+
+export interface GetUserResponse {
+  status: string;
+  data: User;
+}
+
+// export interface GetUserOrdersResponse {
+//   status: string;
+//   data: Order[];
+// }

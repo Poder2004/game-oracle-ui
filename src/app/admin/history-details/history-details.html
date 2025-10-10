@@ -1,38 +1,55 @@
+<app-navadmin></app-navadmin>
 <main class="container">
   <h1 class="main-title">ประวัติธุรกรรม</h1>
 
-  <section class="user-profile-card" *ngIf="userProfile">
-    <img class="avatar" [src]="userProfile.avatarUrl" alt="User Avatar">
-    <div class="user-info">
-      <span class="user-name">{{ userProfile.name }}</span>
-      <span class="user-email">{{ userProfile.email }}</span>
+  <!-- แสดงผลเมื่อโหลดข้อมูลสำเร็จ -->
+  <ng-container *ngIf="user; else loadingOrError">
+    <!-- การ์ดข้อมูลผู้ใช้ -->
+    <section class="user-profile-card">
+      <img class="avatar" [src]="getFullImageUrl(user.image_profile)" alt="User Avatar">
+      <div class="user-info">
+        <span class="user-name">{{ user.username }}</span>
+        <span class="user-email">{{ user.email }}</span>
+      </div>
+      <div class="user-balance">{{ user.wallet | number: '1.2-2' }} บาท</div>
+    </section>
+
+    <!-- ประวัติการเติมเงิน (ยังไม่เชื่อมต่อ) -->
+    <section class="history-card">
+      <h2>ประวัติการเติมเงิน</h2>
+      <ul class="history-list">
+        <!-- <li *ngIf="walletHistory.length === 0" class="empty-state">ไม่มีประวัติการเติมเงิน</li> -->
+        <!-- *ngFor="let item of walletHistory" -->
+      </ul>
+    </section>
+
+    <!-- ประวัติการซื้อเกมส์ -->
+    <section class="history-card">
+      <h2>ประวัติการซื้อเกมส์</h2>
+      <ul class="history-list">
+        <!-- <li *ngIf="orders.length === 0" class="empty-state">ไม่มีประวัติการซื้อเกม</li> -->
+        <!-- วนลูป Orders -->
+        <!-- <ng-container *ngFor="let order of orders">
+          <li *ngFor="let detail of order.OrderDetails" class="purchase-item">
+            <img class="game-cover" [src]="getFullImageUrl(detail.Game.image_game)" [alt]="detail.Game.title">
+            <div class="game-details">
+              <span class="game-name">{{ detail.Game.title }}</span>
+              <div class="purchase-details">
+                <span>{{ order.OrderDate | date: 'dd MMM yyyy' }}</span>
+                <span class="price">{{ detail.Game.price | number: '1.2-2' }} บาท</span>
+              </div>
+            </div>
+          </li>
+        </ng-container> -->
+      </ul>
+    </section>
+
+  </ng-container>
+
+  <!-- แสดงผลตอนกำลังโหลด หรือเกิด Error -->
+  <ng-template #loadingOrError>
+    <div class="feedback-container">
+      <p>{{ errorMessage || 'กำลังโหลดข้อมูล...' }}</p>
     </div>
-    <div class="user-balance">{{ userProfile.balance }}</div>
-  </section>
-
-  <section class="history-card">
-    <h2>ประวัติการเติมเงิน</h2>
-    <ul class="history-list">
-      <li *ngFor="let item of topUpHistory">
-        <span>{{ item.date }}</span>
-        <span class="amount">{{ item.amount }}</span>
-      </li>
-    </ul>
-  </section>
-
-  <section class="history-card">
-    <h2>ประวัติการซื้อเกมส์</h2>
-    <ul class="history-list">
-      <li *ngFor="let item of purchaseHistory" class="purchase-item">
-        <img class="game-cover" [src]="item.imageUrl" [alt]="item.name">
-        <div class="game-details">
-          <span class="game-name">{{ item.name }}</span>
-          <div class="purchase-details">
-            <span>{{ item.purchaseDate }}</span>
-            <span class="price">{{ item.price }}</span>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </section>
+  </ng-template>
 </main>

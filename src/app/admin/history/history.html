@@ -11,7 +11,7 @@
       <h2>ผู้ใช้ทั้งหมดในระบบ</h2>
       <div class="user-count">{{ users.length }} คน</div>
     </div>
-    
+
     <!-- แสดงข้อความ Error ถ้ามี -->
     <div *ngIf="fetchError" class="feedback-message error">
       {{ fetchError }}
@@ -30,17 +30,16 @@
       -->
       <div class="user-item" *ngFor="let user of users">
         <img [src]="getFullImageUrl(user.image_profile)" alt="User Avatar" class="user-avatar">
-        
+
         <div class="user-info">
           <div class="user-name">{{ user.username }}</div>
           <div class="user-email">{{ user.email }}</div>
         </div>
-        
-        <div class="user-actions">
-          <button class="btn-view-history">ดูประวัติธุรกรรม</button>
-        </div>
+
+        <button class="btn-view-history" [routerLink]="['/admin/user-details', user.user_id]">
+          ดูประวัติธุรกรรม
+        </button>
       </div>
     </div>
   </main>
 </div>
-

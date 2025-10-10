@@ -4,11 +4,12 @@ import { Navadmin } from '../navadmin/navadmin';
 import { UserService } from '../../services/user.service';
 import { User } from '../../model/api.model';
 import { Constants } from '../../config/constants'; // 👈 1. Import Constants
+import { RouterModule } from '@angular/router'; 
 
 @Component({
   selector: 'app-historyuser',
   standalone: true,
-  imports: [CommonModule, Navadmin],
+  imports: [CommonModule, Navadmin,RouterModule],
   templateUrl: './history.html',
   styleUrls: ['./history.scss']
 })
