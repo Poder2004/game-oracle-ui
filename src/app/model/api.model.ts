@@ -211,8 +211,12 @@ export interface GetUserResponse {
   data: User;
 }
 
-// export interface GetUserOrdersResponse {
-//   status: string;
-//   data: Order[];
-// }
+// api.model.ts
+export interface WalletHistoryItem {
+  history_id: number; user_id: number; amount: number; transaction_date: string;
+}
+export interface WalletHistoryRes {
+  status: string; message: string; data: WalletHistoryItem[];
+}
+
 

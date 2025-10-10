@@ -59,9 +59,9 @@ mat-card {
 
 mat-card-header {
   /* ทำให้ header กินความกว้างเต็ม 100% */
-  width: 100%; 
+  width: 100%;
   display: flex;
-  justify-content: center; /* จัดให้ item ที่อยู่ข้างใน (title) อยู่กึ่งกลางแนวนอน */
+  justify-content: center; /* จัดให้ title อยู่กึ่งกลางแนวนอน */
 }
 
 .form-card {
@@ -82,8 +82,8 @@ mat-card-header {
   margin: 1rem 0;
   background-color: white;
   border-radius: 8px;
-  height:53px; 
-}  
+  height: 53px;
+}
 
 .confirm-btn {
   background-color: #9FCC70 !important;
@@ -92,6 +92,19 @@ mat-card-header {
   font-size: 1.1rem;
   border-radius: 12px !important;
   width: 80%;
+}
+
+/* --- เปิดเลื่อนเฉพาะการ์ดประวัติ --- */
+.history-card {
+  display: flex;
+  flex-direction: column;
+}
+.history-card mat-card-content {
+  /* กำหนดความสูงสูงสุด + เปิดสกอลล์แค่ภายใน */
+  max-height: 340px;       /* ปรับได้ตามต้องการ */
+  overflow-y: auto;        /* ให้เลื่อนเฉพาะใน content */
+  overflow-x: hidden;
+  padding-right: .25rem;   /* กันข้อความติดสกอลล์บาร์ */
 }
 
 /* --- ส่วนประวัติการซื้อ --- */
@@ -136,4 +149,9 @@ mat-card-header {
     font-size: 1.2rem;
     color: #333;
   }
+}
+
+/* จอแคบ: ลดความสูงสกอลล์ลงเล็กน้อย */
+@media (max-width: 900px) {
+  .history-card mat-card-content { max-height: 260px; }
 }

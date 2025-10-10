@@ -14,18 +14,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
-import { Navber } from "../../widget/navber/navber";
+import { Navber } from '../../widget/navber/navber';
 
 // Services & models
 import { WalletService } from '../../services/wallet.service';
-import { WalletTopUpReq } from '../../model/api.model';
+import { WalletHistoryItem, WalletTopUpReq } from '../../model/api.model';
 
 @Component({
   selector: 'app-wallet',
   standalone: true,
   imports: [
     CommonModule,
-    HttpClientModule,     // ต้องมีเพื่อเรียก HTTP
+    HttpClientModule, // ต้องมีเพื่อเรียก HTTP
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -34,13 +34,12 @@ import { WalletTopUpReq } from '../../model/api.model';
     MatSelectModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
-    Navber
+    Navber,
   ],
   templateUrl: './add-wallet.html',
-  styleUrl: './add-wallet.scss'
+  styleUrl: './add-wallet.scss',
 })
 export class AddWallet implements OnInit {
-
   amountControl = new FormControl('');
   options: string[] = ['100', '300', '500', '1000'];
   filteredOptions!: Observable<string[]>;
@@ -48,22 +47,32 @@ export class AddWallet implements OnInit {
   // state บนหน้า
   walletBalance = 0;
   userId!: number;
-  userName = '';        // << เพิ่ม
-  userEmail = '';       // << เพิ่ม
+  userName = ''; // << เพิ่ม
+  userEmail = ''; // << เพิ่ม
 
   // ประวัติการเติม (UI)
-  topUpHistory = [
-    { date: '19 ก.ย. 68', amount: 500 },
-    { date: '22 ก.ย. 68', amount: 900 },
-    { date: '25 ก.ย. 68', amount: 200 },
-    { date: '30 ก.ย. 68', amount: 1500 },
-  ];
+  topUpHistory: { date: string; amount: number }[] = [];
 
   // ประวัติการซื้อเกม (UI)
   purchaseHistory = [
-    { name: 'Battlefield 6', date: '22 ก.ย. 68', price: 200, image: 'assets/images/bf6.jpg' },
-    { name: 'PUBG: BATTLEGROUNDS', date: '22 ก.ย. 68', price: 300, image: 'assets/images/pubg.jpg' },
-    { name: 'EA SPORTS FC 26', date: '22 ก.ย. 68', price: 1000, image: 'assets/images/fc26.jpg' },
+    {
+      name: 'Battlefield 6',
+      date: '22 ก.ย. 68',
+      price: 200,
+      image: 'assets/images/bf6.jpg',
+    },
+    {
+      name: 'PUBG: BATTLEGROUNDS',
+      date: '22 ก.ย. 68',
+      price: 300,
+      image: 'assets/images/pubg.jpg',
+    },
+    {
+      name: 'EA SPORTS FC 26',
+      date: '22 ก.ย. 68',
+      price: 1000,
+      image: 'assets/images/fc26.jpg',
+    },
   ];
 
   constructor(private walletService: WalletService) {}
@@ -72,7 +81,7 @@ export class AddWallet implements OnInit {
     // autocomplete
     this.filteredOptions = this.amountControl.valueChanges.pipe(
       startWith(''),
-      map(value => this._filter((value || '').toString())),
+      map((value) => this._filter((value || '').toString()))
     );
 
     // ดึงโปรไฟล์เพื่อรู้ user_id และยอด wallet ปัจจุบัน
@@ -82,14 +91,14 @@ export class AddWallet implements OnInit {
         const u: any = (res as any).user ?? res;
         this.userId = u.user_id;
         this.walletBalance = u.wallet;
-        this.userName = u.username;   // << เพิ่ม
-        this.userEmail = u.email;     // << เพิ่ม
-        
+        this.userName = u.username; // << เพิ่ม
+        this.userEmail = u.email; // << เพิ่ม
+        this.loadHistory();
       },
       error: (err) => {
         console.error('โหลดโปรไฟล์ไม่สำเร็จ', err);
         alert('โหลดโปรไฟล์ไม่สำเร็จ — กรุณาเข้าสู่ระบบใหม่');
-      }
+      },
     });
   }
 
@@ -109,26 +118,41 @@ export class AddWallet implements OnInit {
     this.walletService.topUp(body).subscribe({
       next: (res) => {
         this.walletBalance = res.wallet;
-
-        // เพิ่มประวัติบนหน้า
-        const now = new Date();
-        this.topUpHistory.unshift({
-          date: now.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: '2-digit' }),
-          amount: value
-        });
-
+        this.loadHistory();
         this.amountControl.setValue('');
         alert(res.message);
       },
+
       error: (err) => {
         console.error(err);
         alert('เติมเงินไม่สำเร็จ');
-      }
+      },
+    });
+  }
+
+  private loadHistory() {
+    if (!this.userId) return;
+    this.walletService.getHistory(this.userId).subscribe({
+      next: (res) => {
+        this.topUpHistory = (res.data || []).map((h: WalletHistoryItem) => ({
+          date: new Date(h.transaction_date).toLocaleDateString('th-TH', {
+            day: '2-digit',
+            month: 'short',
+            year: '2-digit',
+          }),
+          amount: h.amount,
+        }));
+      },
+      error: (err) => {
+        console.error('โหลดประวัติไม่สำเร็จ', err);
+      },
     });
   }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+    return this.options.filter((option) =>
+      option.toLowerCase().includes(filterValue)
+    );
   }
 }

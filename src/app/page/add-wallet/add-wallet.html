@@ -1,28 +1,28 @@
 <app-navber></app-navber>
 <div class="wallet-container">
-
   <h1 class="page-title">เติมเงิน</h1>
 
   <!-- แสดงยอดเงินคงเหลือ -->
-  <mat-card class="balance-card" style="margin-bottom:16px;">
+  <mat-card class="balance-card" style="margin-bottom: 16px">
     <mat-card-content>
       <h2>ยอดเงินคงเหลือ: {{ walletBalance | number }} บาท</h2>
     </mat-card-content>
   </mat-card>
 
   <div class="top-up-section">
-
     <mat-card class="history-card">
       <mat-card-header>
         <mat-card-title>ประวัติการเติมเงิน</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <ul class="history-list">
-          <li *ngFor="let item of topUpHistory">
-            <span>{{ item.date }}</span>
-            <span class="amount">{{ item.amount | number }} บาท</span>
-          </li>
-        </ul>
+        <div class="history-scroll">
+          <ul class="history-list">
+            <li *ngFor="let item of topUpHistory">
+              <span>{{ item.date }}</span>
+              <span class="amount">{{ item.amount | number }} บาท</span>
+            </li>
+          </ul>
+        </div>
       </mat-card-content>
     </mat-card>
 
@@ -37,9 +37,12 @@
             matInput
             [formControl]="amountControl"
             [matAutocomplete]="auto"
-          >
+          />
           <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+            <mat-option
+              *ngFor="let option of filteredOptions | async"
+              [value]="option"
+            >
               {{ option }} บาท
             </mat-option>
           </mat-autocomplete>
@@ -55,12 +58,15 @@
   <h1 class="page-title">ประวัติการซื้อเกมส์</h1>
   <mat-card class="purchase-history-card">
     <mat-card-header>
-      <mat-card-subtitle>จำนวนเกมส์ทั้งหมดในคลังของคุณ {{ purchaseHistory.length }} เกมส์</mat-card-subtitle>
+      <mat-card-subtitle
+        >จำนวนเกมส์ทั้งหมดในคลังของคุณ
+        {{ purchaseHistory.length }} เกมส์</mat-card-subtitle
+      >
     </mat-card-header>
     <mat-card-content>
       <div class="purchase-item" *ngFor="let item of purchaseHistory">
         <div class="game-info">
-          <img [src]="item.image" alt="{{ item.name }}">
+          <img [src]="item.image" alt="{{ item.name }}" />
           <span>{{ item.name }}</span>
         </div>
         <div class="purchase-details">
@@ -70,5 +76,4 @@
       </div>
     </mat-card-content>
   </mat-card>
-
 </div>
