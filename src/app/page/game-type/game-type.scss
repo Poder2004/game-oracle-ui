@@ -1,0 +1,92 @@
+
+/* โครงรายการเกม (แบบขึ้นบรรทัดใหม่ ไม่ใช่สไลด์) */
+.offers-section {
+  padding: 2rem 1rem 1rem;
+  background-color: #f9f9f9;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.05);
+  margin: 1rem;
+}
+
+.offers-section .offers-scroll-container {
+  display: flex;
+  flex-wrap: wrap;     /* ให้ตกบรรทัดใหม่ */
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+/* การ์ดเกม */
+.offers-section .offer-card {
+  /* ลบสีพื้นเดิมที่เข้ม เพื่อให้ inline style ทำงาน */
+  background: transparent;      /* หรือไม่ระบุ background ก็ได้ */
+  color: #1a1a1a;               /* ข้อความอ่านง่ายบนพื้นอ่อน */
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+.offers-section .offer-title { color: #ffffff; }
+.offers-section .offer-price { color: #ffffff; font-weight: 700; }
+
+/* พื้นที่รูปด้านบนของการ์ด */
+.offers-section .offer-card .offer-image-placeholder {
+  height: 120px;
+  background-color: #666;
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+  position: relative;
+}
+.offers-section .offer-image-placeholder .game-image {
+  width: 200px;
+  height: 100%;
+  object-fit: cover;   /* รูปครอบเต็มกรอบ */
+  display: block;
+}
+/* คืนค่าพื้นหลังเดิมของการ์ด */
+.offers-section .offer-card {
+  background-color: #4a4a4a;   /* สีเดิม */
+  color: #e0e0e0;
+  border-radius: 10px;
+  position: relative;
+  overflow: visible;
+  /* ถ้ามีบรรทัด background: transparent; ให้ลบทิ้ง */
+}
+
+
+/* ปุ่ม "รายละเอียด" */
+.offers-section .nav-links-row {
+  display: flex;
+  justify-content: center;
+}
+.offers-section .nav-link.game-btn {
+  background: #a7cf78;
+  color: #000000;
+  border: none;
+  width: auto;
+  border-radius: 14px;
+  padding: 8px 20px;
+  min-width: 140px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  text-transform: none;
+  box-shadow: none;
+}
+.offers-section .nav-link.game-btn:hover {
+  filter: brightness(0.96);
+}
+.offers-section .nav-link.game-btn:active {
+  transform: translateY(1px);
+}
+
+/* ป้ายส่วนลดบนรูป (ถ้าใช้) */
+.offers-section .offer-card .discount-tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ff4d4d;
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}

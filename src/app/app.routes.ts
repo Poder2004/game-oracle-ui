@@ -59,7 +59,7 @@ export const routes: Routes = [
     component: EditProfile,
     canActivate: [authGuard],
   },
-   {
+  {
     path: 'SearchResults',
     component: SearchResults,
     canActivate: [authGuard],
@@ -87,6 +87,12 @@ export const routes: Routes = [
     component: Discounts,
   },
 
+  {
+    path: 'GameType',
+    loadComponent: () =>
+      import('./page/game-type/game-type').then((m) => m.GameType),
+    canActivate: [authGuard], // ถ้าต้องการ
+  },
   // --- Route เริ่มต้นและ Wildcard ---
   {
     path: '',

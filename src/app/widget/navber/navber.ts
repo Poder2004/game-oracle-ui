@@ -32,6 +32,7 @@ import { GameService } from '../../services/game.service';
   styleUrl: './navber.scss'
 })
 export class Navber {
+[x: string]: any;
   public isUserLoggedIn: boolean = false
   public currentUser: User | null = null;
   userImageUrl: string | null = null;
@@ -40,8 +41,17 @@ export class Navber {
     { name: 'แนะนำ', path: '/home' }, // ตัวอย่าง: ลิงก์ไปหน้า home
     { name: 'อันดับเกมขายดี', path: '/top-selling' }, // ตัวอย่าง
     { name: 'เติมเงิน/ประวัติการซื้อ', path: '/addwallet' }, // <-- นี่คือลิงก์เป้าหมายของคุณ
-    { name: 'ประเภทเกม', path: '/genres' } // ตัวอย่าง
+    { name: 'ประเภทเกม', path: '/GameType' } // ตัวอย่าง
   ];
+
+    categories = [
+    { id: 1, name: 'สร้างสรรค์' },
+    { id: 2, name: 'แอ็กชัน' },
+    { id: 3, name: 'ปกป้องอาณาจักร' },
+    { id: 4, name: 'สยองขวัญ' },
+    { id: 5, name: 'แข่งรถ' },
+  ];
+
 
   activeLink = this.navLinks[0].name;
 
@@ -84,6 +94,7 @@ export class Navber {
         this.userImageUrl = `${this.constants.API_ENDPOINT}/${this.currentUser.image_profile}`;
       }
     }
+
   }
   public onSearch(term: string): void {
     if (term && term.trim() !== '') {
@@ -101,4 +112,10 @@ export class Navber {
     // (Optional) รีเฟรชหน้าเพื่อให้ component อัปเดตสถานะทันที
     window.location.reload();
   }
+
+    goToCategory(c: { id: number; name: string }) {
+    // เลือกอย่างใดอย่างหนึ่ง (อันนี้ใช้ query param ปลอดภัยกับเส้นทางเดิม)
+    this.router.navigate(['/GameType'], { queryParams: { cat: c.id } });
+  }
+
 }

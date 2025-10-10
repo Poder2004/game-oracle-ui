@@ -12,10 +12,7 @@
 
       <div class="game-meta">
         <span>ราคา : {{ g.price | number : "1.2-2" }} ฿</span>
-        <span
-          >ประเภท :
-          {{ g.category?.category_name || "หมวด #" + g.category_id }}</span
-        >
+        <span>ประเภท : {{ categoryName || "หมวด #" + g.category_id }}</span>
         <span
           >วันที่วางจำหน่าย : {{ g.release_date | date : "dd MMM yyyy" }}</span
         >
@@ -25,7 +22,7 @@
       <p class="game-description">
         {{ g.description }}
       </p>
-      
+
       <div class="cta-container">
         <button type="button" class="btn-cart" (click)="addToCart(g)">
           <span>เพิ่มลงตะกร้า</span>

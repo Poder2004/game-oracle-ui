@@ -1,1 +1,42 @@
-<p>game-type works!</p>
+<!-- Navbar -->
+<app-navber></app-navber>
+
+<!-- Offers Section -->
+<section class="offers-section">
+  <h2>ประเภท: {{ categoryName || ('หมวด #' + catId) }}</h2>
+  <p>
+    อย่าพลาดโอกาสที่จะได้รับข้อเสนอพิเศษจากเรา! ค้นหาสิ่งที่คุณชื่นชอบวันนี้!
+  </p>
+
+  <div *ngIf="loadingGames" class="loading-message">กำลังโหลดเกม...</div>
+
+  <div class="offers-scroll-container" *ngIf="!loadingGames && games.length > 0">
+    <mat-card class="offer-card" *ngFor="let game of games">
+      <div class="offer-image-placeholder">
+        <img
+          [src]="getFullImageUrl(game.image_game)"
+          [alt]="game.title"
+          class="game-image"
+        />
+      </div>
+
+      <mat-card-content>
+        <p class="offer-title">{{ game.title }}</p>
+        <p class="offer-price">฿{{ game.price | number : '1.2-2' }}</p>
+
+        <div class="nav-links-row">
+          <button
+            mat-button
+            class="nav-link game-btn"
+            [routerLink]="['/GameDetails', game.game_id]">
+            รายละเอียด
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div *ngIf="!loadingGames && games.length === 0" class="no-games-message">
+    ไม่พบข้อมูลเกมในหมวดนี้
+  </div>
+</section>
