@@ -105,7 +105,17 @@
         <mat-card-content>
           <p class="offer-title">{{ game.title }}</p>
           <p class="offer-price">฿{{ game.price | number : "1.2-2" }}</p>
-          <button mat-flat-button class="top-up-btn">ซื้อบ่ๆ</button>
+          <!-- Nav buttons (ตามรูปแบบที่ขอ) -->
+          <div class="nav-links-row">
+
+            <button
+              mat-button
+              class="nav-link game-btn"
+              [routerLink]="['/GameDetails', game.game_id]"
+            >
+              รายละเอียด
+            </button>
+          </div>
         </mat-card-content>
       </mat-card>
     </div>

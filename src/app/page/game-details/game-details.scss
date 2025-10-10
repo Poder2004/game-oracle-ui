@@ -3,7 +3,7 @@
 // --- สไตล์สำหรับ Host Component ---
 :host {
   display: block;
-  background-color: #f8f9fa; 
+  background-color: #f8f9fa;
 }
 
 // --- Container หลักของหน้า ---
@@ -18,14 +18,14 @@
 .breadcrumbs {
   color: #000000;
   margin: 0;
-  text-align: center; 
+  text-align: center;
   font-size: 2rem;/* << เพิ่มบรรทัดนี้ */
 }
 .breadcrumbss {
   color: #000000;
   margin: 0;
   margin-top: 20px;
-  text-align: center; 
+  text-align: center;
   font-size: 2rem;/* << เพิ่มบรรทัดนี้ */
 }
 
@@ -43,7 +43,7 @@
 .detail-container {
   display: flex;
   gap: 3rem;
-  background-color: #bd9292;
+  background-color: #b7a3ca;
   padding: 2.5rem;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);

@@ -18,6 +18,7 @@ import { Mainadmin } from './admin/mainadmin/mainadmin';
 import { Addgame } from './admin/addgame/addgame';
 import { Historyuser } from './admin/history/history';
 import { adminGuard } from './guards/admin.guard';
+import { GameDetails } from './page/game-details/game-details';
 
 export const routes: Routes = [
   // --- Routes ที่ไม่ต้องล็อกอิน (Public Routes) ---
@@ -57,23 +58,27 @@ export const routes: Routes = [
     component: EditProfile,
     canActivate: [authGuard],
   },
+  {
+    path: 'GameDetails/:id',
+    component: GameDetails,
+  },
 
   // --- Routes สำหรับ Admin ที่ต้องล็อกอินก่อน ---
   {
     path: 'Mainadmin', // ปรับ path เป็น kebab-case
-    component: Mainadmin
+    component: Mainadmin,
   },
   {
     path: 'addgame', // ปรับ path เป็น kebab-case
-    component: Addgame
+    component: Addgame,
   },
   {
     path: 'history',
-    component: Historyuser
+    component: Historyuser,
   },
   {
     path: 'discounts',
-    component: Discounts
+    component: Discounts,
   },
 
   // --- Route เริ่มต้นและ Wildcard ---
