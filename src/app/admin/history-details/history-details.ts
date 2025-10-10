@@ -1,57 +1,69 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Navadmin } from '../navadmin/navadmin'; // ตรวจสอบ Path
+import { UserService } from '../../services/user.service';
+import { User} from '../../model/api.model'; // 👈 Import Models
+import { Constants } from '../../config/constants'; // 👈 Import Constants
 
 @Component({
   selector: 'app-history-details',
   standalone: true,
-  imports: [CommonModule] ,
+  // เพิ่ม Pipes และ RouterModule
+  imports: [CommonModule, RouterModule, Navadmin, DatePipe, DecimalPipe],
   templateUrl: './history-details.html',
-  styleUrl: './history-details.scss'
+  styleUrls: ['./history-details.scss']
 })
 export class HistoryDetails implements OnInit {
+  // 1. ลบข้อมูลจำลองออก และสร้างตัวแปรสำหรับเก็บข้อมูลจริง
+  user: User | null = null;
+  // orders: Order[] = [];
+  // walletHistory: WalletHistory[] = [];
+  
+  errorMessage: string | null = null;
+  userId: number | null = null;
 
-  // --- ข้อมูลจำลองสำหรับหน้า Profile ---
-
-  // ข้อมูลผู้ใช้
-  userProfile = {
-    name: 'พ่อครูภรัณ ',
-    email: 'Pharan@gmail.com',
-    balance: '5,000,000',
-    avatarUrl: 'https://i.pinimg.com/736x/ed/4a/a7/ed4aa78efa51857af870e177cc75ee6e.jpg' // URL รูป Avatar
-  };
-
-  // ประวัติการเติมเงิน
-  topUpHistory = [
-    { date: 'เติมวันที่ 19 ก.ย. 68', amount: '500 บาท' },
-    { date: 'เติมวันที่ 22 ก.ย. 68', amount: '900 บาท' },
-    { date: 'เติมวันที่ 25 ก.ย. 68', amount: '200 บาท' },
-    { date: 'เติมวันที่ 30 ก.ย. 68', amount: '1500 บาท' }
-  ];
-
-  // ประวัติการซื้อเกม
-  purchaseHistory = [
-    {
-      name: 'Battlefield 6',
-      imageUrl: 'https://gaming-cdn.com/images/products/20035/616x353/battlefield-6-xbox-series-x-s-microsoft-store-cover.jpg?v=1759224746',
-      purchaseDate: 'ซื้อวันที่ 22 ก.ย. 68',
-      price: '200 บาท'
-    },
-    {
-      name: 'PUBG: BATTLEGROUNDS',
-      imageUrl: 'https://s.isanook.com/ga/0/ud/213/1066715/image-pubg-01.jpg',
-      purchaseDate: 'ซื้อวันที่ 22 ก.ย. 68',
-      price: '300 บาท'
-    },
-    {
-      name: 'EA SPORTS FC 26',
-      imageUrl: 'https://cdn.akamai.steamstatic.com/steam/apps/2195250/header.jpg?t=1726002167',
-      purchaseDate: 'ซื้อวันที่ 22 ก.ย. 68',
-      price: '1000 บาท'
-    }
-  ];
-
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+       private userService: UserService,
+    private constants: Constants
+  ) {}
 
   ngOnInit(): void {
+    // 2. ดึง ID ของผู้ใช้จาก URL
+    const idParam = this.route.snapshot.paramMap.get('id');
+    this.userId = idParam ? Number(idParam) : null;
+
+    if (this.userId) {
+      // 3. เรียกฟังก์ชันเพื่อโหลดข้อมูลทั้งหมด
+      this.loadAllData(this.userId);
+    } else {
+      this.errorMessage = "ไม่พบ ID ของผู้ใช้";
+    }
+  }
+
+  loadAllData(id: number): void {
+    this.errorMessage = null;
+    
+    // 4. โหลดข้อมูลโปรไฟล์ผู้ใช้
+    this.userService.getUserById(id).subscribe({
+      next: res => this.user = res.data,
+      error: err => this.errorMessage = "ไม่สามารถโหลดข้อมูลผู้ใช้ได้"
+    });
+
+    // // 5. โหลดประวัติการซื้อเกม
+    // this.userService.getUserOrders(id).subscribe({
+    //   next: res => this.orders = res.data,
+    //   error: err => console.error("Failed to load orders", err)
+    // });
+    
+    // 6. โหลดประวัติการเติมเงิน (ถ้ามี Service)
+    // this.adminService.getWalletHistory(id).subscribe(...)
+  }
+  
+  // 7. ฟังก์ชันสำหรับสร้าง URL รูปภาพที่สมบูรณ์
+  getFullImageUrl(path: string): string {
+    if (!path) return 'assets/images/default-avatar.png';
+    return `${this.constants.API_ENDPOINT}/${path}`;
   }
 }

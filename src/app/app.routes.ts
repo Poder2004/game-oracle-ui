@@ -20,6 +20,9 @@ import { Historyuser } from './admin/history/history';
 import { adminGuard } from './guards/admin.guard';
 import { GameDetails } from './page/game-details/game-details';
 import { SearchResults } from './page/search-results/search-results';
+import { GameDetailsadmin } from './admin/game-details/game-details';
+import { EditGame } from './admin/edit-game/edit-game';
+import { HistoryDetails } from './admin/history-details/history-details';
 
 export const routes: Routes = [
   // --- Routes ที่ไม่ต้องล็อกอิน (Public Routes) ---
@@ -68,6 +71,20 @@ export const routes: Routes = [
     path: 'GameDetails/:id',
     component: GameDetails,
   },
+  {
+    path: 'GameDetailsadmin/:id',
+    component: GameDetailsadmin,
+  },
+  { 
+    path: 'edit-game/:id', 
+    component: EditGame,
+    canActivate: [authGuard] 
+  },
+  { 
+    path: 'admin/user-details/:id', 
+    component: HistoryDetails,
+    canActivate: [authGuard] 
+  },
 
   // --- Routes สำหรับ Admin ที่ต้องล็อกอินก่อน ---
   {
@@ -101,6 +118,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '/home', // หากเข้า path ที่ไม่มีอยู่จริง ให้กลับไปหน้า main
+    redirectTo: '/login', // หากเข้า path ที่ไม่มีอยู่จริง ให้กลับไปหน้า main
   },
 ];

@@ -186,10 +186,33 @@ export interface SearchResponse {
   message: string;
   data: Game[]; // data เป็น Array ของ Game
 }
+
 // เพิ่ม interface นี้ (ถ้ายังไม่มี)
 export interface CategoryListResponse {
   status: string;
   message: string;
   data: Category[];
 }
+
+export interface UpdateGameResponse {
+  status: string;
+  message: string;
+  data: Game;
+}
+
+export interface GetGameResponse {
+  status: string;
+  message: string;
+  data: Game;
+}
+
+export interface GetUserResponse {
+  status: string;
+  data: User;
+}
+
+// export interface GetUserOrdersResponse {
+//   status: string;
+//   data: Order[];
+// }
 

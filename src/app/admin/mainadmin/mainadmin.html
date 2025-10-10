@@ -41,7 +41,9 @@
           </div>
 
           <div class="game-details-button-container">
-            <button class="btn details-button">ดูรายละเอียด</button>
+            <button class="btn details-button" [routerLink]="['/GameDetailsadmin', game.game_id]">
+              ดูรายละเอียด
+            </button>
           </div>
         </div>
       </div>

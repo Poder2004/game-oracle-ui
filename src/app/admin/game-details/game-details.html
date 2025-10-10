@@ -1,31 +1,120 @@
-<main class="container">
-    <div class="header-title">
-        <h1>อันดับเกมขายดี</h1>
-        <h2>อันดับที่ 1</h2>
-        <h3>รายละเอียดเกมส์</h3>
+
+<div class="page-container" *ngIf="game; else loadingOrError">
+     <mat-toolbar class="top-toolbar">
+    <span class="logo">Game Oracle</span>
+  </mat-toolbar>
+  <button
+    mat-icon-button
+    class="hamburger-menu-btn"
+    (click)="toggleProfileSidebar()"
+    aria-label="Open Profile Menu"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <!-- ส่วนหัวข้อหลัก -->
+  <div class="header-section">
+    <h1>รายละเอียดเกมส์</h1>
+  </div>
+
+  <!-- การ์ดแสดงข้อมูลเกม -->
+  <div class="detail-card">
+    <!-- คอลัมน์รูปภาพ (ซ้าย) -->
+    <div class="image-column">
+      <img [src]="getFullImageUrl(game.image_game)" [alt]="game.title" class="game-cover-image"/>
     </div>
 
-    <section class="game-details-card">
-        <div class="game-cover">
-            <img [src]="game.coverImage" [alt]="game.name + ' Game Cover'">
-        </div>
-        <div class="game-info">
-            <h2>{{ game.name }}</h2>
-            <p class="meta-data">
-                <strong>ราคา :</strong> {{ game.price }} |
-                <strong>ประเภท :</strong> {{ game.category }} |
-                <strong>วันที่วางขาย :</strong> {{ game.releaseDate }}
-            </p>
+    <!-- คอลัมน์ข้อมูล (ขวา) -->
+    <div class="info-column">
+      <h2 class="game-title">{{ game.title }}</h2>
 
-            <h4>{{ game.about }}</h4>
-            <p>{{ game.description1 }}</p>
-            <p>{{ game.description2 }}</p>
-            <p>{{ game.description3 }}</p>
-        </div>
-    </section>
+      <!-- 
+        รวมข้อมูล ราคา, ประเภท, และวันที่วางจำหน่ายไว้ในบรรทัดเดียว
+      -->
+      <div class="game-meta">
+        <span>ราคา : {{ game.price | number: '1.2-2' }} ฿</span>
+        <span class="separator">|</span>
+        <span>ประเภท : {{ game.category?.category_name || 'N/A' }}</span>
+        <span class="separator">|</span>
+        <span>วันที่วางจำหน่าย : {{ game.release_date | date: 'dd MMM yyyy' }}</span>
+      </div>
 
-    <div class="action-buttons">
-        <button class="btn btn-edit" (click)="onEdit()">แก้ไข</button>
-        <button class="btn btn-delete" (click)="onDelete()">ลบ</button>
+      <p class="game-description">{{ game.description }}</p>
     </div>
-</main>
+  </div>
+
+  <!-- 
+    ย้ายปุ่ม "แก้ไข" และ "ลบ" ออกมาไว้นอกการ์ด
+  -->
+  <div class="action-buttons">
+    <button class="btn btn-edit" (click)="onEdit()">แก้ไข</button>
+    <button class="btn btn-delete" (click)="onDelete()">ลบ</button>
+  </div>
+</div>
+
+
+<!-- Template ที่จะแสดงตอนกำลังโหลดหรือเกิด Error -->
+<ng-template #loadingOrError>
+  <div class="feedback-container">
+    <p *ngIf="errorMessage; else loading">{{ errorMessage }}</p>
+    <ng-template #loading><p>กำลังโหลดข้อมูล...</p></ng-template>
+  </div>
+</ng-template>
+
+<div
+  class="profile-overlay"
+  [class.open]="isProfileOpen"
+  (click)="toggleProfileSidebar()"
+></div>
+
+<aside class="profile-sidebar" [class.open]="isProfileOpen">
+  <div *ngIf="currentUser" class="profile-details">
+    <div class="avatar-container">
+      <img [src]="currentUser.image_profile" alt="User Avatar" />
+    </div>
+    <h2>ข้อมูลส่วนตัว</h2>
+
+    <div class="info-field">
+      <label>Name User</label>
+      <div class="info-value">
+        <mat-icon>person</mat-icon>
+        <span>{{ currentUser.username }}</span>
+      </div>
+    </div>
+    <div class="info-field">
+      <label>Gmail User</label>
+      <div class="info-value">
+        <mat-icon>mail</mat-icon>
+        <span>{{ currentUser.email }}</span>
+      </div>
+    </div>
+    <div class="info-field">
+      <label>Wallet Balance</label>
+      <div class="info-value">
+        <mat-icon>account_balance_wallet</mat-icon>
+        <span>{{ currentUser.wallet | number : "1.2-2" }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <button
+      mat-flat-button
+      class="footer-btn primary-btn"
+      routerLink="/editprofile"
+    >
+      <mat-icon>person</mat-icon>
+      <span>แก้ไขโปรไฟล์</span>
+    </button>
+
+    <button mat-flat-button class="footer-btn primary-btn" routerLink="/Mainadmin">
+      <mat-icon>home</mat-icon>
+      <span>หน้าหลัก</span>
+    </button>
+
+    <button mat-flat-button class="footer-btn secondary-btn" (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span>ออกจากระบบ</span>
+    </button>
+  </div>
+</aside>

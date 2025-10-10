@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'; // 👈 1. Import OnInit
 import { CommonModule } from '@angular/common';
 import { Navadmin } from '../navadmin/navadmin';
-
+import { RouterModule } from '@angular/router'; // 👈 1. Import RouterModule
 // --- 👇 2. Import ที่จำเป็น ---
 import { GameService } from '../../services/game.service';
 import { Game } from '../../model/api.model';
@@ -10,7 +10,7 @@ import { Constants } from '../../config/constants';
 @Component({
   selector: 'app-mainadmin',
   standalone: true,
-  imports: [CommonModule, Navadmin],
+  imports: [CommonModule, Navadmin,RouterModule],
   templateUrl: './mainadmin.html',
   styleUrl: './mainadmin.scss',
 })
