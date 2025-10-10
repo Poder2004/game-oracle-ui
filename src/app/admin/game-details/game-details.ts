@@ -1,11 +1,48 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common'; 
 
 @Component({
   selector: 'app-game-details',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './game-details.html',
   styleUrl: './game-details.scss'
 })
-export class GameDetails {
+export class GameDetails implements OnInit {
+
+  // Object สำหรับเก็บข้อมูลเกมทั้งหมด
+  game: any = {
+    name: 'Roblox',
+    price: '1000 $',
+    category: 'สร้างสรรค์',
+    releaseDate: '19 ก.ย. 2565',
+    coverImage: 'https://images.rbxcdn.com/5348266ea6c5e67b19d6a814cbbb70f6.jpg',
+    about: 'เกี่ยวกับ Roblox',
+    description1: 'Roblox เป็นแพลตฟอร์มจินตนาการระดับสุดยอดที่ให้คุณเล่น สร้าง และเป็นอะไรก็ได้ที่คุณจินตนาการได้ ร่วมสนุกกับผู้เล่นหลายล้านคนและค้นพบโลกที่ไม่มีที่สิ้นสุดที่ถูกสร้างขึ้นโดยชุมชนโลกภายใต้แว่นตาของการพัฒนาเกม! ใช่ข้อเท็จจริงของ Roblox เพื่อรับข้อเสนอเหมือนจริง! ใช้ Roblox ของคุณเพื่อซื้ออุปกรณ์ใหม่สำหรับตัวละครของคุณและเพิ่มความสามารถในการเล่นเกม เป็นของขวัญที่เหมาะสำหรับผู้ที่ชื่นชอบ Roblox มาเล่นกับเพื่อนๆ บนคอมพิวเตอร์ โทรศัพท์มือถือ แท็บเล็ต คอนโซล Xbox One Oculus Rift หรือ HTC Vive ขณะเล่นหนึ่งในล้านเกมฟรีบน Roblox ได้แล้ววันนี้ มีเพียงบัตรนี้จะให้ Roblox เท่านั้น',
+    description2: 'ในชุมชนและตลาดออนไลน์ของ Roblox ผู้ใช้สามารถเล่นเกมได้ แต่ Roblox ไม่ใช่เกม แต่เป็นแพลตฟอร์มที่ผู้ใช้สามารถเข้าถึงเกมที่สร้างขึ้นโดยผู้สร้างเกมรายอื่น ๆ นับคล้ายกับเครือข่ายเกม Steam มากกว่าเกมออนไลน์ที่เหมาะกับเด็กในทางหนึ่ง ไม่เหมือนร้านค้าออนไลน์เช่น Steam ที่เกมทั้งหมดที่ถูกสร้างโดยผู้ใช้ทั่วโลก ทำให้ Roblox เป็นเอกลักษณ์ที่ไม่เหมือนใคร โดย Roblox ช่วยให้ผู้ใช้สามารถสร้างเกมของตัวเองได้ ดังนั้นการสนุกที่ไม่จำกัดเพียงแค่การเล่นเกม',
+    description3: 'สำหรับวิดีโอเกมที่ถูกพัฒนาโดยผู้ใช้แพลตฟอร์มเช่นกัน ไม่ได้มีการพัฒนาโดยบริษัท Roblox ในลักษณะเป็นทางการ ตามเว็บไซต์อย่างเป็นทางการ ผู้ใช้แพลตฟอร์มนี้มีรายได้มากกว่า 20 ล้านเกม'
+  };
+
+  constructor() { }
+
+  ngOnInit(): void {
+    console.log('Admin Details Component Initialized');
+  }
+
+  // ฟังก์ชันสำหรับปุ่ม "แก้ไข"
+  onEdit(): void {
+    console.log('ปุ่มแก้ไขถูกคลิก!');
+    alert('ฟังก์ชันแก้ไขยังไม่ได้ถูกสร้าง');
+  }
+
+  // ฟังก์ชันสำหรับปุ่ม "ลบ"
+  onDelete(): void {
+    console.log('ปุ่มลบถูกคลิก!');
+    if (confirm('คุณต้องการลบเกมนี้ใช่หรือไม่?')) {
+      console.log('กำลังดำเนินการลบ...');
+    } else {
+      console.log('ยกเลิกการลบ');
+    }
+  }
 
 }

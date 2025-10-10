@@ -1,1 +1,31 @@
-<p>game-details works!</p>
+<main class="container">
+    <div class="header-title">
+        <h1>อันดับเกมขายดี</h1>
+        <h2>อันดับที่ 1</h2>
+        <h3>รายละเอียดเกมส์</h3>
+    </div>
+
+    <section class="game-details-card">
+        <div class="game-cover">
+            <img [src]="game.coverImage" [alt]="game.name + ' Game Cover'">
+        </div>
+        <div class="game-info">
+            <h2>{{ game.name }}</h2>
+            <p class="meta-data">
+                <strong>ราคา :</strong> {{ game.price }} |
+                <strong>ประเภท :</strong> {{ game.category }} |
+                <strong>วันที่วางขาย :</strong> {{ game.releaseDate }}
+            </p>
+
+            <h4>{{ game.about }}</h4>
+            <p>{{ game.description1 }}</p>
+            <p>{{ game.description2 }}</p>
+            <p>{{ game.description3 }}</p>
+        </div>
+    </section>
+
+    <div class="action-buttons">
+        <button class="btn btn-edit" (click)="onEdit()">แก้ไข</button>
+        <button class="btn btn-delete" (click)="onDelete()">ลบ</button>
+    </div>
+</main>

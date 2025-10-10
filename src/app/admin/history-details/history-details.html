@@ -1,1 +1,38 @@
-<p>history-details works!</p>
+<main class="container">
+  <h1 class="main-title">ประวัติธุรกรรม</h1>
+
+  <section class="user-profile-card" *ngIf="userProfile">
+    <img class="avatar" [src]="userProfile.avatarUrl" alt="User Avatar">
+    <div class="user-info">
+      <span class="user-name">{{ userProfile.name }}</span>
+      <span class="user-email">{{ userProfile.email }}</span>
+    </div>
+    <div class="user-balance">{{ userProfile.balance }}</div>
+  </section>
+
+  <section class="history-card">
+    <h2>ประวัติการเติมเงิน</h2>
+    <ul class="history-list">
+      <li *ngFor="let item of topUpHistory">
+        <span>{{ item.date }}</span>
+        <span class="amount">{{ item.amount }}</span>
+      </li>
+    </ul>
+  </section>
+
+  <section class="history-card">
+    <h2>ประวัติการซื้อเกมส์</h2>
+    <ul class="history-list">
+      <li *ngFor="let item of purchaseHistory" class="purchase-item">
+        <img class="game-cover" [src]="item.imageUrl" [alt]="item.name">
+        <div class="game-details">
+          <span class="game-name">{{ item.name }}</span>
+          <div class="purchase-details">
+            <span>{{ item.purchaseDate }}</span>
+            <span class="price">{{ item.price }}</span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </section>
+</main>
