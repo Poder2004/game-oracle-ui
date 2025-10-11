@@ -115,10 +115,11 @@ export class Cart implements OnInit {
   toggleProfileSidebar(): void {
     this.isProfileOpen = !this.isProfileOpen;
   }
+
   goBackToGame(): void {
     const id = localStorage.getItem('lastGameId');
     if (id) {
-      this.router.navigate(['/GameDetails', Number(id)]);
+      this.router.navigate(['/home']);
     } else {
       this.location.back();
     }
