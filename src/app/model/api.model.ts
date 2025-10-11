@@ -212,11 +212,32 @@ export interface GetUserResponse {
 }
 
 // api.model.ts
-export interface WalletHistoryItem {
-  history_id: number; user_id: number; amount: number; transaction_date: string;
-}
-export interface WalletHistoryRes {
-  status: string; message: string; data: WalletHistoryItem[];
+// ========================= Wallet (Single Source of Truth) =========================
+export interface WalletTopUpReq {
+  user_id: number;          // ใช้ค่า user_id จริงจาก /profile
+  amount: number;
+  transaction_date?: string;
 }
 
+export interface WalletTopUpRes {
+  message: string;
+  wallet: number;           // ยอดเงินคงเหลือหลังเติม
+}
+
+export interface WalletHistoryItem {
+  // backend บางเวอร์ชันส่งเป็น id หรือ history_id -> ทำ optional ไว้ทั้งคู่เพื่อกันพัง
+  id?: number;
+  history_id?: number;
+
+  user_id: number;
+  amount: number;
+  /** วันที่จาก backend (ISO/RFC3339) */
+  transaction_date: string;
+}
+
+export interface WalletHistoryRes {
+  status: string;
+  message: string;
+  data: WalletHistoryItem[];
+}
 

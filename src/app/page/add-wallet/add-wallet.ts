@@ -37,47 +37,41 @@ import { WalletHistoryItem, WalletTopUpReq } from '../../model/api.model';
     Navber,
   ],
   templateUrl: './add-wallet.html',
-  styleUrl: './add-wallet.scss',
+  styleUrls: ['./add-wallet.scss'], // ✅ ใช้ styleUrls (array)
 })
 export class AddWallet implements OnInit {
   amountControl = new FormControl('');
+  dateControl = new FormControl('');
+
   options: string[] = ['100', '300', '500', '1000'];
   filteredOptions!: Observable<string[]>;
 
   // state บนหน้า
   walletBalance = 0;
   userId!: number;
-  userName = ''; // << เพิ่ม
-  userEmail = ''; // << เพิ่ม
+  userName = '';
+  userEmail = '';
 
   // ประวัติการเติม (UI)
   topUpHistory: { date: string; amount: number }[] = [];
 
-  // ประวัติการซื้อเกม (UI)
+  // (ตัวอย่าง) ประวัติการซื้อเกม (UI)
   purchaseHistory = [
-    {
-      name: 'Battlefield 6',
-      date: '22 ก.ย. 68',
-      price: 200,
-      image: 'assets/images/bf6.jpg',
-    },
-    {
-      name: 'PUBG: BATTLEGROUNDS',
-      date: '22 ก.ย. 68',
-      price: 300,
-      image: 'assets/images/pubg.jpg',
-    },
-    {
-      name: 'EA SPORTS FC 26',
-      date: '22 ก.ย. 68',
-      price: 1000,
-      image: 'assets/images/fc26.jpg',
-    },
+    { name: 'Battlefield 6', date: '22 ก.ย. 68', price: 200, image: 'assets/images/bf6.jpg' },
+    { name: 'PUBG: BATTLEGROUNDS', date: '22 ก.ย. 68', price: 300, image: 'assets/images/pubg.jpg' },
+    { name: 'EA SPORTS FC 26', date: '22 ก.ย. 68', price: 1000, image: 'assets/images/fc26.jpg' },
   ];
 
   constructor(private walletService: WalletService) {}
 
   ngOnInit() {
+    // ตั้งค่า default = วันนี้ (YYYY-MM-DD) ให้กับ input type="date"
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    this.dateControl.setValue(`${yyyy}-${mm}-${dd}`);
+
     // autocomplete
     this.filteredOptions = this.amountControl.valueChanges.pipe(
       startWith(''),
@@ -87,12 +81,11 @@ export class AddWallet implements OnInit {
     // ดึงโปรไฟล์เพื่อรู้ user_id และยอด wallet ปัจจุบัน
     this.walletService.getProfile().subscribe({
       next: (res) => {
-        // ถ้า service คืน GetProfileResponse → ใช้ res.user
         const u: any = (res as any).user ?? res;
         this.userId = u.user_id;
         this.walletBalance = u.wallet;
-        this.userName = u.username; // << เพิ่ม
-        this.userEmail = u.email; // << เพิ่ม
+        this.userName = u.username;
+        this.userEmail = u.email;
         this.loadHistory();
       },
       error: (err) => {
@@ -113,7 +106,14 @@ export class AddWallet implements OnInit {
       return;
     }
 
-    const body: WalletTopUpReq = { user_id: this.userId, amount: value };
+    // ✅ แนบวันที่ที่ผู้ใช้เลือกไปกับ body
+    const dateStr = (this.dateControl.value || '').toString().trim();
+
+    const body: WalletTopUpReq = {
+      user_id: this.userId,
+      amount: value,
+      transaction_date: dateStr || undefined, // ถ้าผู้ใช้ล้างค่า จะไม่ส่งฟิลด์นี้
+    };
 
     this.walletService.topUp(body).subscribe({
       next: (res) => {
@@ -122,7 +122,6 @@ export class AddWallet implements OnInit {
         this.amountControl.setValue('');
         alert(res.message);
       },
-
       error: (err) => {
         console.error(err);
         alert('เติมเงินไม่สำเร็จ');
@@ -134,7 +133,17 @@ export class AddWallet implements OnInit {
     if (!this.userId) return;
     this.walletService.getHistory(this.userId).subscribe({
       next: (res) => {
-        this.topUpHistory = (res.data || []).map((h: WalletHistoryItem) => ({
+        // ✅ จัดเรียงใหม่ → เก่า ก่อน map โดยไทเบรกด้วย id/history_id
+        const rows = (res.data || []).slice().sort((a: any, b: any) => {
+          const ta = new Date(a.transaction_date).getTime();
+          const tb = new Date(b.transaction_date).getTime();
+          if (tb !== ta) return tb - ta; // ใหม่ก่อน
+          const aId = (a.history_id ?? a.id ?? 0) as number;
+          const bId = (b.history_id ?? b.id ?? 0) as number;
+          return bId - aId; // ใหม่ก่อน
+        });
+
+        this.topUpHistory = rows.map((h: WalletHistoryItem) => ({
           date: new Date(h.transaction_date).toLocaleDateString('th-TH', {
             day: '2-digit',
             month: 'short',
@@ -151,8 +160,6 @@ export class AddWallet implements OnInit {
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.options.filter((option) =>
-      option.toLowerCase().includes(filterValue)
-    );
+    return this.options.filter((option) => option.toLowerCase().includes(filterValue));
   }
 }
