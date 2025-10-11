@@ -65,6 +65,7 @@
                 [value]="coupon"
                 [disabled]="subtotal < coupon.min_value"
                 class="coupon-radio-button"
+                (click)="onCouponClick(coupon)"
               >
                 <div class="coupon-label">
                   <strong>{{ coupon.name_code }}</strong>

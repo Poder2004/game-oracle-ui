@@ -140,10 +140,16 @@ export class Cart implements OnInit {
       this.calculateTotals();
     }
   }
-
-  /**
-   * Navigates back to the previous page or home.
-   */
+  onCouponClick(coupon: DiscountCode): void {
+    if (coupon === this.selectedCoupon) {
+      // ใช้ setTimeout เพื่อหน่วงเวลาเล็กน้อย
+      // เพื่อให้ Angular อัปเดตค่า ngModel ให้เสร็จก่อนที่เราจะสั่งยกเลิก
+      setTimeout(() => {
+        this.selectedCoupon = null;
+        this.calculateTotals();
+      }, 0);
+    }
+  }
   goBackToGame(): void {
     this.router.navigate(['/home']);
   }
