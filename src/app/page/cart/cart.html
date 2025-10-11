@@ -98,8 +98,15 @@
             <button mat-stroked-button (click)="goBackToGame()">
               เลือกซื้อต่อ
             </button>
-            <button mat-flat-button color="primary" class="checkout-btn">
-              ชำระเงิน
+            <button
+              mat-flat-button
+              color="primary"
+              class="checkout-btn"
+              (click)="onCheckout()"
+              [disabled]="isCheckingOut"
+            >
+              <span *ngIf="!isCheckingOut">ชำระเงิน</span>
+              <span *ngIf="isCheckingOut">กำลังดำเนินการ...</span>
             </button>
           </div>
         </mat-card-content>

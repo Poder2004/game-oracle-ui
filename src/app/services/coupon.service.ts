@@ -64,4 +64,11 @@ export class CouponService {
       { headers: this.getAuthHeaders() }
     ); // ส่ง body ว่างๆ ไป
   }
+
+  getMyAvailableCoupons(): Observable<GetAllCouponsResponse> {
+    const url = `${this.API_ENDPOINT}/api/my-available-coupons`;
+    return this.http.get<GetAllCouponsResponse>(url, {
+      headers: this.getAuthHeaders(),
+    });
+  }
 }

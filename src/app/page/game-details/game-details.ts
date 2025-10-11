@@ -57,7 +57,9 @@ export class GameDetails implements OnInit {
     if (catId == null) return;
     this.gameService.getCategories().subscribe({
       next: (cats) => {
-        const hit = (cats || []).find(c => Number(c.category_id) === Number(catId));
+        const hit = (cats || []).find(
+          (c) => Number(c.category_id) === Number(catId)
+        );
         if (hit) this.categoryName = hit.category_name;
       },
       error: (e) => console.warn('load categories failed', e),
@@ -66,6 +68,7 @@ export class GameDetails implements OnInit {
 
   addToCart(g: Game) {
     this.cart.addItem({
+      id: g.game_id, // 👈 เพิ่มบรรทัดนี้
       name: g.title,
       price: Number(g.price) || 0,
       image: g.image_game || '', // เผื่อแสดงรูปในตะกร้า
