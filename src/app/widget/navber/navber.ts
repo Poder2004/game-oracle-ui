@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 // --- Import Angular Material Modules ---
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -14,7 +14,6 @@ import { User } from '../../model/api.model';
 import { Constants } from '../../config/constants';
 import { GameService } from '../../services/game.service';
 
-
 @Component({
   selector: 'app-navber',
   standalone: true,
@@ -26,32 +25,32 @@ import { GameService } from '../../services/game.service';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatMenuModule
+    MatMenuModule,
   ],
   templateUrl: './navber.html',
-  styleUrl: './navber.scss'
+  styleUrl: './navber.scss',
 })
 export class Navber {
-[x: string]: any;
-  public isUserLoggedIn: boolean = false
+  [x: string]: any;
+  public isUserLoggedIn: boolean = false;
   public currentUser: User | null = null;
   userImageUrl: string | null = null;
-
+  // กำหนดให้ค่าเริ่มต้นเป็น true (แสดงไอคอนตะกร้าเป็นปกติ)
+  @Input() showCartIcon: boolean = true;
   navLinks = [
     { name: 'แนะนำ', path: '/home' }, // ตัวอย่าง: ลิงก์ไปหน้า home
     { name: 'อันดับเกมขายดี', path: '/top-selling' }, // ตัวอย่าง
     { name: 'เติมเงิน/ประวัติการซื้อ', path: '/addwallet' }, // <-- นี่คือลิงก์เป้าหมายของคุณ
-    { name: 'ประเภทเกม', path: '/GameType' } // ตัวอย่าง
+    { name: 'ประเภทเกม', path: '/GameType' }, // ตัวอย่าง
   ];
 
-    categories = [
+  categories = [
     { id: 1, name: 'สร้างสรรค์' },
     { id: 2, name: 'แอ็กชัน' },
     { id: 3, name: 'ปกป้องอาณาจักร' },
     { id: 4, name: 'สยองขวัญ' },
     { id: 5, name: 'แข่งรถ' },
   ];
-
 
   activeLink = this.navLinks[0].name;
 
@@ -66,13 +65,11 @@ export class Navber {
     this.isProfileOpen = !this.isProfileOpen;
   }
 
-
   constructor(
     private constants: Constants,
     private authService: AuthService,
     private router: Router,
     private gameService: GameService
-
   ) {
     this.isUserLoggedIn = this.authService.isLoggedIn();
 
@@ -94,12 +91,13 @@ export class Navber {
         this.userImageUrl = `${this.constants.API_ENDPOINT}/${this.currentUser.image_profile}`;
       }
     }
-
   }
   public onSearch(term: string): void {
     if (term && term.trim() !== '') {
       // สั่งให้ Router เปลี่ยนหน้าไปที่ '/search-results' พร้อมกับส่งคำค้นหาไปด้วย
-      this.router.navigate(['/SearchResults'], { queryParams: { q: term.trim() } });
+      this.router.navigate(['/SearchResults'], {
+        queryParams: { q: term.trim() },
+      });
     }
   }
 
@@ -113,9 +111,8 @@ export class Navber {
     window.location.reload();
   }
 
-    goToCategory(c: { id: number; name: string }) {
+  goToCategory(c: { id: number; name: string }) {
     // เลือกอย่างใดอย่างหนึ่ง (อันนี้ใช้ query param ปลอดภัยกับเส้นทางเดิม)
     this.router.navigate(['/GameType'], { queryParams: { cat: c.id } });
   }
-
 }

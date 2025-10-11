@@ -1,52 +1,56 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
-// --- Modules ที่จำเป็น ---
-import { CommonModule } from '@angular/common';
+// --- Angular Material Modules ---
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatRadioModule } from '@angular/material/radio'; // สำหรับ Radio Button
-import { FormsModule } from '@angular/forms';
-import { Navber } from '../../widget/navber/navber'; // สำหรับ ngModel
+import { MatRadioModule } from '@angular/material/radio';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Router, RouterModule } from '@angular/router';
-import { User } from '../../model/api.model';
+import { MatDividerModule } from '@angular/material/divider';
+
+// --- Application-specific Imports ---
+import { Navber } from '../../widget/navber/navber';
+import { User, DiscountCode } from '../../model/api.model';
 import { AuthService } from '../../services/auth.service';
-import { CartService, CartItem } from '../../services/cart.service'; // ✅ เพิ่ม
-import { Location } from '@angular/common'; // ✅ เพิ่ม
+import { CartService, CartItem } from '../../services/cart.service';
+import { CouponService } from '../../services/coupon.service';
+import { Constants } from '../../config/constants';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
+    RouterModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
     MatRadioModule,
-    FormsModule,
     MatToolbarModule,
-    RouterModule,
-
+    MatDividerModule,
     Navber,
   ],
   templateUrl: './cart.html',
-  styleUrl: './cart.scss',
+  styleUrls: ['./cart.scss'], // Changed from styleUrl to styleUrls
 })
 export class Cart implements OnInit {
+  // --- User and Authentication State ---
   public currentUser: User | null = null;
   public isUserLoggedIn: boolean = false;
+  public isProfileOpen = false;
 
-  // ✅ ใช้ของจริงจาก service
+  // --- Cart and Coupon State ---
   cartItems: CartItem[] = [];
+  availableCoupons: DiscountCode[] = [];
+  loadingCoupons = true;
+  selectedCoupon: DiscountCode | null = null;
 
-  coupons = [
-    { name: 'ส่วนลด ซื้อขั้นต่ำ 1000 ลด 30%', value: 300, minValue: 1000 },
-    { name: 'ส่วนลด ซื้อขั้นต่ำ 500 ลด 10%', value: 50, minValue: 500 },
-  ];
-
-  // ตัวแปรสำหรับเก็บค่า
-  selectedCoupon: any = null;
+  // --- Financial Totals ---
   subtotal = 0;
   discount = 0;
   total = 0;
@@ -55,73 +59,96 @@ export class Cart implements OnInit {
     private authService: AuthService,
     private router: Router,
     private cartService: CartService,
-    private location: Location // ✅ เพิ่ม
+    private location: Location,
+    private couponService: CouponService,
+    private constants: Constants
   ) {
     this.isUserLoggedIn = this.authService.isLoggedIn();
 
-    // 2. ดึงข้อมูลผู้ใช้จาก localStorage ถ้ามี
     if (this.isUserLoggedIn) {
       const userJson = localStorage.getItem('currentUser');
       if (userJson) {
-        this.currentUser = JSON.parse(userJson); // แปลง JSON string กลับเป็น Object
+        this.currentUser = JSON.parse(userJson);
       }
     }
   }
 
-  // 3. สร้างฟังก์ชันสำหรับ Logout
-  logout(): void {
-    localStorage.removeItem('authToken'); // ลบ token
-    localStorage.removeItem('currentUser'); // ลบข้อมูล user
-    this.router.navigate(['/login']); // กลับไปหน้า login
-
-    // (Optional) รีเฟรชหน้าเพื่อให้ component อัปเดตสถานะทันที
-    window.location.reload();
-  }
-
   ngOnInit(): void {
-    this.cartItems = this.cartService.getItems(); // ✅ โหลดจาก localStorage
+    this.cartItems = this.cartService.getItems();
+    this.loadAvailableCoupons();
     this.calculateTotals();
   }
 
-  // ฟังก์ชันคำนวณราคาทั้งหมด
-  calculateTotals(): void {
-    // คำนวณราคารวม
-    this.subtotal = this.cartItems.reduce((sum, item) => sum + item.price, 0);
+  /**
+   * Fetches all coupons and the user's claimed coupons, then filters to show only the ones available to the user.
+   */
+  loadAvailableCoupons(): void {
+    this.loadingCoupons = true;
+    forkJoin({
+      allCouponsRes: this.couponService.getAllCoupons(),
+      myCouponsRes: this.couponService.getMyClaimedCoupons(),
+    }).subscribe({
+      next: ({ allCouponsRes, myCouponsRes }) => {
+        const allCoupons = allCouponsRes.data || [];
+        const myClaimedIds = new Set(myCouponsRes.data || []);
 
-    // คำนวณส่วนลด
-    if (this.selectedCoupon && this.subtotal >= this.selectedCoupon.minValue) {
-      this.discount = this.selectedCoupon.value;
-    } else {
-      this.discount = 0;
-      this.selectedCoupon = null; // รีเซ็ตถ้าเงื่อนไขไม่ถึง
+        this.availableCoupons = allCoupons.filter((coupon) =>
+          myClaimedIds.has(coupon.did)
+        );
+        this.loadingCoupons = false;
+      },
+      error: (err) => {
+        console.error('Failed to load coupons', err);
+        this.loadingCoupons = false;
+      },
+    });
+  }
+
+  /**
+   * Calculates subtotal, applies coupon discount, and determines the final total.
+   */
+  calculateTotals(): void {
+    this.subtotal = this.cartItems.reduce((sum, item) => sum + item.price, 0);
+    this.discount = 0; // Reset discount before recalculating
+
+    if (this.selectedCoupon) {
+      if (this.subtotal >= this.selectedCoupon.min_value) {
+        if (this.selectedCoupon.discount_type === 'fixed') {
+          this.discount = this.selectedCoupon.discount_value;
+        } else if (this.selectedCoupon.discount_type === 'percent') {
+          const discountAmount =
+            (this.subtotal * this.selectedCoupon.discount_value) / 100;
+          this.discount = parseFloat(discountAmount.toFixed(2));
+        }
+      } else {
+        // Deselect coupon if subtotal is no longer sufficient
+        this.selectedCoupon = null;
+      }
     }
 
-    // คำนวณยอดสุทธิ
     this.total = this.subtotal - this.discount;
   }
 
-  // ฟังก์ชันสำหรับลบ item
+  /**
+   * Removes an item from the cart and recalculates the totals.
+   */
   removeItem(itemToRemove: CartItem): void {
-    const idx = this.cartItems.indexOf(itemToRemove);
-    if (idx > -1) {
-      this.cartService.removeItem(idx);
-      this.cartItems.splice(idx, 1);
+    const index = this.cartItems.indexOf(itemToRemove);
+    if (index > -1) {
+      this.cartService.removeItem(index);
+      this.cartItems.splice(index, 1);
       this.calculateTotals();
     }
   }
 
-  public isProfileOpen = false;
-  // ฟังก์ชันสำหรับสลับสถานะ (เปิด/ปิด)
-  toggleProfileSidebar(): void {
-    this.isProfileOpen = !this.isProfileOpen;
+  /**
+   * Navigates back to the previous page or home.
+   */
+  goBackToGame(): void {
+    this.router.navigate(['/home']);
   }
 
-  goBackToGame(): void {
-    const id = localStorage.getItem('lastGameId');
-    if (id) {
-      this.router.navigate(['/home']);
-    } else {
-      this.location.back();
-    }
+  getFullImageUrl(path?: string): string {
+    return path ? `${this.constants.API_ENDPOINT}/${path}` : '';
   }
 }
