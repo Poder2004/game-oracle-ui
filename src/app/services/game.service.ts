@@ -47,7 +47,7 @@ export class GameService {
 
   /** สร้างเกมใหม่ (admin) */
   createGame(formData: FormData): Observable<CreateGameResponse> {
-    const url = `${this.API_ENDPOINT}/admin/games`;
+    const url = `${this.API_ENDPOINT}/admin/addgames`;
     return this.http.post<CreateGameResponse>(url, formData, { headers: this.getAuthHeaders() });
   }
 
