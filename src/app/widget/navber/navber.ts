@@ -61,7 +61,7 @@ export class Navber {
     private authService: AuthService,
     private router: Router,
     private gameService: GameService,
-    private userService: UserService // 👈 2. Inject UserService
+    private userService: UserService // เพิ่มตรงนี้
   ) {
     this.isUserLoggedIn = this.authService.isLoggedIn();
 
