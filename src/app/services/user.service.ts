@@ -46,7 +46,7 @@ export class UserService {
    */
   updateProfile(formData: FormData): Observable<any> {
     // 💥 แก้ไข URL ที่นี่ จาก /api/updateprofile เป็น /api/profile
-    const url = `${this.API_ENDPOINT}/api/profile`;
+    const url = `${this.API_ENDPOINT}/api/updateprofile`;
     // เรียกใช้ฟังก์ชันช่วยที่เราเพิ่งสร้าง
     return this.http.put<any>(url, formData, { headers: this.getAuthHeaders() });
   }
