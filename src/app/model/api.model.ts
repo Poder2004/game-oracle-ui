@@ -211,6 +211,27 @@ export interface GetUserResponse {
   data: User;
 }
 
+export interface OrderDetail {
+  od_id: number;
+  orders_id: number;
+  game_id: number;
+  game: Game; // 👈 [แก้ไข] เปลี่ยนจาก Game เป็น game (g ตัวเล็ก)
+}
+
+/**
+ * Interface for Order data
+ */
+export interface Order {
+  orders_id: number;
+  user_id: number;
+  did?: number;
+  discount: number;
+  sum_total: number;
+  final_total: number;
+  order_date: string;
+  order_details: OrderDetail[]; // 👈 [แก้ไข] เปลี่ยนจาก OrderDetails เป็น order_details
+}
+
 // api.model.ts
 // ========================= Wallet (Single Source of Truth) =========================
 export interface WalletTopUpReq {
@@ -241,3 +262,26 @@ export interface WalletHistoryRes {
   data: WalletHistoryItem[];
 }
 
+/**
+ * Interface for the response when getting a user's order history
+ */
+export interface GetUserOrdersResponse {
+  status: string;
+  data: Order[];
+}
+
+/**
+ * Interface for the response when getting a user's wallet history
+ */
+export interface GetWalletHistoryResponse {
+  status: string;
+  data: WalletHistoryItem[];
+}
+
+/**
+ * Interface สำหรับ Response การดึงประวัติการซื้อของผู้ใช้
+ */
+export interface GetUserOrdersResponse {
+  status: string;
+  data: Order[];
+}

@@ -1,92 +1,65 @@
 import { Component, OnInit } from '@angular/core';
-
-// Modules
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common'; // 👈 Import Pipes
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 import { Navber } from '../../widget/navber/navber';
 
-// Services & models
+// --- 👇 Import ที่อัปเดต ---
 import { WalletService } from '../../services/wallet.service';
-import { WalletHistoryItem, WalletTopUpReq } from '../../model/api.model';
+import { Constants } from '../../config/constants';
+import { Order, WalletHistoryItem, WalletTopUpReq } from '../../model/api.model';
+import { RouterModule } from '@angular/router'; // 👈 Import RouterModule
 
 @Component({
   selector: 'app-wallet',
   standalone: true,
   imports: [
-    CommonModule,
-    HttpClientModule, // ต้องมีเพื่อเรียก HTTP
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSelectModule,
-    MatAutocompleteModule,
-    ReactiveFormsModule,
-    Navber,
+    CommonModule, ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule,
+    MatButtonModule, MatAutocompleteModule, Navber, DatePipe, DecimalPipe, RouterModule // 👈 เพิ่ม Pipes และ RouterModule
   ],
   templateUrl: './add-wallet.html',
-  styleUrls: ['./add-wallet.scss'], // ✅ ใช้ styleUrls (array)
+  styleUrls: ['./add-wallet.scss'],
 })
 export class AddWallet implements OnInit {
   amountControl = new FormControl('');
-  dateControl = new FormControl('');
-
   options: string[] = ['100', '300', '500', '1000'];
   filteredOptions!: Observable<string[]>;
 
-  // state บนหน้า
   walletBalance = 0;
   userId!: number;
-  userName = '';
-  userEmail = '';
 
-  // ประวัติการเติม (UI)
   topUpHistory: { date: string; amount: number }[] = [];
+  
+  // 1. ลบข้อมูลจำลอง และสร้างตัวแปรใหม่สำหรับเก็บข้อมูลจริง
+  purchaseHistory: Order[] = [];
 
-  // (ตัวอย่าง) ประวัติการซื้อเกม (UI)
-  purchaseHistory = [
-    { name: 'Battlefield 6', date: '22 ก.ย. 68', price: 200, image: 'assets/images/bf6.jpg' },
-    { name: 'PUBG: BATTLEGROUNDS', date: '22 ก.ย. 68', price: 300, image: 'assets/images/pubg.jpg' },
-    { name: 'EA SPORTS FC 26', date: '22 ก.ย. 68', price: 1000, image: 'assets/images/fc26.jpg' },
-  ];
-
-  constructor(private walletService: WalletService) {}
+  constructor(
+    private walletService: WalletService,
+    private constants: Constants // 👈 Inject Constants
+  ) {}
 
   ngOnInit() {
-    // ตั้งค่า default = วันนี้ (YYYY-MM-DD) ให้กับ input type="date"
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    this.dateControl.setValue(`${yyyy}-${mm}-${dd}`);
-
-    // autocomplete
     this.filteredOptions = this.amountControl.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter((value || '').toString()))
     );
 
-    // ดึงโปรไฟล์เพื่อรู้ user_id และยอด wallet ปัจจุบัน
     this.walletService.getProfile().subscribe({
       next: (res) => {
-        const u: any = (res as any).user ?? res;
+        const u = res.user;
         this.userId = u.user_id;
         this.walletBalance = u.wallet;
-        this.userName = u.username;
-        this.userEmail = u.email;
-        this.loadHistory();
+        
+        // 2. เรียกฟังก์ชันโหลดประวัติต่างๆ หลังจากโหลดโปรไฟล์สำเร็จ
+        this.loadTopUpHistory();
+        this.loadPurchaseHistory();
       },
       error: (err) => {
         console.error('โหลดโปรไฟล์ไม่สำเร็จ', err);
@@ -95,66 +68,59 @@ export class AddWallet implements OnInit {
     });
   }
 
+  // 3. สร้างฟังก์ชันสำหรับโหลดประวัติการซื้อเกม
+  loadPurchaseHistory(): void {
+    this.walletService.getMyOrders().subscribe({
+      next: (res) => {
+        this.purchaseHistory = res.data;
+      },
+      error: (err) => {
+        console.error('โหลดประวัติการซื้อเกมไม่สำเร็จ', err);
+      }
+    });
+  }
+
+  // สร้างฟังก์ชันสำหรับสร้าง URL รูปภาพ
+  getFullImageUrl(path: string): string {
+    if (!path) return 'https://placehold.co/150x75/2c2c2e/f2f2f7?text=No+Image';
+    return `${this.constants.API_ENDPOINT}/${path}`;
+  }
+
   onTopUp(): void {
     const value = Number(this.amountControl.value);
     if (!value || value <= 0) {
       alert('กรุณากรอกจำนวนเงินที่ถูกต้อง');
       return;
     }
-    if (!this.userId) {
-      alert('ไม่พบผู้ใช้ — กรุณาเข้าสู่ระบบใหม่');
-      return;
-    }
-
-    // ✅ แนบวันที่ที่ผู้ใช้เลือกไปกับ body
-    const dateStr = (this.dateControl.value || '').toString().trim();
-
-    const body: WalletTopUpReq = {
-      user_id: this.userId,
-      amount: value,
-      transaction_date: dateStr || undefined, // ถ้าผู้ใช้ล้างค่า จะไม่ส่งฟิลด์นี้
-    };
-
+    
+    const body: WalletTopUpReq = { user_id: this.userId, amount: value };
     this.walletService.topUp(body).subscribe({
       next: (res) => {
         this.walletBalance = res.wallet;
-        this.loadHistory();
+        this.loadTopUpHistory(); // แก้ชื่อฟังก์ชัน
         this.amountControl.setValue('');
         alert(res.message);
       },
-      error: (err) => {
-        console.error(err);
-        alert('เติมเงินไม่สำเร็จ');
-      },
+      error: (err) => alert('เติมเงินไม่สำเร็จ'),
     });
   }
 
-  private loadHistory() {
+  // แก้ไขชื่อฟังก์ชัน loadHistory เป็น loadTopUpHistory เพื่อความชัดเจน
+  private loadTopUpHistory() {
     if (!this.userId) return;
     this.walletService.getHistory(this.userId).subscribe({
       next: (res) => {
-        // ✅ จัดเรียงใหม่ → เก่า ก่อน map โดยไทเบรกด้วย id/history_id
-        const rows = (res.data || []).slice().sort((a: any, b: any) => {
-          const ta = new Date(a.transaction_date).getTime();
-          const tb = new Date(b.transaction_date).getTime();
-          if (tb !== ta) return tb - ta; // ใหม่ก่อน
-          const aId = (a.history_id ?? a.id ?? 0) as number;
-          const bId = (b.history_id ?? b.id ?? 0) as number;
-          return bId - aId; // ใหม่ก่อน
-        });
-
+        const rows = (res.data || []).slice().sort((a,b) => 
+          new Date(b.transaction_date).getTime() - new Date(a.transaction_date).getTime());
+        
         this.topUpHistory = rows.map((h: WalletHistoryItem) => ({
           date: new Date(h.transaction_date).toLocaleDateString('th-TH', {
-            day: '2-digit',
-            month: 'short',
-            year: '2-digit',
+            day: '2-digit', month: 'short', year: '2-digit',
           }),
           amount: h.amount,
         }));
       },
-      error: (err) => {
-        console.error('โหลดประวัติไม่สำเร็จ', err);
-      },
+      error: (err) => console.error('โหลดประวัติไม่สำเร็จ', err),
     });
   }
 
@@ -163,3 +129,4 @@ export class AddWallet implements OnInit {
     return this.options.filter((option) => option.toLowerCase().includes(filterValue));
   }
 }
+

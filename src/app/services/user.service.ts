@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Constants } from '../config/constants';
-import { GetAllUsersResponse, GetProfileResponse, GetUserResponse, User } from '../model/api.model';
+import { GetAllUsersResponse, GetProfileResponse, GetUserOrdersResponse, GetUserResponse, GetWalletHistoryResponse, User } from '../model/api.model';
 
 
 @Injectable({
@@ -59,19 +59,28 @@ export class UserService {
     // เรียกใช้ฟังก์ชันช่วยที่เราเพิ่งสร้าง
     return this.http.get<GetAllUsersResponse>(url, { headers: this.getAuthHeaders() });
   }
-
-   getUserById(id: number): Observable<GetUserResponse> {
+ /**
+   * ดึงข้อมูลผู้ใช้คนเดียวตาม ID
+   */
+  getUserById(id: number): Observable<GetUserResponse> {
     const url = `${this.API_ENDPOINT}/admin/users/${id}`;
     return this.http.get<GetUserResponse>(url, { headers: this.getAuthHeaders() });
   }
 
   /**
    * ดึงประวัติการซื้อเกมทั้งหมดของผู้ใช้
-   * @param id ID ของผู้ใช้
    */
-  // getUserOrders(id: number): Observable<GetUserOrdersResponse> {
-  //   const url = `${this.API_ENDPOINT}/admin/users/${id}/orders`;
-  //   return this.http.get<GetUserOrdersResponse>(url, { headers: this.getAuthHeaders() });
-  // }
+  getUserOrders(id: number): Observable<GetUserOrdersResponse> {
+    const url = `${this.API_ENDPOINT}/admin/users/${id}/orders`;
+    return this.http.get<GetUserOrdersResponse>(url, { headers: this.getAuthHeaders() });
+  }
+  
+  /**
+   * ดึงประวัติการเติมเงินทั้งหมดของผู้ใช้
+   */
+  getWalletHistory(id: number): Observable<GetWalletHistoryResponse> {
+    const url = `${this.API_ENDPOINT}/admin/users/${id}/wallet-history`;
+    return this.http.get<GetWalletHistoryResponse>(url, { headers: this.getAuthHeaders() });
+  }
 }
 

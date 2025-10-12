@@ -1,44 +1,117 @@
-<div class="page-container" *ngIf="game as g">
-  <p class="breadcrumbs">อันดับเกมขายดี</p>
-  <h1 class="breadcrumbss">รายละเอียดเกมส์</h1>
 
-  <div class="detail-container">
+
+<div class="page-container" *ngIf="game; else loadingOrError">
+    <mat-toolbar class="top-toolbar">
+    <span class="logo">Game Oracle</span>
+  </mat-toolbar>
+  <button
+    mat-icon-button
+    class="hamburger-menu-btn"
+    (click)="toggleProfileSidebar()"
+    aria-label="Open Profile Menu"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <!-- ส่วนหัวข้อหลัก -->
+  <div class="header-section">
+    <h1>รายละเอียดเกมส์</h1>
+  </div>
+
+  <!-- การ์ดแสดงข้อมูลเกม -->
+  <div class="detail-card">
+    <!-- คอลัมน์รูปภาพ (ซ้าย) -->
     <div class="image-column">
-      <img [src]="getFullImageUrl(g.image_game)" [alt]="g.title" />
+      <img [src]="getFullImageUrl(game.image_game)" [alt]="game.title" class="game-cover-image"/>
     </div>
 
+    <!-- คอลัมน์ข้อมูล (ขวา) -->
     <div class="info-column">
-      <h2 class="game-title">{{ g.title }}</h2>
+      <h2 class="game-title">{{ game.title }}</h2>
 
-      <div class="game-meta">
-        <span>ราคา : {{ g.price | number : "1.2-2" }} ฿</span>
-        <span>ประเภท : {{ categoryName || "หมวด #" + g.category_id }}</span>
-        <span
-          >วันที่วางจำหน่าย : {{ g.release_date | date : "dd MMM yyyy" }}</span
-        >
-      </div>
-
-      <h3 class="about-title">เกี่ยวกับเกมนี้</h3>
-      <p class="game-description">
-        {{ g.description }}
+      <!-- ข้อมูล ราคา, ประเภท, และวันที่วางจำหน่าย -->
+      <p class="game-meta">
+        ราคา : {{ game.price | number: '1.2-2' }} ฿ | 
+        ประเภท : {{ categoryName || 'N/A' }} | 
+        วันที่วางจำหน่าย : {{ game.release_date | date: 'dd MMM yyyy' }}
       </p>
 
-      <div class="cta-container">
-        <button type="button" class="btn-cart" (click)="addToCart(g)">
-          <span>เพิ่มลงตะกร้า</span>
-          <!-- ไอคอนตะกร้า (SVG ไม่ต้องพึ่งไลบรารี) -->
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              d="M7 10h10l-1 9H8l-1-9zm12-2h-3.2l-2.4-4H10.6l-2.4 4H5a1 1 0 0 0 0 2h14a1 1 0 1 0 0-2zM10 12v5m4-5v5"
-              stroke="currentColor"
-              stroke-width="2"
-              fill="none"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
+      <h3 class="about-title">เกี่ยวกับ {{ game.title }}</h3>
+      <p class="game-description">{{ game.description }}</p>
+    </div>
+  </div>
+
+  <!-- ปุ่ม "เพิ่มลงตะกร้า" -->
+  <div class="action-buttons">
+    <button class="btn btn-add-to-cart" (click)="addToCart(game)">
+      <span>เพิ่มลงตะกร้า</span>
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7 10h10l-1 9H8l-1-9zm12-2h-3.2l-2.4-4H10.6l-2.4 4H5a1 1 0 0 0 0 2h14a1 1 0 1 0 0-2zM10 12v5m4-5v5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- Template ที่จะแสดงตอนกำลังโหลดหรือเกิด Error -->
+<ng-template #loadingOrError>
+  <div class="feedback-container">
+    <p>กำลังโหลดข้อมูลเกม...</p>
+  </div>
+</ng-template>
+<div
+  class="profile-overlay"
+  [class.open]="isProfileOpen"
+  (click)="toggleProfileSidebar()"
+></div>
+
+<aside class="profile-sidebar" [class.open]="isProfileOpen">
+  <div *ngIf="currentUser" class="profile-details">
+    <div class="avatar-container">
+      <img [src]="currentUser.image_profile" alt="User Avatar" />
+    </div>
+    <h2>ข้อมูลส่วนตัว</h2>
+
+    <div class="info-field">
+      <label>Name User</label>
+      <div class="info-value">
+        <mat-icon>person</mat-icon>
+        <span>{{ currentUser.username }}</span>
+      </div>
+    </div>
+    <div class="info-field">
+      <label>Gmail User</label>
+      <div class="info-value">
+        <mat-icon>mail</mat-icon>
+        <span>{{ currentUser.email }}</span>
+      </div>
+    </div>
+    <div class="info-field">
+      <label>Wallet Balance</label>
+      <div class="info-value">
+        <mat-icon>account_balance_wallet</mat-icon>
+        <span>{{ currentUser.wallet | number : "1.2-2" }}</span>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="sidebar-footer">
+    <button
+      mat-flat-button
+      class="footer-btn primary-btn"
+      routerLink="/editprofile"
+    >
+      <mat-icon>person</mat-icon>
+      <span>แก้ไขโปรไฟล์</span>
+    </button>
+
+    <button mat-flat-button class="footer-btn primary-btn" routerLink="/home">
+      <mat-icon>home</mat-icon>
+      <span>หน้าหลัก</span>
+    </button>
+
+    <button mat-flat-button class="footer-btn secondary-btn" (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span>ออกจากระบบ</span>
+    </button>
+  </div>
+</aside>

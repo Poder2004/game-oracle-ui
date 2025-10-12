@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Constants } from '../config/constants';
 import {
   GetProfileResponse,
+  GetUserOrdersResponse,
   WalletHistoryRes,
   WalletTopUpReq,
   WalletTopUpRes,
@@ -52,5 +53,10 @@ export class WalletService {
       `${this.API_ENDPOINT}/api/wallet/history?user_id=${userId}`,
       { headers: this.authHeaders() }
     );
+  }
+
+   getMyOrders(): Observable<GetUserOrdersResponse> {
+    const url = `${this.API_ENDPOINT}/api/orders`;
+    return this.http.get<GetUserOrdersResponse>(url, { headers: this.authHeaders() });
   }
 }

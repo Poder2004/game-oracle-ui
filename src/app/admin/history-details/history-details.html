@@ -14,12 +14,17 @@
       <div class="user-balance">{{ user.wallet | number: '1.2-2' }} บาท</div>
     </section>
 
-    <!-- ประวัติการเติมเงิน (ยังไม่เชื่อมต่อ) -->
+     <!-- ประวัติการเติมเงิน -->
     <section class="history-card">
       <h2>ประวัติการเติมเงิน</h2>
       <ul class="history-list">
-        <!-- <li *ngIf="walletHistory.length === 0" class="empty-state">ไม่มีประวัติการเติมเงิน</li> -->
-        <!-- *ngFor="let item of walletHistory" -->
+        <!-- แสดงข้อความเมื่อไม่มีข้อมูล -->
+        <li *ngIf="walletHistory.length === 0" class="empty-state">ไม่มีประวัติการเติมเงิน</li>
+        <!-- วนลูปแสดงข้อมูล -->
+        <li *ngFor="let item of walletHistory">
+          <span>{{ item.transaction_date | date: 'dd MMM yyyy, HH:mm' }}</span>
+          <span class="amount add">+{{ item.amount | number: '1.2-2' }} บาท</span>
+        </li>
       </ul>
     </section>
 
@@ -27,20 +32,23 @@
     <section class="history-card">
       <h2>ประวัติการซื้อเกมส์</h2>
       <ul class="history-list">
-        <!-- <li *ngIf="orders.length === 0" class="empty-state">ไม่มีประวัติการซื้อเกม</li> -->
+        <!-- แสดงข้อความเมื่อไม่มีข้อมูล -->
+        <li *ngIf="orders.length === 0" class="empty-state">ไม่มีประวัติการซื้อเกม</li>
         <!-- วนลูป Orders -->
-        <!-- <ng-container *ngFor="let order of orders">
-          <li *ngFor="let detail of order.OrderDetails" class="purchase-item">
-            <img class="game-cover" [src]="getFullImageUrl(detail.Game.image_game)" [alt]="detail.Game.title">
+        <ng-container *ngFor="let order of orders">
+          <!-- วนลูป OrderDetails ที่อยู่ในแต่ละ Order -->
+          <li *ngFor="let detail of order.order_details" class="purchase-item">
+            <img class="game-cover" [src]="getFullImageUrl(detail.game.image_game)" [alt]="detail.game.title">
             <div class="game-details">
-              <span class="game-name">{{ detail.Game.title }}</span>
+              <span class="game-name">{{ detail.game.title }}</span>
               <div class="purchase-details">
-                <span>{{ order.OrderDate | date: 'dd MMM yyyy' }}</span>
-                <span class="price">{{ detail.Game.price | number: '1.2-2' }} บาท</span>
+                <span>{{ order.order_date | date: 'dd MMM yyyy' }}</span>
+                <!-- แสดงราคาที่จ่ายจริงในคำสั่งซื้อนั้นๆ -->
+                <span class="price">{{ order.final_total | number: '1.2-2' }} บาท</span>
               </div>
             </div>
           </li>
-        </ng-container> -->
+        </ng-container>
       </ul>
     </section>
 
