@@ -1,8 +1,11 @@
+:host {
+  display: block;
+  background-color: #505050; /* สีเทาเข้มสำหรับพื้นหลังทั้งหมด */
+  min-height: 100vh; /* ทำให้พื้นหลังเต็มความสูงของหน้าจอ */
+}
 /* --- Container หลักของหน้า --- */
 .page-container {
-
-margin-top: 100px;
-  background-color: #f8f9fa; /* สีพื้นหลังอ่อนๆ */
+  margin-top: 100px;
   font-family: sans-serif;
   display: flex;
   align-items: center; /* จัดให้อยู่กลางแนวตั้ง */
@@ -20,16 +23,15 @@ margin-top: 100px;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-
-  h1 {
-    font-size: 2rem; /* ลดขนาดฟอนต์ */
-    color: #333;
-  }
+}
+.header-section h1 {
+  font-size: 2rem; /* ลดขนาดฟอนต์ */
+  color: #ffffff;
 }
 
 /* --- การ์ดฟอร์ม --- */
 .form-card {
-  background-color: #FFF1F1;
+  background-color: #ebebeb;
   border-radius: 1rem;
   padding: 2.5rem; /* ลด Padding */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -40,30 +42,28 @@ margin-top: 100px;
   display: flex;
   align-items: center;
   margin-bottom: 1.5rem; /* ลดระยะห่าง */
-
-  label {
-    font-size: 1rem; /* ลดขนาดฟอนต์ */
-    font-weight: 500;
-    color: #555;
-    width: 110px; /* ปรับความกว้าง label */
-    flex-shrink: 0;
-  }
-
-  input[type="text"],
-  input[type="number"] {
-    flex-grow: 1;
-    border: 1px solid #ddd;
-    background-color: #fff;
-    padding: 0.7rem 1rem; /* ลด Padding */
-    border-radius: 0.5rem;
-    font-size: 0.95rem;
-    
-    &:focus {
-      outline: none;
-      border-color: #ff8a8a;
-      box-shadow: 0 0 0 3px rgba(255, 138, 138, 0.2);
-    }
-  }
+}
+.form-group label {
+  font-size: 1rem; /* ลดขนาดฟอนต์ */
+  font-weight: 500;
+  color: #555;
+  width: 110px; /* ปรับความกว้าง label */
+  flex-shrink: 0;
+}
+.form-group input[type="text"],
+.form-group input[type="number"] {
+  flex-grow: 1;
+  border: 1px solid #000000;
+  background-color: #fff;
+  padding: 0.7rem 1rem; /* ลด Padding */
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+}
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus {
+  outline: none;
+  border-color: #da3cfa;
+  box-shadow: 0 0 0 3px rgba(243, 24, 177, 0.2);
 }
 
 /* --- แถวสำหรับ input ที่อยู่ข้างกัน --- */
@@ -71,20 +71,16 @@ margin-top: 100px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem; /* ลดระยะห่าง */
-  
-  .form-group {
-    margin-bottom: 0;
-
-    /* --- เพิ่มโค้ดนี้เพื่อปรับขนาดช่องตัวเลข --- */
-    .input-group {
-      flex-grow: 0; /* ป้องกันไม่ให้ group ขยาย */
-      
-      input[type="number"] {
-        width: 80px; /* กำหนดความกว้างให้สั้นลง */
-      }
-    }
-    /* ------------------------------------ */
-  }
+  margin-bottom: 1.5rem; /* <<< เพิ่มบรรทัดนี้เพื่อสร้างระยะห่างด้านล่าง */
+}
+.form-row .form-group {
+  margin-bottom: 0;
+}
+.form-row .form-group .input-group {
+  flex-grow: 0; /* ป้องกันไม่ให้ group ขยาย */
+}
+.form-row .form-group .input-group input[type="number"] {
+  width: 80px; /* กำหนดความกว้างให้สั้นลง */
 }
 
 /* --- กลุ่มของ Input และหน่วย (%, ใบ) --- */
@@ -92,27 +88,25 @@ margin-top: 100px;
   display: flex;
   align-items: stretch; /* ทำให้ input และ span สูงเท่ากัน */
   flex-grow: 1;
-
-  input {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    /* ให้ input ยืดหยุ่นได้ แต่ไม่เกินพื้นที่ */
-    min-width: 0;
-  }
-
-  span {
-    display: flex;
-    align-items: center;
-    background-color: #e9ecef; /* ปรับสีให้ดูดีขึ้น */
-    border: 1px solid #ddd;
-    border-left: none;
-    padding: 0 1rem; /* ปรับ Padding */
-    border-top-right-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
-    color: #495057;
-    font-weight: 500;
-    white-space: nowrap; /* ป้องกันการขึ้นบรรทัดใหม่ */
-  }
+}
+.input-group input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  /* ให้ input ยืดหยุ่นได้ แต่ไม่เกินพื้นที่ */
+  min-width: 0;
+}
+.input-group span {
+  display: flex;
+  align-items: center;
+  background-color: #e9ecef; /* ปรับสีให้ดูดีขึ้น */
+  border: 1px solid #ddd;
+  border-left: none;
+  padding: 0 1rem; /* ปรับ Padding */
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  color: #495057;
+  font-weight: 500;
+  white-space: nowrap; /* ป้องกันการขึ้นบรรทัดใหม่ */
 }
 
 /* --- ส่วนปุ่ม Submit --- */
@@ -131,10 +125,9 @@ margin-top: 100px;
   font-weight: bold;
   cursor: pointer;
   transition: opacity 0.2s;
-  
-  &:hover {
-    opacity: 0.9;
-  }
+}
+.btn:hover {
+  opacity: 0.9;
 }
 
 .view-coupons-btn {
@@ -178,12 +171,11 @@ margin-top: 100px;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-
-  h2 {
-    margin: 0;
-    font-size: 1.75rem;
-    color: #333;
-  }
+}
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  color: #333;
 }
 
 .close-button {
@@ -193,10 +185,9 @@ margin-top: 100px;
   line-height: 1;
   color: #888;
   cursor: pointer;
-  
-  &:hover {
-    color: #333;
-  }
+}
+.close-button:hover {
+  color: #333;
 }
 
 .coupon-list {
@@ -250,4 +241,3 @@ margin-top: 100px;
   color: #333;
   flex-shrink: 0;
 }
-

@@ -1,8 +1,12 @@
+
+:host {
+  display: block;
+  background-color: #505050; /* สีเทาเข้มสำหรับพื้นหลังทั้งหมด */
+  min-height: 100vh; /* ทำให้พื้นหลังเต็มความสูงของหน้าจอ */
+}
 /* --- Container หลักของหน้า --- */
 .page-container {
-  min-height: 100vh;
   padding: 2rem;
-  background-color: #f9f6f3; /* สีพื้นหลังอ่อนๆ ตามรูป */
   display: flex;
   justify-content: center;
   align-items: flex-start; /* จัดให้อยู่ด้านบน */
@@ -11,7 +15,7 @@
 
 /* --- การ์ดฟอร์มตรงกลาง --- */
 .form-card {
-  background-color: #ffffff;
+  background-color: #aaaaaa;
   padding: 2.5rem;
   border-radius: 1rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -25,11 +29,11 @@
   margin-bottom: 2rem;
   h1 {
     font-size: 2.25rem;
-    color: #333;
+    color: #ffffff;
     margin-bottom: 0.5rem;
   }
   p {
-    color: #888;
+    color: #ffffff;
   }
 }
 
@@ -57,7 +61,7 @@
 
   input:focus, textarea:focus, select:focus {
     outline: none;
-    border-color: #96d2a2;
+    border-color: #00ff33;
     box-shadow: 0 0 0 3px rgba(131, 204, 150, 0.2);
   }
 }
@@ -82,7 +86,7 @@
   transition: border-color 0.2s, background-color 0.2s;
   position: relative;
   overflow: hidden; /* ป้องกันไม่ให้รูปเกินขอบ */
-  
+
   &:hover {
     border-color: #96d2a2;
     background-color: #fdfdfd;

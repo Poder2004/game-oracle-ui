@@ -1,7 +1,10 @@
 /* General Body and Font Styles - Light Theme */
+:host {
+  display: block;
+  background-color: #505050; /* สีเทาเข้มสำหรับพื้นหลังทั้งหมด */
+  min-height: 100vh; /* ทำให้พื้นหลังเต็มความสูงของหน้าจอ */
+}
 .admin-container {
-  background-color: #838383; /* สีสำรองเผื่อรูปภาพไม่โหลด */
-  min-height: 100vh;
   color: #1F2937; /* Default text color changed to dark gray */
   font-family: sans-serif;
   padding: 1rem;

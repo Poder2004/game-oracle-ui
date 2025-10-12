@@ -1,3 +1,9 @@
+
+:host {
+  display: block;
+  background-color: #383838; /* สีเทาเข้มสำหรับพื้นหลังทั้งหมด */
+  min-height: 100vh; /* ทำให้พื้นหลังเต็มความสูงของหน้าจอ */
+}
 // --- 1. ประกาศสีเป็น Sass Variables ก่อน ---
 $bg-primary: #1a1d21;
 $bg-secondary: #25282e;
@@ -18,9 +24,7 @@ $accent-color: #e79a4a;
 
 // --- Container หลัก ---
 .history-page-container {
-  background-color: var(--bg-primary);
   color: var(--text-primary);
-  min-height: 100vh;
   padding: 1.5rem 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -118,7 +122,7 @@ $accent-color: #e79a4a;
   border-radius: 12px;
   margin-top: 1.5rem;
   font-weight: 500;
-  
+
   &.error { background-color: rgba(255, 69, 58, 0.1); color: #ff8a80; }
   &.info { background-color: rgba(74, 144, 226, 0.1); color: #80bfff; }
 }
