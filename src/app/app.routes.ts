@@ -59,8 +59,7 @@ export const routes: Routes = [
   },
   {
     path: 'editprofile',
-    component: EditProfile,
-    canActivate: [authGuard],
+    component: EditProfile
   },
   {
     path: 'SearchResults',
