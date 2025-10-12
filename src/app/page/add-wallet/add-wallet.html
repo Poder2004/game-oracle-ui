@@ -89,11 +89,8 @@
 </div>
 
 
-<!-- ===== [เพิ่ม] Modal สำหรับแสดงรายละเอียดคำสั่งซื้อ ===== -->
 <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeOrderDetails()">
   <div class="modal-content" *ngIf="selectedOrder" (click)="$event.stopPropagation()">
-    
-    <!-- Header -->
     <div class="modal-header">
       <h2>รายละเอียดคำสั่งซื้อ #{{ selectedOrder.orders_id }}</h2>
       <button mat-icon-button (click)="closeOrderDetails()">
@@ -101,16 +98,16 @@
       </button>
     </div>
 
-    <!-- รายการเกมในคำสั่งซื้อ -->
     <div class="modal-game-list">
-      <div class="modal-game-item" *ngFor="let detail of selectedOrder.order_details">
-        <img [src]="getFullImageUrl(detail.game.image_game)" [alt]="detail.game.title" class="game-image">
-        <span class="game-title">{{ detail.game.title }}</span>
-        <span class="game-price">{{ detail.game.price | number: '1.2-2' }} บาท</span>
-      </div>
+      <div class="modal-game-item" *ngFor="let detail of selectedOrder.OrderDetails">
+
+    <img [src]="getFullImageUrl(detail.Game.image_game)" [alt]="detail.Game.title" class="game-image">
+    <span class="game-title">{{ detail.Game.title }}</span>
+    <span class="game-price">{{ detail.Game.price | number: '1.2-2' }} บาท</span>
+
+  </div>
     </div>
 
-    <!-- สรุปยอดเงิน -->
     <div class="modal-summary">
       <div class="summary-row">
         <span>ราคารวม</span>

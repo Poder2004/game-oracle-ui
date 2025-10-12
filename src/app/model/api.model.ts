@@ -214,13 +214,14 @@ export interface OrderDetail {
   od_id: number;
   orders_id: number;
   game_id: number;
-  game: Game; // 👈 [แก้ไข] เปลี่ยนจาก Game เป็น game (g ตัวเล็ก)
+  Game: Game;
 }
 
 /**
  * Interface for Order data
  */
 export interface Order {
+Game: any;
   orders_id: number;
   user_id: number;
   did?: number;
@@ -228,7 +229,7 @@ export interface Order {
   sum_total: number;
   final_total: number;
   order_date: string;
-  order_details: OrderDetail[]; // 👈 [แก้ไข] เปลี่ยนจาก OrderDetails เป็น order_details
+ OrderDetails: OrderDetail[]; // 👈 [แก้ไข] เปลี่ยนจาก OrderDetails เป็น order_details
 }
 
 // api.model.ts
@@ -262,14 +263,6 @@ export interface WalletHistoryRes {
 }
 
 /**
- * Interface for the response when getting a user's order history
- */
-export interface GetUserOrdersResponse {
-  status: string;
-  data: Order[];
-}
-
-/**
  * Interface for the response when getting a user's wallet history
  */
 export interface GetWalletHistoryResponse {
@@ -284,3 +277,4 @@ export interface GetUserOrdersResponse {
   status: string;
   data: Order[];
 }
+

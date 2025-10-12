@@ -2,9 +2,7 @@
 <main class="container">
   <h1 class="main-title">ประวัติธุรกรรม</h1>
 
-  <!-- แสดงผลเมื่อโหลดข้อมูลสำเร็จ -->
   <ng-container *ngIf="user; else loadingOrError">
-    <!-- การ์ดข้อมูลผู้ใช้ -->
     <section class="user-profile-card">
       <img class="avatar" [src]="getFullImageUrl(user.image_profile)" alt="User Avatar">
       <div class="user-info">
@@ -14,13 +12,10 @@
       <div class="user-balance">{{ user.wallet | number: '1.2-2' }} บาท</div>
     </section>
 
-     <!-- ประวัติการเติมเงิน -->
     <section class="history-card">
       <h2>ประวัติการเติมเงิน</h2>
       <ul class="history-list">
-        <!-- แสดงข้อความเมื่อไม่มีข้อมูล -->
         <li *ngIf="walletHistory.length === 0" class="empty-state">ไม่มีประวัติการเติมเงิน</li>
-        <!-- วนลูปแสดงข้อมูล -->
         <li *ngFor="let item of walletHistory">
           <span>{{ item.transaction_date | date: 'dd MMM yyyy, HH:mm' }}</span>
           <span class="amount add">+{{ item.amount | number: '1.2-2' }} บาท</span>
@@ -28,36 +23,73 @@
       </ul>
     </section>
 
-    <!-- ประวัติการซื้อเกมส์ -->
-    <section class="history-card">
-      <h2>ประวัติการซื้อเกมส์</h2>
-      <ul class="history-list">
-        <!-- แสดงข้อความเมื่อไม่มีข้อมูล -->
-        <li *ngIf="orders.length === 0" class="empty-state">ไม่มีประวัติการซื้อเกม</li>
-        <!-- วนลูป Orders -->
-        <ng-container *ngFor="let order of orders">
-          <!-- วนลูป OrderDetails ที่อยู่ในแต่ละ Order -->
-          <li *ngFor="let detail of order.order_details" class="purchase-item">
-            <img class="game-cover" [src]="getFullImageUrl(detail.game.image_game)" [alt]="detail.game.title">
-            <div class="game-details">
-              <span class="game-name">{{ detail.game.title }}</span>
-              <div class="purchase-details">
-                <span>{{ order.order_date | date: 'dd MMM yyyy' }}</span>
-                <!-- แสดงราคาที่จ่ายจริงในคำสั่งซื้อนั้นๆ -->
-                <span class="price">{{ order.final_total | number: '1.2-2' }} บาท</span>
-              </div>
-            </div>
-          </li>
-        </ng-container>
-      </ul>
-    </section>
+    <h1 class="page-title">ประวัติการซื้อเกมส์</h1>
+    <mat-card class="purchase-history-card">
+      <mat-card-header>
+        <mat-card-subtitle>
+          คำสั่งซื้อทั้งหมด {{ purchaseHistory.length }} รายการ
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="purchaseHistory.length === 0" class="empty-state">
+          คุณยังไม่มีประวัติการซื้อเกม
+        </div>
+
+        <div class="order-header" *ngIf="purchaseHistory.length > 0">
+          <span>#</span>
+          <span>วันที่สั่งซื้อ</span>
+          <span>ยอดชำระ</span>
+        </div>
+
+        <div class="order-list">
+          <div class="order-row" *ngFor="let order of purchaseHistory; let i = index" (click)="openOrderDetails(order)">
+            <span class="order-index">#{{ i + 1 }}</span>
+            <span class="order-date">{{ order.order_date | date: 'dd MMM yyyy' }}</span>
+            <span class="order-total">{{ order.final_total | number: '1.2-2' }} บาท</span>
+          </div>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
 
   </ng-container>
 
-  <!-- แสดงผลตอนกำลังโหลด หรือเกิด Error -->
   <ng-template #loadingOrError>
-    <div class="feedback-container">
-      <p>{{ errorMessage || 'กำลังโหลดข้อมูล...' }}</p>
-    </div>
+    <div *ngIf="isLoading" class="state-message">กำลังโหลดข้อมูล...</div>
+    <div *ngIf="errorMessage" class="state-message error">{{ errorMessage }}</div>
   </ng-template>
+
 </main>
+<div class="modal-overlay" *ngIf="isModalOpen" (click)="closeOrderDetails()">
+  <div class="modal-content" *ngIf="selectedOrder" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>รายละเอียดคำสั่งซื้อ #{{ selectedOrder.orders_id }}</h2>
+      <button mat-icon-button (click)="closeOrderDetails()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-game-list">
+      <div class="modal-game-item" *ngFor="let detail of selectedOrder.OrderDetails">
+        <img [src]="getFullImageUrl(detail.Game.image_game)" [alt]="detail.Game.title" class="game-image">
+        <span class="game-title">{{ detail.Game.title }}</span>
+        <span class="game-price">{{ detail.Game.price | number: '1.2-2' }} บาท</span>
+      </div>
+    </div>
+
+    <div class="modal-summary">
+      <div class="summary-row">
+        <span>ราคารวม</span>
+        <span>{{ selectedOrder.sum_total | number: '1.2-2' }} บาท</span>
+      </div>
+      <div class="summary-row">
+        <span>ส่วนลด</span>
+        <span class="discount">- {{ selectedOrder.discount | number: '1.2-2' }} บาท</span>
+      </div>
+      <div class="summary-row total">
+        <span>ยอดชำระทั้งหมด</span>
+        <span>{{ selectedOrder.final_total | number: '1.2-2' }} บาท</span>
+      </div>
+    </div>
+  </div>
+</div>

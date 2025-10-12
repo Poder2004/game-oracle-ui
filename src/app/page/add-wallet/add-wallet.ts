@@ -84,6 +84,7 @@ export class AddWallet implements OnInit {
   
   // --- 👇 [เพิ่ม] ฟังก์ชันสำหรับเปิด/ปิด Modal ---
   openOrderDetails(order: Order): void {
+    console.log('Data for selected order:', order);
     this.selectedOrder = order;
     this.isModalOpen = true;
   }
