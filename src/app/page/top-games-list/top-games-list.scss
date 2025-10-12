@@ -1,0 +1,99 @@
+:host {
+  display: block;
+  font-family: 'Prompt', sans-serif; // (Optional) แนะนำให้ใช้ Font ภาษาไทยสวยๆ
+}
+
+.top-selling-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: #333;
+  }
+}
+
+.status-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: #888;
+  &.error-message {
+    color: #d9534f;
+  }
+}
+
+.ranking-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.rank-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ccc;
+  width: 40px;
+  text-align: center;
+}
+
+// เพิ่มสีพิเศษสำหรับ 3 อันดับแรก
+.rank-item:nth-child(1) .rank-number { color: #ffd700; } // Gold
+.rank-item:nth-child(2) .rank-number { color: #c0c0c0; } // Silver
+.rank-item:nth-child(3) .rank-number { color: #cd7f32; } // Bronze
+
+.rank-image {
+  width: 120px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.rank-info {
+  flex-grow: 1; // ทำให้ดันปุ่มไปทางขวาสุด
+}
+
+.game-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0 0 0.25rem 0;
+  color: #222;
+}
+
+.game-category {
+  font-size: 0.9rem;
+  color: #777;
+  margin: 0;
+}
+
+.details-button {
+  flex-shrink: 0;
+}

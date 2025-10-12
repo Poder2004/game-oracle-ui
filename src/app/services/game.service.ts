@@ -42,16 +42,20 @@ export class GameService {
   /** ดึงเกมทั้งหมด (admin) */
   getAllGames(): Observable<GetAllGamesResponse> {
     const url = `${this.API_ENDPOINT}/admin/games`;
-    return this.http.get<GetAllGamesResponse>(url, { headers: this.getAuthHeaders() });
+    return this.http.get<GetAllGamesResponse>(url, {
+      headers: this.getAuthHeaders(),
+    });
   }
 
   /** สร้างเกมใหม่ (admin) */
   createGame(formData: FormData): Observable<CreateGameResponse> {
     const url = `${this.API_ENDPOINT}/admin/addgames`;
-    return this.http.post<CreateGameResponse>(url, formData, { headers: this.getAuthHeaders() });
+    return this.http.post<CreateGameResponse>(url, formData, {
+      headers: this.getAuthHeaders(),
+    });
   }
 
-    /** ดึงประเภทเกมทั้งหมด */
+  /** ดึงประเภทเกมทั้งหมด */
   getCategories(): Observable<Category[]> {
     const url = `${this.API_ENDPOINT}/api/categories`;
     return this.http.get<Category[]>(url);
@@ -61,19 +65,23 @@ export class GameService {
   getGameById(gameId: number): Observable<GetGameResponse> {
     const url = `${this.API_ENDPOINT}/api/games/${gameId}`;
     return this.http.get<GetGameResponse>(url);
-    
   }
 
   /** อัปเดตเกม (admin) */
   updateGame(id: number, formData: FormData): Observable<UpdateGameResponse> {
     const url = `${this.API_ENDPOINT}/admin/games/${id}`;
-    return this.http.put<UpdateGameResponse>(url, formData, { headers: this.getAuthHeaders() });
+    return this.http.put<UpdateGameResponse>(url, formData, {
+      headers: this.getAuthHeaders(),
+    });
   }
 
   /** ลบเกม (admin) */
   deleteGame(id: number): Observable<Object> {
     const url = `${this.API_ENDPOINT}/admin/games/${id}`;
-    return this.http.delete(url, { headers: this.getAuthHeaders(), observe: 'response' });
+    return this.http.delete(url, {
+      headers: this.getAuthHeaders(),
+      observe: 'response',
+    });
   }
 
   /** ดึงเกมตามหมวด (public) */
@@ -84,5 +92,13 @@ export class GameService {
     });
   }
 
- 
+  /**
+   * ✅ เพิ่มฟังก์ชันนี้เข้าไปใหม่
+   * ดึงข้อมูล 5 อันดับเกมที่ขายดีที่สุด
+   */
+  getTopSellingGames(): Observable<GetAllGamesResponse> {
+    const url = `${this.API_ENDPOINT}/api/games/top-selling`;
+    // Endpoint นี้เป็น public ไม่ต้องใช้ getAuthHeaders()
+    return this.http.get<GetAllGamesResponse>(url);
+  }
 }
