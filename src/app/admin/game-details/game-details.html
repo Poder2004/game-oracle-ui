@@ -1,17 +1,5 @@
-
+<app-navadmin></app-navadmin>
 <div class="page-container" *ngIf="game; else loadingOrError">
-     <mat-toolbar class="top-toolbar">
-    <span class="logo">Game Oracle</span>
-  </mat-toolbar>
-  <button
-    mat-icon-button
-    class="hamburger-menu-btn"
-    (click)="toggleProfileSidebar()"
-    aria-label="Open Profile Menu"
-  >
-    <mat-icon>menu</mat-icon>
-  </button>
-
   <!-- ส่วนหัวข้อหลัก -->
   <div class="header-section">
     <h1>รายละเอียดเกมส์</h1>
@@ -21,22 +9,28 @@
   <div class="detail-card">
     <!-- คอลัมน์รูปภาพ (ซ้าย) -->
     <div class="image-column">
-      <img [src]="getFullImageUrl(game.image_game)" [alt]="game.title" class="game-cover-image"/>
+      <img
+        [src]="getFullImageUrl(game.image_game)"
+        [alt]="game.title"
+        class="game-cover-image"
+      />
     </div>
 
     <!-- คอลัมน์ข้อมูล (ขวา) -->
     <div class="info-column">
       <h2 class="game-title">{{ game.title }}</h2>
 
-      <!-- 
-        รวมข้อมูล ราคา, ประเภท, และวันที่วางจำหน่ายไว้ในบรรทัดเดียว
-      -->
       <div class="game-meta">
-        <span>ราคา : {{ game.price | number: '1.2-2' }} ฿</span>
+        <span>ราคา : {{ game.price | number : "1.2-2" }} ฿</span>
         <span class="separator">|</span>
-        <span>ประเภท : {{ game.category?.category_name || 'N/A' }}</span>
+
+        <span>ประเภท : {{ categoryName || "N/A" }}</span>
+
         <span class="separator">|</span>
-        <span>วันที่วางจำหน่าย : {{ game.release_date | date: 'dd MMM yyyy' }}</span>
+        <span
+          >วันที่วางจำหน่าย :
+          {{ game.release_date | date : "dd MMM yyyy" }}</span
+        >
       </div>
 
       <p class="game-description">{{ game.description }}</p>
@@ -51,7 +45,6 @@
     <button class="btn btn-delete" (click)="onDelete()">ลบ</button>
   </div>
 </div>
-
 
 <!-- Template ที่จะแสดงตอนกำลังโหลดหรือเกิด Error -->
 <ng-template #loadingOrError>
@@ -107,7 +100,11 @@
       <span>แก้ไขโปรไฟล์</span>
     </button>
 
-    <button mat-flat-button class="footer-btn primary-btn" routerLink="/Mainadmin">
+    <button
+      mat-flat-button
+      class="footer-btn primary-btn"
+      routerLink="/Mainadmin"
+    >
       <mat-icon>home</mat-icon>
       <span>หน้าหลัก</span>
     </button>

@@ -4,19 +4,28 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { Game, User } from '../../model/api.model';
 import { Constants } from '../../config/constants';
-import { MatIconModule } from "@angular/material/icon";
-import { MatToolbar } from "@angular/material/toolbar";
+import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../services/auth.service';
+import { Navadmin } from '../navadmin/navadmin';
 
 @Component({
   selector: 'app-game-details',
   standalone: true,
-  imports: [CommonModule, DatePipe, DecimalPipe, RouterModule, MatIconModule, MatToolbar], // 👈 Import Pipes
+  imports: [
+    CommonModule,
+    DatePipe,
+    DecimalPipe,
+    RouterModule,
+    MatIconModule,
+    Navadmin,
+  ],
   templateUrl: './game-details.html',
-  styleUrl: './game-details.scss'
+  styleUrl: './game-details.scss',
 })
 export class GameDetailsadmin implements OnInit {
   game?: Game;
+  // ✨ 1. เพิ่ม Property สำหรับเก็บชื่อประเภทเกม
+  categoryName = '';
   errorMessage: string | null = null;
   public currentUser: User | null = null;
   public isUserLoggedIn: boolean = false;
@@ -26,22 +35,20 @@ export class GameDetailsadmin implements OnInit {
     private gameService: GameService,
     private constants: Constants,
     private router: Router,
-     private authService: AuthService,
+    private authService: AuthService
   ) {
     this.isUserLoggedIn = this.authService.isLoggedIn();
 
-    // 2. ดึงข้อมูลผู้ใช้จาก localStorage ถ้ามี
     if (this.isUserLoggedIn) {
-      const userJson = localStorage.getItem('currentUser');
+      // 🔑 แก้ไข: อ่านจาก 'userData' เพื่อความสอดคล้อง
+      const userJson = localStorage.getItem('userData');
       if (userJson) {
-        this.currentUser = JSON.parse(userJson); // แปลง JSON string กลับเป็น Object
+        this.currentUser = JSON.parse(userJson);
       }
     }
   }
 
-
   ngOnInit(): void {
-    // ดึง ID จาก URL
     const idParam = this.route.snapshot.paramMap.get('id');
     const id = idParam ? Number(idParam) : null;
 
@@ -54,6 +61,14 @@ export class GameDetailsadmin implements OnInit {
       next: (res) => {
         if (res && res.data) {
           this.game = res.data;
+
+          // ✨ 2. เพิ่ม Logic การค้นหาชื่อประเภทเกมเหมือนฝั่ง User
+          const nameFromGame = this.game?.category?.category_name;
+          if (nameFromGame) {
+            this.categoryName = nameFromGame;
+          } else {
+            this.loadCategoryName(this.game?.category_id);
+          }
         } else {
           this.errorMessage = 'ไม่พบข้อมูลเกม';
         }
@@ -65,55 +80,59 @@ export class GameDetailsadmin implements OnInit {
     });
   }
 
+  // ✨ 3. เพิ่มฟังก์ชัน loadCategoryName ทั้งหมดจากฝั่ง User
+  private loadCategoryName(catId?: number) {
+    if (catId == null) return;
+    this.gameService.getCategories().subscribe({
+      next: (cats) => {
+        const hit = (cats || []).find(
+          (c) => Number(c.category_id) === Number(catId)
+        );
+        if (hit) this.categoryName = hit.category_name;
+      },
+      error: (e) => console.warn('load categories failed', e),
+    });
+  }
+
   getFullImageUrl(path?: string): string {
-    if (!path) return 'https://placehold.co/600x400/2c2c2e/f2f2f7?text=No+Image';
+    if (!path)
+      return 'https://placehold.co/600x400/2c2c2e/f2f2f7?text=No+Image';
     return `${this.constants.API_ENDPOINT}/${path}`;
   }
 
-  // ฟังก์ชันสำหรับปุ่ม "แก้ไข"
   onEdit(): void {
     if (this.game) {
-      // นำทางไปยังหน้า Edit พร้อมส่ง ID ของเกมไปด้วย
       this.router.navigate(['/edit-game', this.game.game_id]);
     }
   }
 
-  // ฟังก์ชันสำหรับปุ่ม "ลบ"
   onDelete(): void {
-    // 3.1 ตรวจสอบว่ามีข้อมูลเกมก่อน
     if (!this.game) return;
-
-    // 3.2 แสดงหน้าต่างยืนยัน
     if (confirm(`คุณต้องการลบเกม "${this.game.title}" ออกจากระบบใช่หรือไม่?`)) {
-      // 3.3 เรียกใช้ Service เพื่อลบ
       this.gameService.deleteGame(this.game.game_id).subscribe({
         next: () => {
-          // --- กรณีสำเร็จ ---
           alert(`ลบเกม "${this.game?.title}" สำเร็จ`);
-          // พาผู้ใช้กลับไปหน้ารายการเกมทั้งหมด
           this.router.navigate(['/Mainadmin']);
         },
         error: (err) => {
-          // --- กรณีล้มเหลว ---
           console.error('Delete game failed', err);
           alert('เกิดข้อผิดพลาดในการลบเกม กรุณาลองอีกครั้ง');
-        }
+        },
       });
     }
   }
 
+  // ส่วน Sidebar ไม่ต้องแก้ไข แต่จะแก้ localStorage key ใน logout เพื่อความถูกต้อง
   public isProfileOpen = false;
-  // ฟังก์ชันสำหรับสลับสถานะ (เปิด/ปิด)
   toggleProfileSidebar(): void {
     this.isProfileOpen = !this.isProfileOpen;
   }
-
   logout(): void {
-    localStorage.removeItem('authToken'); // ลบ token
-    localStorage.removeItem('currentUser'); // ลบข้อมูล user
-    this.router.navigate(['/login']); // กลับไปหน้า login
-
-    // (Optional) รีเฟรชหน้าเพื่อให้ component อัปเดตสถานะทันที
-    window.location.reload();
+    localStorage.removeItem('authToken');
+    // 🔑 แก้ไข: ลบ 'userData'
+    localStorage.removeItem('userData');
+    this.router.navigate(['/login']).then(() => {
+      window.location.reload();
+    });
   }
 }
