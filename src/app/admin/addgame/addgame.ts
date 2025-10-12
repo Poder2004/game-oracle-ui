@@ -24,9 +24,12 @@ export class Addgame implements OnInit {
     this.loadCategories();
   }
 
-  loadCategories(): void {
+ loadCategories(): void {
     this.gameService.getCategories().subscribe({
       next: (data) => {
+        // เพิ่ม log ตรงนี้เพื่อดูข้อมูลที่ได้รับจาก API
+        console.log('Data received from getCategories API:', data); 
+        
         this.categories = data; // นำข้อมูลที่ได้จาก API มาใส่ในตัวแปร
       },
       error: (err) => {

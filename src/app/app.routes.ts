@@ -77,12 +77,12 @@ export const routes: Routes = [
   { 
     path: 'edit-game/:id', 
     component: EditGame,
-    canActivate: [authGuard] 
+
   },
   { 
     path: 'admin/user-details/:id', 
     component: HistoryDetails,
-    canActivate: [authGuard] 
+
   },
 
   // --- Routes สำหรับ Admin ที่ต้องล็อกอินก่อน ---
@@ -107,7 +107,6 @@ export const routes: Routes = [
     path: 'GameType',
     loadComponent: () =>
       import('./page/game-type/game-type').then((m) => m.GameType),
-    canActivate: [authGuard], // ถ้าต้องการ
   },
   // --- Route เริ่มต้นและ Wildcard ---
   {

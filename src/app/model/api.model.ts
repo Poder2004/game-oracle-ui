@@ -187,7 +187,6 @@ export interface SearchResponse {
   data: Game[]; // data เป็น Array ของ Game
 }
 
-// เพิ่ม interface นี้ (ถ้ายังไม่มี)
 export interface CategoryListResponse {
   status: string;
   message: string;

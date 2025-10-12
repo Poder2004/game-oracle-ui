@@ -51,18 +51,17 @@ export class GameService {
     return this.http.post<CreateGameResponse>(url, formData, { headers: this.getAuthHeaders() });
   }
 
-  /** ดึงประเภทเกมทั้งหมด */
+    /** ดึงประเภทเกมทั้งหมด */
   getCategories(): Observable<Category[]> {
     const url = `${this.API_ENDPOINT}/api/categories`;
-    return this.http
-      .get<CategoryListResponse>(url, { headers: this.getAuthHeaders() })
-      .pipe(map(res => res?.data ?? [] as Category[]));
+    return this.http.get<Category[]>(url);
   }
 
   /** ดึงเกมตาม id (public) */
   getGameById(gameId: number): Observable<GetGameResponse> {
     const url = `${this.API_ENDPOINT}/api/games/${gameId}`;
     return this.http.get<GetGameResponse>(url);
+    
   }
 
   /** อัปเดตเกม (admin) */
