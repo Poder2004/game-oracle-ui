@@ -1,7 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Input } from '@angular/core';
-
-// --- Import Angular Material Modules ---
+import { Component, Input } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,7 +7,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { Router, RouterModule } from '@angular/router';
+
+// --- Services and Models ---
 import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service'; // 👈 1. Import UserService
 import { User } from '../../model/api.model';
 import { Constants } from '../../config/constants';
 import { GameService } from '../../services/game.service';
@@ -31,17 +32,18 @@ import { GameService } from '../../services/game.service';
   styleUrl: './navber.scss',
 })
 export class Navber {
-  [x: string]: any;
   public isUserLoggedIn: boolean = false;
   public currentUser: User | null = null;
-  userImageUrl: string | null = null;
-  // กำหนดให้ค่าเริ่มต้นเป็น true (แสดงไอคอนตะกร้าเป็นปกติ)
+  public userImageUrl: string | null = null;
+  public isProfileOpen = false;
+
   @Input() showCartIcon: boolean = true;
+
   navLinks = [
-    { name: 'แนะนำ', path: '/home' }, // ตัวอย่าง: ลิงก์ไปหน้า home
-    { name: 'อันดับเกมขายดี', path: '/top-selling' }, // ตัวอย่าง
-    { name: 'เติมเงิน/ประวัติการซื้อ', path: '/addwallet' }, // <-- นี่คือลิงก์เป้าหมายของคุณ
-    { name: 'ประเภทเกม', path: '/GameType' }, // ตัวอย่าง
+    { name: 'แนะนำ', path: '/home' },
+    { name: 'อันดับเกมขายดี', path: '/top-selling' },
+    { name: 'เติมเงิน/ประวัติการซื้อ', path: '/addwallet' },
+    { name: 'ประเภทเกม', path: '/GameType' },
   ];
 
   categories = [
@@ -54,65 +56,91 @@ export class Navber {
 
   activeLink = this.navLinks[0].name;
 
-  setActiveLink(linkName: string): void {
-    this.activeLink = linkName;
-    // เมื่อตัวแปร activeLink เปลี่ยนไป Angular จะอัปเดตหน้าเว็บให้เอง!
-  }
-  public isProfileOpen = false; // ตัวแปรควบคุมสถานะของ Sidebar (เริ่มต้นคือปิด)
-
-  // ฟังก์ชันสำหรับสลับสถานะ (เปิด/ปิด)
-  toggleProfileSidebar(): void {
-    this.isProfileOpen = !this.isProfileOpen;
-  }
-
   constructor(
     private constants: Constants,
     private authService: AuthService,
     private router: Router,
-    private gameService: GameService
+    private gameService: GameService,
+    private userService: UserService // 👈 2. Inject UserService
   ) {
     this.isUserLoggedIn = this.authService.isLoggedIn();
 
-    // 2. ดึงข้อมูลผู้ใช้จาก localStorage ถ้ามี
+    // โหลดข้อมูลผู้ใช้เริ่มต้นจาก localStorage เพื่อการแสดงผลที่รวดเร็ว
     if (this.isUserLoggedIn) {
       const userJson = localStorage.getItem('currentUser');
       if (userJson) {
-        this.currentUser = JSON.parse(userJson); // แปลง JSON string กลับเป็น Object
-      }
-    }
-
-    const userJson = localStorage.getItem('currentUser');
-    if (userJson) {
-      this.currentUser = JSON.parse(userJson);
-
-      // 4. สร้าง URL ที่สมบูรณ์
-      if (this.currentUser && this.currentUser.image_profile) {
-        // นำ Base URL ของ API มาต่อกับ Path ของรูปภาพ
-        this.userImageUrl = `${this.constants.API_ENDPOINT}/${this.currentUser.image_profile}`;
+        this.currentUser = JSON.parse(userJson);
+        this.buildUserImageUrl(); // เรียกใช้ฟังก์ชันช่วย
       }
     }
   }
+
+  // 👇 3. [แก้ไข] ฟังก์ชันเดิมให้ฉลาดขึ้น
+  toggleProfileSidebar(): void {
+    // 3.1 ถ้า sidebar กำลังจะเปิด, ให้รีเฟรชข้อมูลก่อน
+    if (!this.isProfileOpen) {
+      this.refreshUserProfileData();
+    }
+    // 3.2 สลับสถานะการแสดงผล
+    this.isProfileOpen = !this.isProfileOpen;
+  }
+
+  // 👇 4. [เพิ่มฟังก์ชันใหม่] สำหรับดึงข้อมูลล่าสุด
+  private refreshUserProfileData(): void {
+    // เรียก API getProfile จาก UserService
+    this.userService.getProfile().subscribe({
+      next: (response) => {
+        if (response && response.user) {
+          // อัปเดตข้อมูลผู้ใช้ปัจจุบัน
+          this.currentUser = response.user;
+          // อัปเดตข้อมูลใน localStorage ให้ตรงกัน
+          localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+          // สร้าง URL รูปภาพใหม่
+          this.buildUserImageUrl();
+        }
+      },
+      error: (err) => {
+        console.error('Failed to refresh user profile:', err);
+        // ถ้า Token หมดอายุ (Unauthorized), ให้ logout
+        if (err.status === 401) {
+          this.logout();
+        }
+      }
+    });
+  }
+
+  // 👇 5. [เพิ่มฟังก์ชันช่วย] เพื่อลดโค้ดซ้ำซ้อน
+  private buildUserImageUrl(): void {
+    if (this.currentUser && this.currentUser.image_profile) {
+      this.userImageUrl = `${this.constants.API_ENDPOINT}/${this.currentUser.image_profile}`;
+    } else {
+      this.userImageUrl = null; // หรือ 'assets/images/default-avatar.png'
+    }
+  }
+
+  // --- ฟังก์ชันเดิม (ไม่ต้องแก้ไข) ---
+
+  setActiveLink(linkName: string): void {
+    this.activeLink = linkName;
+  }
+
   public onSearch(term: string): void {
     if (term && term.trim() !== '') {
-      // สั่งให้ Router เปลี่ยนหน้าไปที่ '/search-results' พร้อมกับส่งคำค้นหาไปด้วย
       this.router.navigate(['/SearchResults'], {
         queryParams: { q: term.trim() },
       });
     }
   }
-
-  // 3. สร้างฟังก์ชันสำหรับ Logout
+  
   logout(): void {
-    localStorage.removeItem('authToken'); // ลบ token
-    localStorage.removeItem('currentUser'); // ลบข้อมูล user
-    this.router.navigate(['/login']); // กลับไปหน้า login
-
-    // (Optional) รีเฟรชหน้าเพื่อให้ component อัปเดตสถานะทันที
-    window.location.reload();
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('currentUser');
+    this.router.navigate(['/login']).then(() => {
+      window.location.reload();
+    });
   }
 
   goToCategory(c: { id: number; name: string }) {
-    // เลือกอย่างใดอย่างหนึ่ง (อันนี้ใช้ query param ปลอดภัยกับเส้นทางเดิม)
     this.router.navigate(['/GameType'], { queryParams: { cat: c.id } });
   }
 }
