@@ -16,11 +16,7 @@ html {
     density: 0,
   ));
 }
-html, body {
-  height: 100%;
-  background-color: #838383; // 👈 กำหนดสีพื้นหลังหลักที่นี่
-  color: #f2f2f7; // กำหนดสีตัวอักษรหลักเป็นสีขาวนวล
-}
+
 body {
   // Default the application to a light color theme. This can be changed to
   // `dark` to enable the dark color theme, or to `light dark` to defer to the
@@ -49,3 +45,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  background-color: #383838;
+}

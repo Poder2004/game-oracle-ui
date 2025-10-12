@@ -1,5 +1,15 @@
+:host {
+  display: block;
+  min-height: 100vh;
+
+  // ::ng-deep จะสั่งให้สไตล์นี้มีผลกับ body ทั่วทั้งหน้า
+  // แต่จะทำงานก็ต่อเมื่อ Component นี้ถูกแสดงผลอยู่เท่านั้น
+  ::ng-deep body {
+    background-color: #383838 !important; // ใช้ !important เพื่อให้แน่ใจว่าสไตล์นี้จะถูกใช้งาน
+  }
+}
 // ตัวแปรสี (ปรับแก้ได้ตามธีมเว็บของคุณ)
-$card-bg: #fff;
+$card-bg: #383838;
 $shadow-color: rgba(0, 0, 0, 0.1);
 $primary-color: #3f51b5; // สีของปุ่ม
 
@@ -12,6 +22,7 @@ $primary-color: #3f51b5; // สีของปุ่ม
     font-size: 2rem;
     font-weight: 600;
     margin-bottom: 2rem;
+    color: aliceblue;
   }
 
   .loading-message,
@@ -38,7 +49,7 @@ $primary-color: #3f51b5; // สีของปุ่ม
   }
 
   .offer-image-placeholder {
-    background-color: #f0f0f0;
+    background-color: #5a37378e;
 
     .game-image {
       width: 100%;
