@@ -1,56 +1,42 @@
 <app-navber></app-navber>
 <div class="wallet-container">
-  <!-- ส่วนเติมเงินและประวัติการเติมเงิน (เหมือนเดิม) -->
+
   <h1 class="page-title">เติมเงิน</h1>
-  <mat-card class="balance-card">
-    <mat-card-content>
-      <h2>ยอดเงินคงเหลือ: {{ walletBalance | number }} บาท</h2>
-    </mat-card-content>
-  </mat-card>
-  <div class="top-up-section">
-    <mat-card class="history-card">
-      <mat-card-header>
-        <mat-card-title>ประวัติการเติมเงิน</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="history-scroll">
-          <ul class="history-list">
-            <li *ngIf="topUpHistory.length === 0" class="empty-state">ไม่มีประวัติการเติมเงิน</li>
-            <li *ngFor="let item of topUpHistory">
-              <span>{{ item.date }}</span>
-              <span class="amount">{{ item.amount | number }} บาท</span>
-            </li>
-          </ul>
-        </div>
-      </mat-card-content>
-    </mat-card>
-    <mat-card class="form-card">
-      <mat-card-content>
-        <p>กรอกจำนวนเงินหรือเลือกจำนวนเงิน</p>
 
-        <mat-form-field appearance="outline" class="amount-field">
-          <input
-            type="text"
-            placeholder="กรอกหรือเลือกจำนวนเงิน"
-            matInput
-            [formControl]="amountControl"
-            [matAutocomplete]="auto"
-          />
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option
-              *ngFor="let option of filteredOptions | async"
-              [value]="option"
-            >
-              {{ option }} บาท
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
+  <div class="balance-display">
+    ยอดเงินคงเหลือ: <strong>{{ walletBalance | number:'1.2-2' }}</strong> บาท
+  </div>
 
-        <button mat-flat-button class="confirm-btn" (click)="onTopUp()">
-          ยืนยันการเติมเงิน
+  <div class="main-section">
+
+    <div class="card history-card">
+      <h3>ประวัติการเติมเงิน</h3>
+      <ul class="history-list">
+        <li *ngIf="topUpHistory.length === 0" class="empty-state">
+          ไม่มีประวัติการเติมเงิน
+        </li>
+        <li *ngFor="let item of topUpHistory">
+          <a>{{ item.date }}</a>
+          <span class="amount">{{ item.amount | number }} บาท</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card form-card">
+      <h3>กรอกจำนวนเงินหรือเลือกจำนวนเงิน</h3>
+
+      <input type="number" class="amount-input" placeholder="ระบุจำนวนเงิน (บาท)" [formControl]="amountControl" />
+
+      <div class="predefined-amounts">
+        <button *ngFor="let amount of predefinedAmounts" class="amount-chip" (click)="setAmount(amount)">
+          {{ amount | number }}
         </button>
-      </mat-card-content>
-    </mat-card>
+      </div>
+
+      <button class="confirm-btn" (click)="onTopUp()" [disabled]="amountControl.invalid">
+        ยืนยันการเติมเงิน
+      </button>
+    </div>
   </div>
 
 
@@ -83,7 +69,7 @@
           <span class="order-total">{{ order.final_total | number: '1.2-2' }} บาท</span>
         </div>
       </div>
-      
+
     </mat-card-content>
   </mat-card>
 </div>
@@ -101,11 +87,11 @@
     <div class="modal-game-list">
       <div class="modal-game-item" *ngFor="let detail of selectedOrder.OrderDetails">
 
-    <img [src]="getFullImageUrl(detail.Game.image_game)" [alt]="detail.Game.title" class="game-image">
-    <span class="game-title">{{ detail.Game.title }}</span>
-    <span class="game-price">{{ detail.Game.price | number: '1.2-2' }} บาท</span>
+        <img [src]="getFullImageUrl(detail.Game.image_game)" [alt]="detail.Game.title" class="game-image">
+        <span class="game-title">{{ detail.Game.title }}</span>
+        <span class="game-price">{{ detail.Game.price | number: '1.2-2' }} บาท</span>
 
-  </div>
+      </div>
     </div>
 
     <div class="modal-summary">
@@ -125,4 +111,3 @@
 
   </div>
 </div>
-

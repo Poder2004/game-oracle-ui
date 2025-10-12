@@ -1,10 +1,15 @@
+/* wallet.component.scss */
+
+// --- โครงสร้างหลัก & พื้นหลัง ---
 :host {
   display: block;
-  background-color: #383838;
+  background-color: #555c66; /* สีพื้นหลังเทาเข้มเหมือนในรูป */
   min-height: 100vh;
+  font-family: 'Kanit', sans-serif; // แนะนำฟอนต์นี้สำหรับภาษาไทย
 }
+
 .wallet-container {
-  padding: 2rem 6rem;
+  padding: 2rem;
 }
 
 .page-title {
@@ -16,23 +21,154 @@
   margin-bottom: 2rem;
 }
 
-/* --- ส่วนเติมเงิน (เหมือนเดิม) --- */
-.top-up-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-bottom: 4rem;
+
+// --- [UI ใหม่] ส่วนเติมเงิน ---
+.balance-display {
+  color: white;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 15px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
-mat-card {
+
+.main-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Responsive */
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  margin-bottom: 4rem; // เว้นระยะห่างก่อนถึงประวัติการซื้อ
+}
+
+.card {
+  background-color: #e0e0e0; /* สีเทาอ่อนของการ์ด */
+  border-radius: 15px;
+  padding: 1.5rem 2rem;
+  color: #333;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+  }
+}
+
+.history-card .history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+
+    a {
+      color: #007bff; /* สีน้ำเงินเหมือนในรูป */
+      text-decoration: none;
+    }
+    .amount {
+      font-weight: 500;
+    }
+  }
+  .empty-state {
+    color: #888;
+    text-align: center;
+  }
+}
+
+.form-card {
+  .amount-select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    background-color: white;
+  }
+
+  .confirm-btn {
+    background-color: #69c573; /* สีเขียวยืนยัน */
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background-color: #5aa963; /* สีเข้มขึ้นเมื่อ hover */
+    }
+
+    &:disabled {
+      background-color: #aaa;
+      cursor: not-allowed;
+    }
+  }
+
+   .amount-input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    // ซ่อนลูกศรขึ้นลงของ input type number
+    -moz-appearance: textfield;
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  .predefined-amounts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .amount-chip {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+
+    &:hover {
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+  }
+
+}
+
+
+// --- [UI เดิม] ส่วนประวัติการซื้อ ---
+.purchase-history-card {
   background-color: #E6E6E6 !important;
   color: #333;
   border-radius: 20px !important;
-  padding: 1.5rem !important;
-}
-// ... โค้ดส่วนเติมเงินอื่นๆ เหมือนเดิม ...
-
-/* --- [แก้ไข] ส่วนประวัติการซื้อ --- */
-.purchase-history-card {
   padding: 1rem 2rem !important;
 
   .order-header {
@@ -64,7 +200,7 @@ mat-card {
     font-size: 1.1rem;
     font-weight: 500;
     text-align: right;
-    
+
     &:hover {
       transform: translateY(-3px);
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -82,7 +218,7 @@ mat-card {
   }
 }
 
-/* --- [เพิ่ม] สไตล์สำหรับ Modal --- */
+// --- [UI เดิม] สไตล์สำหรับ Modal ---
 .modal-overlay {
   position: fixed;
   top: 0;

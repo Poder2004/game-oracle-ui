@@ -10,7 +10,10 @@
 
     <!-- เชื่อมต่อ Form กับ FormGroup และ (ngSubmit) -->
     <form class="form-card" [formGroup]="couponForm" (ngSubmit)="onSubmit()">
-      
+      <pre style="background-color: #eee; padding: 10px; border-radius: 5px;">
+    Form Status: {{ couponForm.status }}
+  </pre>
+
       <!-- ชื่อโค้ด (NameCode) -->
       <div class="form-group">
         <label for="name_code">ชื่อโค้ด (อังกฤษตัวใหญ่/ตัวเลข) :</label>
@@ -40,19 +43,19 @@
           </div>
         </div>
       </div>
-      
+
       <!-- แถวสำหรับ Min Value และ Limit Usage -->
       <div class="form-row">
         <div class="form-group">
           <label for="min_value">ยอดซื้อขั้นต่ำ (บาท) :</label>
-            <input type="number" id="min_value" formControlName="min_value" />
+          <input type="number" id="min_value" formControlName="min_value" />
         </div>
         <div class="form-group">
           <label for="limit_usage">จำนวนคูปองทั้งหมด (ใบ) :</label>
-            <input type="number" id="limit_usage" formControlName="limit_usage" />
+          <input type="number" id="limit_usage" formControlName="limit_usage" />
         </div>
       </div>
-      
+
       <!-- ส่วนแสดงข้อความ Feedback -->
       <div *ngIf="submitSuccess" class="feedback-message success">{{ submitSuccess }}</div>
       <div *ngIf="submitError" class="feedback-message error">{{ submitError }}</div>
@@ -72,9 +75,9 @@
       <h2>โค้ดส่วนลดทั้งหมด</h2>
       <button class="close-button" (click)="closeModal()">&times;</button>
     </div>
-    
+
     <div *ngIf="fetchError" class="feedback-message error">{{ fetchError }}</div>
-    
+
     <div class="coupon-list">
       <!-- แสดงข้อมูลจริงจาก allCoupons -->
       <div class="coupon-item" *ngFor="let coupon of allCoupons">

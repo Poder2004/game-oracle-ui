@@ -1,17 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Navber } from '../../widget/navber/navber';
 import { RouterModule } from '@angular/router';
-
-// --- Imports ---
 import { WalletService } from '../../services/wallet.service';
 import { Constants } from '../../config/constants';
 import { Order, WalletHistoryItem, WalletTopUpReq } from '../../model/api.model';
@@ -21,28 +13,25 @@ import { MatIconModule } from "@angular/material/icon";
   selector: 'app-wallet',
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule,
-    MatButtonModule, MatAutocompleteModule, Navber, DatePipe, DecimalPipe, RouterModule,
-    MatIconModule
-],
+    CommonModule, ReactiveFormsModule, MatCardModule, Navber, DatePipe,
+    DecimalPipe, RouterModule, MatIconModule
+  ],
   templateUrl: './add-wallet.html',
   styleUrls: ['./add-wallet.scss'],
 })
 export class AddWallet implements OnInit {
-  amountControl = new FormControl('');
-  options: string[] = ['100', '300', '500', '1000'];
-  filteredOptions!: Observable<string[]>;
+  // --- UI ใหม่: ใช้ FormControl กับ Select Dropdown ---
+   amountControl = new FormControl<number | null>(null, [Validators.required, Validators.min(1)]);
+    predefinedAmounts: number[] = [100, 300, 500, 1000, 1500];
 
   walletBalance = 0;
   userId!: number;
-
   topUpHistory: { date: string; amount: number }[] = [];
   purchaseHistory: Order[] = [];
 
-  // --- 👇 [เพิ่ม] ตัวแปรสำหรับจัดการ Modal ---
+  // --- ตัวแปรสำหรับจัดการ Modal ---
   public selectedOrder: Order | null = null;
   public isModalOpen = false;
-  // --- 👆 [สิ้นสุดส่วนที่เพิ่ม] ---
 
   constructor(
     private walletService: WalletService,
@@ -50,17 +39,12 @@ export class AddWallet implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.filteredOptions = this.amountControl.valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filter((value || '').toString()))
-    );
-
     this.walletService.getProfile().subscribe({
       next: (res) => {
         const u = res.user;
         this.userId = u.user_id;
         this.walletBalance = u.wallet;
-        
+
         this.loadTopUpHistory();
         this.loadPurchaseHistory();
       },
@@ -81,10 +65,8 @@ export class AddWallet implements OnInit {
       }
     });
   }
-  
-  // --- 👇 [เพิ่ม] ฟังก์ชันสำหรับเปิด/ปิด Modal ---
+
   openOrderDetails(order: Order): void {
-    console.log('Data for selected order:', order);
     this.selectedOrder = order;
     this.isModalOpen = true;
   }
@@ -93,42 +75,50 @@ export class AddWallet implements OnInit {
     this.isModalOpen = false;
     this.selectedOrder = null;
   }
-  // --- 👆 [สิ้นสุดส่วนที่เพิ่ม] ---
 
   getFullImageUrl(path: string): string {
     if (!path) return 'https://placehold.co/150x75/2c2c2e/f2f2f7?text=No+Image';
     return `${this.constants.API_ENDPOINT}/${path}`;
   }
+  setAmount(amount: number): void {
+        this.amountControl.setValue(amount);
+    }
 
   onTopUp(): void {
-    const value = Number(this.amountControl.value);
-    if (!value || value <= 0) {
-      alert('กรุณากรอกจำนวนเงินที่ถูกต้อง');
-      return;
+        const value = this.amountControl.value;
+        if (this.amountControl.invalid || !value || value <= 0) {
+            alert('กรุณาระบุจำนวนเงินที่ถูกต้อง (ต้องมากกว่า 0)');
+            return;
+        }
+
+        const body: WalletTopUpReq = { user_id: this.userId, amount: value };
+
+        this.walletService.topUp(body).subscribe({
+            next: (res) => {
+                this.walletBalance = res.wallet;
+                this.loadTopUpHistory();
+                this.amountControl.reset();
+                alert(res.message || 'เติมเงินสำเร็จ!');
+            },
+            // นี่คือส่วนที่สำคัญที่สุดในการหาสาเหตุ
+            error: (err) => {
+                console.error('API Error:', err); // แสดง error ทั้งหมดใน Console
+                const errorMessage = err.error?.message || 'เติมเงินไม่สำเร็จ, ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้';
+                alert(errorMessage);
+            }
+        });
     }
-    
-    const body: WalletTopUpReq = { user_id: this.userId, amount: value };
-    this.walletService.topUp(body).subscribe({
-      next: (res) => {
-        this.walletBalance = res.wallet;
-        this.loadTopUpHistory();
-        this.amountControl.setValue('');
-        alert(res.message);
-      },
-      error: (err) => alert('เติมเงินไม่สำเร็จ'),
-    });
-  }
 
   private loadTopUpHistory() {
     if (!this.userId) return;
     this.walletService.getHistory(this.userId).subscribe({
       next: (res) => {
-        const rows = (res.data || []).slice().sort((a,b) => 
+        const rows = (res.data || []).slice().sort((a,b) =>
           new Date(b.transaction_date).getTime() - new Date(a.transaction_date).getTime());
-        
+
         this.topUpHistory = rows.map((h: WalletHistoryItem) => ({
           date: new Date(h.transaction_date).toLocaleDateString('th-TH', {
-            day: '2-digit', month: 'short', year: '2-digit',
+            day: '2-digit', month: 'short', year: 'numeric',
           }),
           amount: h.amount,
         }));
@@ -136,10 +126,4 @@ export class AddWallet implements OnInit {
       error: (err) => console.error('โหลดประวัติไม่สำเร็จ', err),
     });
   }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.options.filter((option) => option.toLowerCase().includes(filterValue));
-  }
 }
-
