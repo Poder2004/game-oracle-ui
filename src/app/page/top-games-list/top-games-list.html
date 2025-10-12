@@ -1,0 +1,41 @@
+<app-navber></app-navber>
+<section class="top-selling-container">
+  <h2>5 อันดับเกมขายดีที่สุด</h2>
+
+  <div *ngIf="isLoading" class="status-container">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
+  <div *ngIf="error" class="status-container error-message">
+    <p>{{ error }}</p>
+  </div>
+
+  <div
+    *ngIf="!isLoading && !error && topGames.length === 0"
+    class="status-container"
+  >
+    <p>ยังไม่มีข้อมูลการจัดอันดับ</p>
+  </div>
+
+  <ol class="ranking-list" *ngIf="!isLoading && !error && topGames.length > 0">
+    <li *ngFor="let game of topGames; let i = index" class="rank-item">
+      <span class="rank-number">{{ i + 1 }}</span>
+      <img
+        class="rank-image"
+        [src]="getFullImageUrl(game.image_game)"
+        [alt]="game.title"
+      />
+      <div class="rank-info">
+        <h3 class="game-title">{{ game.title }}</h3>
+      </div>
+      <a
+        mat-stroked-button
+        color="primary"
+        class="details-button"
+        [routerLink]="['/GameDetails', game.game_id]"
+      >
+        ดูรายละเอียด
+      </a>
+    </li>
+  </ol>
+</section>

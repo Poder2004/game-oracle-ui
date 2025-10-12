@@ -23,6 +23,7 @@ import { SearchResults } from './page/search-results/search-results';
 import { GameDetailsadmin } from './admin/game-details/game-details';
 import { EditGame } from './admin/edit-game/edit-game';
 import { HistoryDetails } from './admin/history-details/history-details';
+import { TopGamesList } from './page/top-games-list/top-games-list';
 
 export const routes: Routes = [
   // --- Routes ที่ไม่ต้องล็อกอิน (Public Routes) ---
@@ -59,8 +60,15 @@ export const routes: Routes = [
   },
   {
     path: 'editprofile',
-    component: EditProfile
+    component: EditProfile,
   },
+
+  {
+    path: 'topgame',
+    component: TopGamesList,
+    canActivate: [authGuard],
+  },
+
   {
     path: 'SearchResults',
     component: SearchResults,
@@ -74,15 +82,13 @@ export const routes: Routes = [
     path: 'GameDetailsadmin/:id',
     component: GameDetailsadmin,
   },
-  { 
-    path: 'edit-game/:id', 
+  {
+    path: 'edit-game/:id',
     component: EditGame,
-
   },
-  { 
-    path: 'admin/user-details/:id', 
+  {
+    path: 'admin/user-details/:id',
     component: HistoryDetails,
-
   },
 
   // --- Routes สำหรับ Admin ที่ต้องล็อกอินก่อน ---

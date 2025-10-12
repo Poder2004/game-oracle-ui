@@ -41,7 +41,7 @@ export class Navber {
 
   navLinks = [
     { name: 'แนะนำ', path: '/home' },
-    { name: 'อันดับเกมขายดี', path: '/top-selling' },
+    { name: 'อันดับเกมขายดี', path: '/topgame' },
     { name: 'เติมเงิน/ประวัติการซื้อ', path: '/addwallet' },
     { name: 'ประเภทเกม', path: '/GameType' },
   ];
@@ -105,7 +105,7 @@ export class Navber {
         if (err.status === 401) {
           this.logout();
         }
-      }
+      },
     });
   }
 
@@ -131,7 +131,7 @@ export class Navber {
       });
     }
   }
-  
+
   logout(): void {
     localStorage.removeItem('authToken');
     localStorage.removeItem('currentUser');
