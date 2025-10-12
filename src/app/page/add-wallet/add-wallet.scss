@@ -1,15 +1,17 @@
-:host {
-  color: #e0e0e0;
-}
 
+:host {
+  display: block;
+  background-color: #383838; /* สีเทาเข้มสำหรับพื้นหลังทั้งหมด */
+  min-height: 100vh; /* ทำให้พื้นหลังเต็มความสูงของหน้าจอ */
+}
 .wallet-container {
-  background-color: #545454;
   padding: 2rem 6rem;
 }
 
 .page-title {
   font-family: 'Inter', sans-serif;
   text-align: center;
+  color: white;
   font-size: 2.5rem;
   font-weight: 600;
   margin-bottom: 2rem;
