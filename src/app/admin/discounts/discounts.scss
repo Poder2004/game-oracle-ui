@@ -229,7 +229,12 @@
   color: #333;
   margin-bottom: 0.25rem;
 }
-
+.coupon-status {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* ระยะห่างระหว่าง "จำนวน" กับ "ปุ่ม" */
+  flex-shrink: 0; /* ป้องกันการหดตัว */
+}
 .coupon-description {
   color: #666;
   font-size: 0.9rem;
@@ -239,5 +244,45 @@
   font-size: 1.1rem;
   font-weight: bold;
   color: #333;
-  flex-shrink: 0;
+}
+
+.coupon-item {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e0e0e0;
+}
+
+/* --- [เพิ่ม] สไตล์สำหรับปุ่ม Actions ใน Modal --- */
+.coupon-actions {
+    display: flex;
+  gap: 0.5rem;
+
+    button {
+        border: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: 5px;
+        cursor: pointer;
+        color: white;
+        font-weight: 500;
+    }
+
+    .btn-edit {
+        background-color: #399fce; // สีน้ำเงิน
+    }
+    .btn-delete {
+        background-color: #f44336; // สีแดง
+    }
+}
+
+/* --- [เพิ่ม] สไตล์สำหรับปุ่ม Cancel --- */
+.form-action {
+    display: flex;
+    gap: 1rem;
+    .cancel-btn {
+        background-color: #9e9e9e; // สีเทา
+        color: white;
+    }
 }

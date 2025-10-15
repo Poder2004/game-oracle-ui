@@ -8,6 +8,8 @@ import {
   CreateCouponResponse,
   GetAllCouponsResponse,
   GetMyCouponsResponse,
+  UpdateCouponPayload,
+  UpdateCouponResponse,
 } from '../model/api.model';
 
 @Injectable({
@@ -70,5 +72,17 @@ export class CouponService {
     return this.http.get<GetAllCouponsResponse>(url, {
       headers: this.getAuthHeaders(),
     });
+  }
+
+    // ฟังก์ชันสำหรับอัปเดตคูปอง
+   updateCoupon(id: number, couponData: UpdateCouponPayload): Observable<UpdateCouponResponse> {
+    const url = `${this.API_ENDPOINT}/admin/coupons/${id}`;
+    return this.http.put<UpdateCouponResponse>(url, couponData, { headers: this.getAuthHeaders() });
+  }
+
+  // ฟังก์ชัน deleteCoupon
+  deleteCoupon(id: number): Observable<void> {
+    const url = `${this.API_ENDPOINT}/admin/coupons/${id}`;
+    return this.http.delete<void>(url, { headers: this.getAuthHeaders() });
   }
 }

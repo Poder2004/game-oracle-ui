@@ -29,4 +29,4 @@ export class ImageUploads {
         const response = await lastValueFrom(observable);
         return response.secure_url;
     }
-}
+}             

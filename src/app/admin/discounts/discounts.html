@@ -8,35 +8,27 @@
       </button>
     </div>
 
-    <!-- เชื่อมต่อ Form กับ FormGroup และ (ngSubmit) -->
     <form class="form-card" [formGroup]="couponForm" (ngSubmit)="onSubmit()">
-      <pre style="background-color: #eee; padding: 10px; border-radius: 5px;">
-    Form Status: {{ couponForm.status }}
-  </pre>
-
-      <!-- ชื่อโค้ด (NameCode) -->
       <div class="form-group">
-        <label for="name_code">ชื่อโค้ด (อังกฤษตัวใหญ่/ตัวเลข) :</label>
+        <label for="name_code">ชื่อโค้ด (อังกฤษตัวใหญ่/ตัวเลข):</label>
         <input type="text" id="name_code" formControlName="name_code" />
       </div>
 
-      <!-- คำอธิบาย (Description) -->
       <div class="form-group">
-        <label for="description">เนื้อหา/คำอธิบาย :</label>
+        <label for="description">เนื้อหา/คำอธิบาย:</label>
         <input type="text" id="description" formControlName="description" />
       </div>
 
-      <!-- แถวสำหรับ Discount Value และ Type -->
       <div class="form-row">
         <div class="form-group">
-          <label for="discount_value">มูลค่าส่วนลด :</label>
+          <label for="discount_value">มูลค่าส่วนลด:</label>
           <div class="input-group">
             <input type="number" id="discount_value" formControlName="discount_value" />
             <span>{{ couponForm.get('discount_type')?.value === 'percent' ? '%' : 'บาท' }}</span>
           </div>
         </div>
         <div class="form-group">
-          <label>ประเภทส่วนลด :</label>
+          <label>ประเภทส่วนลด:</label>
           <div class="radio-group">
             <label><input type="radio" value="percent" formControlName="discount_type" /> เปอร์เซ็นต์</label>
             <label><input type="radio" value="fixed" formControlName="discount_type" /> จำนวนเงิน</label>
@@ -44,31 +36,32 @@
         </div>
       </div>
 
-      <!-- แถวสำหรับ Min Value และ Limit Usage -->
       <div class="form-row">
         <div class="form-group">
-          <label for="min_value">ยอดซื้อขั้นต่ำ (บาท) :</label>
+          <label for="min_value">ยอดซื้อขั้นต่ำ (บาท):</label>
           <input type="number" id="min_value" formControlName="min_value" />
         </div>
         <div class="form-group">
-          <label for="limit_usage">จำนวนคูปองทั้งหมด (ใบ) :</label>
+          <label for="limit_usage">จำนวนคูปองทั้งหมด (ใบ):</label>
           <input type="number" id="limit_usage" formControlName="limit_usage" />
         </div>
       </div>
 
-      <!-- ส่วนแสดงข้อความ Feedback -->
       <div *ngIf="submitSuccess" class="feedback-message success">{{ submitSuccess }}</div>
       <div *ngIf="submitError" class="feedback-message error">{{ submitError }}</div>
 
-      <!-- ปุ่ม Submit -->
       <div class="form-action">
-        <button class="btn submit-btn" type="submit" [disabled]="couponForm.invalid">ประกาศโค้ดส่วนลด</button>
+        <button class="btn submit-btn" type="submit" [disabled]="couponForm.invalid">
+          {{ editingCouponId ? 'อัปเดตโค้ด' : 'ประกาศโค้ดส่วนลด' }}
+        </button>
+        <button *ngIf="editingCouponId" class="btn cancel-btn" type="button" (click)="cancelEdit()">
+          ยกเลิก
+        </button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- Modal สำหรับแสดงคูปองทั้งหมด -->
 <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
@@ -79,14 +72,20 @@
     <div *ngIf="fetchError" class="feedback-message error">{{ fetchError }}</div>
 
     <div class="coupon-list">
-      <!-- แสดงข้อมูลจริงจาก allCoupons -->
       <div class="coupon-item" *ngFor="let coupon of allCoupons">
         <div class="coupon-icon">%</div>
         <div class="coupon-details">
           <div class="coupon-name">{{ coupon.name_code }}</div>
           <div class="coupon-description">{{ coupon.description }}</div>
         </div>
-        <div class="coupon-quantity">{{ coupon.limit_usage - coupon.used_count }} / {{ coupon.limit_usage }} ใบ</div>
+
+        <div class="coupon-status">
+          <div class="coupon-quantity">{{ coupon.limit_usage - coupon.used_count }} / {{ coupon.limit_usage }} ใบ</div>
+          <div class="coupon-actions">
+            <button class="btn-edit" (click)="onEdit(coupon)">แก้ไข</button>
+            <button class="btn-delete" (click)="onDelete(coupon.did)">ลบ</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
