@@ -278,3 +278,17 @@ export interface GetUserOrdersResponse {
   data: Order[];
 }
 
+/**
+ * Interface สำหรับข้อมูลที่จะส่งไป "อัปเดต" คูปอง
+ * (เราไม่ควรส่ง name_code ไปด้วย เพราะไม่ควรให้แก้ไขรหัสคูปอง)
+ */
+export type UpdateCouponPayload = Omit<CreateCouponPayload, 'name_code'>;
+
+/**
+ * Interface สำหรับ Response ที่ได้กลับมาหลังจากการ "อัปเดต" คูปองสำเร็จ
+ */
+export interface UpdateCouponResponse {
+  status: string;
+  message: string;
+  data: DiscountCode;
+}
