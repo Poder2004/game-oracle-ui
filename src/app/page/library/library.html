@@ -1,0 +1,51 @@
+<app-navber></app-navber>
+
+<div class="library-container">
+  <div class="library-header">
+    <h1><mat-icon>sports_esports</mat-icon> คลังเกมของฉัน</h1>
+    <p>เกมทั้งหมดที่คุณเป็นเจ้าของ</p>
+  </div>
+
+  <div *ngIf="isLoading" class="status-container">
+    <mat-spinner diameter="60"></mat-spinner>
+    <p>กำลังโหลดคลังเกมของคุณ...</p>
+  </div>
+
+  <div *ngIf="error" class="status-container error-message">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ error }}</p>
+  </div>
+
+  <div
+    *ngIf="!isLoading && !error && libraryGames.length === 0"
+    class="status-container"
+  >
+    <mat-icon>videogame_asset_off</mat-icon>
+    <h2>คลังเกมของคุณว่างเปล่า</h2>
+    <p>เริ่มสะสมเกมโปรดของคุณได้แล้ววันนี้!</p>
+    <a mat-flat-button color="primary" routerLink="/home">เลือกซื้อเกม</a>
+  </div>
+
+  <div
+    class="game-grid"
+    *ngIf="!isLoading && !error && libraryGames.length > 0"
+  >
+    <mat-card class="game-card" *ngFor="let game of libraryGames">
+      <img
+        mat-card-image
+        [src]="getFullImageUrl(game.image_game)"
+        [alt]="game.title"
+      />
+      <mat-card-content>
+        <h3 class="game-title">{{ game.title }}</h3>
+        <p class="game-category">{{ game.category?.category_name || "N/A" }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-flat-button color="primary" class="play-button">
+          <mat-icon>play_arrow</mat-icon>
+          เล่น
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

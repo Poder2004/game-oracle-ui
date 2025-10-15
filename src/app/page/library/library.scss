@@ -1,0 +1,128 @@
+/* --- การตั้งค่าพื้นฐานสำหรับ Host Component --- */
+:host {
+  display: block;
+  background-color: #000000; // ✅ เปลี่ยนพื้นหลังเป็นสีขาวล้วน
+  min-height: 100vh;
+  color: #e7dede; // ✅ เปลี่ยนสีตัวอักษรหลักเป็นสีเข้ม
+}
+
+/* --- Container หลักของหน้า --- */
+.library-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* --- ส่วนหัวข้อของหน้า --- */
+.library-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    mat-icon {
+      font-size: 2.8rem;
+      width: 2.8rem;
+      height: 2.8rem;
+    }
+  }
+  p {
+    font-size: 1.1rem;
+    color: #fffdfd; // สีตัวอักษรย่อย
+  }
+}
+
+/* --- ส่วนแสดงสถานะ (โหลด, error, ไม่มีข้อมูล) --- */
+.status-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 40vh;
+  gap: 1.5rem;
+  color: #fdf6f6;
+  font-size: 1.2rem;
+  mat-icon {
+    font-size: 5rem;
+    width: 5rem;
+    height: 5rem;
+    color: #ccc;
+  }
+  h2 {
+    font-size: 2rem;
+    margin-top: 1rem;
+    color: #ffffff;
+  }
+  &.error-message {
+    color: #d9534f;
+    mat-icon {
+      color: #d9534f;
+    }
+  }
+}
+
+/* --- Grid แสดงรายการเกม --- */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+/* --- การ์ดเกมแต่ละใบ --- */
+.game-card {
+  background-color: #f5f5f5; // ✅ เปลี่ยนพื้นหลังการ์ดเป็นสีเทาอ่อน
+  color: #f4ecec; // สีตัวอักษรในการ์ด
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); // เพิ่มเงาเริ่มต้น
+
+  &:hover {
+    transform: translateY(-5px); // ทำให้ลอยขึ้นชัดเจนขึ้น
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  }
+
+  img {
+    height: 120px;
+    object-fit: cover;
+  }
+
+  mat-card-content {
+    padding: 1rem;
+    flex-grow: 1;
+  }
+
+  .game-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #222;
+  }
+
+  .game-category {
+    font-size: 0.85rem;
+    color: #777;
+    margin: 0;
+  }
+
+  mat-card-actions {
+    padding: 0 1rem 1rem 1rem;
+  }
+
+  .play-button {
+    width: 100%;
+    background-color: #9fcc70 !important;
+    color: #333 !important;
+    font-weight: bold;
+  }
+}

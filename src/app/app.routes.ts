@@ -24,6 +24,7 @@ import { GameDetailsadmin } from './admin/game-details/game-details';
 import { EditGame } from './admin/edit-game/edit-game';
 import { HistoryDetails } from './admin/history-details/history-details';
 import { TopGamesList } from './page/top-games-list/top-games-list';
+import { Library } from './page/library/library';
 
 export const routes: Routes = [
   // --- Routes ที่ไม่ต้องล็อกอิน (Public Routes) ---
@@ -66,6 +67,11 @@ export const routes: Routes = [
   {
     path: 'topgame',
     component: TopGamesList,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'library',
+    component: Library,
     canActivate: [authGuard],
   },
 

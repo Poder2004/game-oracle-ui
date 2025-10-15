@@ -1,5 +1,5 @@
 <mat-toolbar class="top-toolbar">
-  <span class="logo">Game Oracle</span>
+  <span class="logo">Game Point</span>
   <span class="spacer"></span>
 
   <ng-container *ngIf="!isUserLoggedIn">
@@ -136,6 +136,15 @@
     >
       <mat-icon>person</mat-icon>
       <span>แก้ไขโปรไฟล์</span>
+    </button>
+
+    <button
+      mat-flat-button
+      class="footer-btn primary-btn"
+      routerLink="/library"
+    >
+      <mat-icon>collections_bookmark</mat-icon>
+      <span>คลังเกม</span>
     </button>
 
     <button mat-flat-button class="footer-btn primary-btn" routerLink="/home">
