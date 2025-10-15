@@ -30,7 +30,11 @@
     class="game-grid"
     *ngIf="!isLoading && !error && libraryGames.length > 0"
   >
-    <mat-card class="game-card" *ngFor="let game of libraryGames">
+    <mat-card
+      class="game-card"
+      *ngFor="let game of libraryGames"
+      [routerLink]="['/GameDetails', game.game_id]"
+    >
       <img
         mat-card-image
         [src]="getFullImageUrl(game.image_game)"
@@ -43,7 +47,7 @@
       <mat-card-actions>
         <button mat-flat-button color="primary" class="play-button">
           <mat-icon>play_arrow</mat-icon>
-          เล่น
+          <span>เล่น</span>
         </button>
       </mat-card-actions>
     </mat-card>
